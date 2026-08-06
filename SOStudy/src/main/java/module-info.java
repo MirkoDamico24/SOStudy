@@ -5,4 +5,6 @@ module it.uniroma2.dicii.ispw.sostudy {
 
     opens it.uniroma2.dicii.ispw.sostudy to javafx.fxml;
     exports it.uniroma2.dicii.ispw.sostudy;
+    exports it.uniroma2.dicii.ispw.sostudy.controller;
+    opens it.uniroma2.dicii.ispw.sostudy.controller to javafx.fxml;
 }

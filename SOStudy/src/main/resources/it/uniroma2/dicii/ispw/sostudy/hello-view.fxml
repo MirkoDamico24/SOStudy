@@ -1,16 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="it.uniroma2.dicii.ispw.sostudy.HelloController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<AnchorPane prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.dicii.ispw.sostudy.HelloController">
+    <children>
+        <Button fx:id="settingsButton" layoutX="50.0" layoutY="50.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: #1a75ff; -fx-background-radius: 50; -fx-border-color: #000000; -fx-border-radius: 50;" text="⚙" textAlignment="CENTER">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Button>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+        <Label fx:id="welcomeLabel" alignment="CENTER" layoutX="312.0" layoutY="50.0" prefHeight="90.0" prefWidth="400.0" style="-fx-background-color: #f4f9ff; -fx-border-color: #a3cfff;" text="Welcome to SoStudy">
+            <font>
+                <Font name="Comic Sans MS Bold" size="32.0" />
+            </font>
+        </Label>
+
+        <HBox fx:id="profileBox" alignment="CENTER_LEFT" layoutX="820.0" layoutY="65.0" prefHeight="60.0" prefWidth="150.0" spacing="10.0">
+            <children>
+                <ImageView fx:id="useAvatar" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+                <Label fx:id="userNameLabel" style="-fx-border-color: #a3cfff; -fx-padding: 2 5 2 5;" text="UserName" textFill="#5b5b5b">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+            </children>
+        </HBox>
+
+        <VBox fx:id="mainMenuContainer" alignment="CENTER" layoutX="362.0" layoutY="250.0" prefHeight="300.0" prefWidth="300.0" spacing="45.0">
+            <children>
+                <Button fx:id="planStudyButton" mnemonicParsing="false" onAction="#onHelloButtonClick" prefHeight="55.0" prefWidth="250.0" style="-fx-background-color: #2a75ff; -fx-background-radius: 5;" text="Plan your study" textFill="WHITE">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Button>
+                <Button fx:id="quizSectionButton" mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" style="-fx-background-color: #2a75ff; -fx-background-radius: 5;" text="Quiz section" textFill="WHITE">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Button>
+                <Button fx:id="classesSectionButton" mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" style="-fx-background-color: #2a75ff; -fx-background-radius: 5;" text="Classes Section" textFill="WHITE">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Button>
+            </children>
+        </VBox>
+
+        <Button fx:id="logoutButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: #1a75ff; -fx-background-radius: 50; -fx-border-color: #000000; -fx-border-radius: 50;" text="➔" textAlignment="CENTER" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Button>
+    </children>
+</AnchorPane>
