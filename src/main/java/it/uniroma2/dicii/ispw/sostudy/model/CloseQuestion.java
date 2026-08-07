@@ -15,7 +15,7 @@ public class CloseQuestion extends Question {
 
     public CloseQuestion(String header, int maxScore, List<Choice> choices, Choice solution) {
         super(header, maxScore);
-        List<Choice> choicesCopy = new ArrayList<>(choices);
+        List<Choice> choicesCopy = new ArrayList<>();
         for (Choice choice : choices) {
             choicesCopy.add(new Choice(choice.getContent()));
         }
@@ -46,19 +46,21 @@ public class CloseQuestion extends Question {
         this.choices.remove(choice);
     }
 
-    public void addSolution(Choice choice) throws Exception{
+    public void addSolution(Choice choice) throws ModelException{
         if(this.choices.contains(choice)) {
             this.solution = choice;
         }
         else{
-            throw new Exception("[Class: CloseQuestion] The provided solution is not a choice of the question. It cannot be a solution.");
+            throw new ModelException("[Class: CloseQuestion] The provided solution is not a choice of the question. It cannot be a solution.");
         }
     }
 
     public List<Choice> getChoices() { return this.choices; }
 
     @Override
-    public void evaluate(Answer answer) throws ModelException {
+    public void evaluate(TestAttemptAnswer answer) throws ModelException {
+        if(!(answer instanceof CloseAnswer)) throw new ModelException("[Class: CloseQuestion] The provided answer is not a CloseAnswer");
+
         Choice answerContent = ((CloseAnswer) answer).getContent();
         int assignedScore = 0;
 

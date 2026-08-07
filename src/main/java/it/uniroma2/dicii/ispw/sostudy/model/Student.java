@@ -10,7 +10,7 @@ public class Student {
     private String email;
 
     private List<TestAttempt> takenTests;
-    private List<Class>  classes;
+    private List<VirtualClass>  classes;
 
     public Student(int id, String name, String surname, String email) {
         this.id = id;
@@ -26,7 +26,7 @@ public class Student {
         this.takenTests.add(t);
     }
 
-    public void joinClass(Class cls) {
+    public void joinClass(VirtualClass cls) {
         if(this.classes == null) {
             this.classes = new ArrayList<>();
         }
@@ -38,5 +38,5 @@ public class Student {
     public String getName() { return this.name; }
     public String getSurname() { return this.surname; }
     public String getEmail() { return this.email; }
-    public List<Class> getClasses() { return this.classes; }
+    public List<VirtualClass> getClasses() { return this.classes; }
 }

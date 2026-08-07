@@ -9,7 +9,7 @@ public class Professor {
     private String surname;
     private String email;
 
-    private List<Class> classes;
+    private List<VirtualClass> classes;
 
     public Professor(int id, String name, String surname, String email) {
         this.id = id;
@@ -18,7 +18,7 @@ public class Professor {
         this.email = email;
     }
 
-    public void addClass(Class cls) {
+    public void addClass(VirtualClass cls) {
         if(this.classes == null) {
             this.classes = new ArrayList<>();
         }
@@ -29,5 +29,5 @@ public class Professor {
     public String getName() { return this.name; }
     public String getSurname() { return this.surname; }
     public String getEmail() { return this.email; }
-    public List<Class> getClasses() { return this.classes; }
+    public List<VirtualClass> getClasses() { return this.classes; }
 }

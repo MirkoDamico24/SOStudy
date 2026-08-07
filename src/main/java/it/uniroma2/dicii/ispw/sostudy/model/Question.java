@@ -2,7 +2,6 @@ package it.uniroma2.dicii.ispw.sostudy.model;
 
 import it.uniroma2.dicii.ispw.sostudy.exception.ModelException;
 
-import java.util.List;
 
 public abstract class Question{
     private String header;
@@ -13,7 +12,7 @@ public abstract class Question{
         this.maxScore = maxScore;
     }
 
-    public abstract void evaluate(Answer answer) throws ModelException;
+    public abstract void evaluate(TestAttemptAnswer answer) throws ModelException;
     public abstract Question copy();
 
     public int getMaxScore()                  { return this.maxScore; }

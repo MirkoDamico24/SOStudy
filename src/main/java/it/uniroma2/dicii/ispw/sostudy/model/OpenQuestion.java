@@ -9,7 +9,7 @@ public class OpenQuestion extends Question/*<OpenAnswer>*/{
     }
 
     @Override
-    public void evaluate(Answer answer) throws ModelException {
+    public void evaluate(TestAttemptAnswer answer) throws ModelException {
         throw new ModelException("[Class: OpenQuestion] Cannot auto-evaluate an OpenQuestion");
     }
 

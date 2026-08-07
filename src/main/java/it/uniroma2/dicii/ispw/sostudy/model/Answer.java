@@ -1,6 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.model;
 
-public abstract class Answer<T> {
+public abstract class Answer<T> implements TestAttemptAnswer {
     private int score;
     private T content;
 
@@ -8,10 +8,15 @@ public abstract class Answer<T> {
         this.content = content;
     }
 
+    @Override
     public abstract Answer<T> copy();
 
-    public void setScore(int score) { this.score = score; }
+    @Override
     public int getScore() { return score; }
+
+    @Override
+    public void setScore(int score) { this.score = score; }
+
     public void setContent(T content) { this.content = content; }
     public T getContent() { return this.content; }
 
