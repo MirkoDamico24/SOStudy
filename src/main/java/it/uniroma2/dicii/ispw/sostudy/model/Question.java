@@ -13,18 +13,19 @@ public abstract class Question <A extends Answer<?>> {
     }
 
     public abstract void evaluate(A answer) throws Exception;
-    public abstract Container getContent();
 
     public int getMaxScore()                  { return this.maxScore; }
     public String getHeader()                 { return this.header;}
-    public void setHeader(String header)    { this.header = this.header; }
+    public void setHeader(String header)      { this.header = this.header; }
     public void setMaxScore(int maxScore)     { this.maxScore = maxScore; }
-    public void addAnswer(A answer){ this.answers.add(answer); }
+    public void addAnswer(A answer)           { this.answers.add(answer); }
 
-    public List<A> getNextAnswer() {
-       //TODO: when Session concept introduced, implment
-        System.out.println("getNextAnswer da implementare quando introduci concetto di Session!!!!");
-        return this.answers;
+    public A getNextAnswer(A answer) throws Exception{
+       if(answer == null) throw new Exception();    //TODO: implementa eccezioni correttamente
+
+       int currentPosition = this.answers.indexOf(answer);
+       if(currentPosition != -1 && currentPosition + 1 < this.answers.size())  return answers.get(currentPosition+1);
+       else throw new Exception();  //TODO: implementa eccezioni correttamente
     }
 
 }

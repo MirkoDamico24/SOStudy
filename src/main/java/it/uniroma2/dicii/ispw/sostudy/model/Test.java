@@ -20,12 +20,12 @@ public class Test {
     }
 
     public void addQuestion(OpenQuestion question) {
-        Question q = new OpenQuestion(question.getContent().getQuestionHeader(), question.getMaxScore());
+        Question q = new OpenQuestion(question.getHeader(), question.getMaxScore());
         this.questions.add(q);
     }
 
     public void addQuestion(CloseQuestion question) {
-        Question q = new CloseQuestion(question.getContent(), question.getMaxScore());
+        Question q = new CloseQuestion(question.getHeader(), question.getMaxScore());
         this.questions.add(q);
     }
 
@@ -35,10 +35,12 @@ public class Test {
 
     public List<Question> getQuestions() {return this.questions;}
 
-    public Question getNextQuestion() {
-        System.out.println("getNextQuestion has to be implemented: session needed");
-        //TODO: implementa quando avrai sessione
-        return null;
+    public Question getNextQuestion(Question current) throws Exception{
+        if(current == null) throw new Exception(); //TODO: implementa eccezioni correttamente
+
+        int currentPosition = this.questions.indexOf(current);
+        if(currentPosition != -1 &&  currentPosition + 1 < this.questions.size())  return questions.get(currentPosition+1);
+        else throw new Exception(); //TODO: implementa eccezioni correttamente
     }
 
     public String getName() {return this.name;}

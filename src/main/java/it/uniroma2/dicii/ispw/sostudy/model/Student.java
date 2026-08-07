@@ -18,5 +18,4 @@ public class Student {
     public String getSurname() { return this.surname;}
     public String getEmail() { return this.email;}
 
-
 }

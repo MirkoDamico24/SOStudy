@@ -7,9 +7,8 @@ public class CloseQuestion extends Question<CloseAnswer> {
     private List<Choice> choices;
     private Choice solution;
 
-    public CloseQuestion(CloseQuestionContainer content, int maxScore) {
-        super(content.getQuestionHeader(), maxScore);
-        this.choices = content.getOptions();
+    public CloseQuestion(String header, int maxScore) {
+        super(header, maxScore);
     }
 
     public void addChoice(Choice choice){
@@ -51,9 +50,4 @@ public class CloseQuestion extends Question<CloseAnswer> {
         answer.setScore(assignedScore);
     }
 
-    @Override
-    public Container getContent() {
-        Container c = new Container(this.getHeader(), this.choices);
-        return c;
-    }
 }
