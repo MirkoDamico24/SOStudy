@@ -13,12 +13,10 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 
 public class CreaDomandaMultiplaController {
     @FXML private ImageView profAvatar;
@@ -93,8 +91,6 @@ public class CreaDomandaMultiplaController {
             // Impedisce di cancellare se ci sono 2 o meno opzioni (logica base dei test)
             if (optionsListVBox.getChildren().size() > 2) {
                 optionsListVBox.getChildren().remove(row);
-            } else {
-                System.out.println("Attenzione: una domanda a risposta multipla deve avere almeno 2 opzioni!");
             }
         });
 
@@ -107,20 +103,15 @@ public class CreaDomandaMultiplaController {
 
     @FXML
     void handleSalvaDomanda(ActionEvent event) {
-        System.out.println("--- SALVATAGGIO DOMANDA MULTIPLA ---");
-        System.out.println("Testo: " + testoDomandaArea.getText());
-        System.out.println("Punteggio: " + punteggioComboBox.getValue());
 
-        System.out.println("Opzioni inserite:");
+
         // Cicla su tutte le righe create dinamicamente
         for (Node node : optionsListVBox.getChildren()) {
-            if (node instanceof HBox) {
-                HBox row = (HBox) node;
+            if (node instanceof HBox row) {
                 RadioButton rb = (RadioButton) row.getChildren().get(0);
                 TextField tf = (TextField) row.getChildren().get(1);
 
                 String corretta = rb.isSelected() ? "[ESATTA] " : "[ERRATA] ";
-                System.out.println("- " + corretta + tf.getText());
             }
         }
     }

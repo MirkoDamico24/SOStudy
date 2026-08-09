@@ -18,10 +18,6 @@ public class LoginControllerGUI {
 
     @FXML
     void handleLoginAction(ActionEvent event) {
-        String email = emailField.getText();
-        String password = passwordField.getText();
 
-        // Inserisci qui la logica di autenticazione
-        System.out.println("Tentativo di login con Email: " + email);
     }
 }

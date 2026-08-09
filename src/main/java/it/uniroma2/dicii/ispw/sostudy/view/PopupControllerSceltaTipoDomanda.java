@@ -15,7 +15,6 @@ public class PopupControllerSceltaTipoDomanda {
 
     @FXML
     void handleRispostaAperta(ActionEvent event) {
-        System.out.println("Scelta registrata: Domanda a Risposta Aperta");
 
         // 1. Qui andrà la logica per aprire la schermata di creazione "Risposta Aperta"
 
@@ -25,7 +24,6 @@ public class PopupControllerSceltaTipoDomanda {
 
     @FXML
     void handleRispostaMultipla(ActionEvent event) {
-        System.out.println("Scelta registrata: Domanda a Risposta Multipla");
 
         // 1. Qui andrà la logica per aprire la schermata di creazione "Risposta Multipla"
 

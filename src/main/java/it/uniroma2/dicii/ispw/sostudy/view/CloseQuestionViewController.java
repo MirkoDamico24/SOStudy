@@ -1,5 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.view;
 
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -45,6 +46,7 @@ public class CloseQuestionViewController {
     // Riferimenti per gestire la logica di mutua esclusione (tipo RadioButton)
     private HBox nodoOpzioneAttiva = null;
     private String rispostaSelezionata = null;
+    private String fillColor = "-fx-text-fill: #555555;";
 
     class QuestionStatus {
         int numero;
@@ -99,7 +101,7 @@ public class CloseQuestionViewController {
             // 1. Il "Pillolo" grigio con il numero (es. "1) ")
             Label lblNum = new Label(index + ")");
             lblNum.setFont(new Font("Serif", 32));
-            lblNum.setStyle("-fx-background-color: #EAEAEA; -fx-border-color: #999999; -fx-border-radius: 50em; -fx-background-radius: 50em; -fx-padding: 2 15 2 15; -fx-text-fill: #555555;");
+            lblNum.setStyle("-fx-background-color: #EAEAEA; -fx-border-color: #999999; -fx-border-radius: 50em; -fx-background-radius: 50em; -fx-padding: 2 15 2 15;" + fillColor);
 
             // Spaziatura tra numero e testo
             Region spacer1 = new Region();
@@ -108,7 +110,7 @@ public class CloseQuestionViewController {
             // 2. Il Testo dell'opzione
             Label lblTesto = new Label(testoOpzione);
             lblTesto.setFont(new Font("Serif", 32));
-            lblTesto.setStyle("-fx-text-fill: #555555;");
+            lblTesto.setStyle(fillColor);
 
             // Spazio espandibile per spingere la checkbox a destra
             Region spacer2 = new Region();
@@ -117,7 +119,7 @@ public class CloseQuestionViewController {
             // 3. Icona Checkbox (Nascosta di default)
             Label lblCheck = new Label("☑");
             lblCheck.setFont(new Font("System", 32));
-            lblCheck.setStyle("-fx-text-fill: #555555;");
+            lblCheck.setStyle(fillColor);
             lblCheck.setVisible(false);
 
             optionBox.getChildren().addAll(lblNum, spacer1, lblTesto, spacer2, lblCheck);
@@ -130,7 +132,7 @@ public class CloseQuestionViewController {
                 if (nodoOpzioneAttiva != null) {
                     nodoOpzioneAttiva.setStyle("-fx-border-color: #777777; -fx-border-width: 1.5; -fx-border-radius: 12; -fx-background-radius: 12; -fx-background-color: white; -fx-cursor: hand;");
                     // Nascondi la checkbox (è il 5° elemento, indice 4)
-                    ((Label) nodoOpzioneAttiva.getChildren().get(4)).setVisible(false);
+                    (nodoOpzioneAttiva.getChildren().get(4)).setVisible(false);
                 }
 
                 // B. Seleziona l'attuale (Bordo Blu #1C77FF)
@@ -157,10 +159,9 @@ public class CloseQuestionViewController {
     @FXML
     void handleProssimaDomanda(ActionEvent event) {
         if (rispostaSelezionata == null) {
-            System.out.println("Attenzione: Nessuna risposta selezionata!");
+
             return;
         }
-        System.out.println("Risposta Registrata: " + rispostaSelezionata);
         // Logica applicativa per salvare la risposta sul DB e passare oltre...
     }
 
@@ -181,10 +182,9 @@ public class CloseQuestionViewController {
 
             if (secondiRimanenti <= 0) {
                 timeline.stop();
-                System.out.println("Tempo Scaduto!");
             }
         }));
-        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
 
@@ -195,7 +195,7 @@ public class CloseQuestionViewController {
             String spunta = q.completata ? "☑ " : "☐ ";
             Label lblQuestion = new Label(spunta + "Question " + q.numero);
             lblQuestion.setFont(new Font("Serif Regular", 22));
-            lblQuestion.setStyle(q.completata ? "-fx-text-fill: #1C77FF;" : "-fx-text-fill: #555555;");
+            lblQuestion.setStyle(q.completata ? "-fx-text-fill: #1C77FF;" : fillColor);
 
             listaProgressoVBox.getChildren().add(lblQuestion);
             if (i < domande.size() - 1) {

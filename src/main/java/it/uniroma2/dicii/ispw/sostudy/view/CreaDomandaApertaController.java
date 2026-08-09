@@ -58,26 +58,21 @@ public class CreaDomandaApertaController {
         String testo = testoDomandaArea.getText();
         Integer punteggio = punteggioComboBox.getValue();
 
-        System.out.println("--- SALVATAGGIO DOMANDA APERTA ---");
-        System.out.println("Testo: " + testo);
-        System.out.println("Punteggio Assegnato: " + punteggio);
-
         // Logica per aggiungere la domanda al database del test in creazione...
     }
 
     @FXML
     void handleIndietro(ActionEvent event) {
-        System.out.println("Navigazione: Indietro (Ritorno alla schermata del Test)");
         // Logica per tornare alla schermata precedente
     }
 
     @FXML
     void handleNavHome(ActionEvent event) {
-        System.out.println("Navigazione: Home");
+
     }
 
     @FXML
     void handleNavClassiVirtuali(ActionEvent event) {
-        System.out.println("Navigazione: Classi Virtuali");
+
     }
 }

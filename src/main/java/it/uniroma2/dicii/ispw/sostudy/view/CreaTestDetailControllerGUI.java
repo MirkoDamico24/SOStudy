@@ -82,12 +82,6 @@ public class CreaTestDetailControllerGUI {
         String orario = orarioComboBox.getValue();
         String durata = durataField.getText();
 
-        System.out.println("--- SALVATAGGIO TEST ---");
-        System.out.println("Nome: " + nomeTest);
-        System.out.println("Classe: " + classeAssegnata);
-        System.out.println("Data: " + dataConsegna);
-        System.out.println("Ora: " + orario);
-        System.out.println("Durata (min): " + durata);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/dicii/ispw/sostudy/PopupSceltaTipoDomanda.fxml"));
@@ -108,17 +102,16 @@ public class CreaTestDetailControllerGUI {
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Errore nel caricamento del popup.");
         }
     }
 
     @FXML
     void handleNavHome(ActionEvent event) {
-        System.out.println("Navigazione: Home");
+
     }
 
     @FXML
     void handleNavClassiVirtuali(ActionEvent event) {
-        System.out.println("Navigazione: Classi Virtuali");
+        
     }
 }

@@ -80,9 +80,7 @@ public class InsideClassViewControllerGUI {
             lblTest.setStyle("-fx-text-fill: #555555; -fx-cursor: hand;");
 
             // Aggiungo evento click sul test per andare (es.) al dettaglio del test
-            lblTest.setOnMouseClicked(event -> {
-                System.out.println("Utente ha cliccato sul test: " + nomeTest);
-            });
+            lblTest.setOnMouseClicked(event ->{});
 
             // Linea di divisione grigio chiaro sotto il test
             Region underline = new Region();
@@ -101,16 +99,16 @@ public class InsideClassViewControllerGUI {
 
     @FXML
     void handleNavHome(ActionEvent event) {
-        System.out.println("Navigazione: Torno alla Home");
+
     }
 
     @FXML
     void handleNavCreaTest(ActionEvent event) {
-        System.out.println("Navigazione: Crea nuovo Test");
+
     }
 
     @FXML
     void handleInvitaStudente(ActionEvent event) {
-        System.out.println("Apertura modale/finestra per invitare uno studente...");
+
     }
 }

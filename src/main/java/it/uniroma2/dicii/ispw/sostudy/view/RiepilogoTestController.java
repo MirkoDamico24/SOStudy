@@ -9,8 +9,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
@@ -131,7 +129,6 @@ public class RiepilogoTestController {
         btnEdit.setStyle("-fx-background-color: transparent; -fx-text-fill: #555555; -fx-cursor: hand; -fx-font-size: 26px; -fx-padding: 0;");
         // Forziamo una larghezza e altezza minime per impedire la comparsa dei tre puntini "..."
         btnEdit.setMinSize(40, 40);
-        btnEdit.setOnAction(e -> System.out.println("Modifica domanda: " + indice));
 
         // Cestino
         Button btnDelete = new Button("🗑");
@@ -167,8 +164,7 @@ public class RiepilogoTestController {
         int punteggioTotale = 0;
 
         for (Node node : listaDomandeVBox.getChildren()) {
-            if (node instanceof VBox) {
-                VBox wrapper = (VBox) node;
+            if (node instanceof VBox wrapper) {
                 GridPane grid = (GridPane) wrapper.getChildren().get(0);
                 Label puntLabel = (Label) grid.getChildren().get(1); // La colonna 2
 
@@ -185,7 +181,6 @@ public class RiepilogoTestController {
 
     @FXML
     void handleModificaDettagli(ActionEvent event) {
-        System.out.println("Torno alla schermata Dettagli Test...");
         // Logica per caricare crea_test_1.fxml
     }
 
@@ -204,7 +199,6 @@ public class RiepilogoTestController {
 
             // Dopo la chiusura del popup, qui puoi intercettare la scelta
             // per navigare verso la schermata Aperta o Multipla
-            System.out.println("Popup chiuso.");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -213,6 +207,6 @@ public class RiepilogoTestController {
 
     @FXML
     void handleSalvaPubblica(ActionEvent event) {
-        System.out.println("Salvataggio finale e pubblicazione del test sul Database...");
+
     }
 }

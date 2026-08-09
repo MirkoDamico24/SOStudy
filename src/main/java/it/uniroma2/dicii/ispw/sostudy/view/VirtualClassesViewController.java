@@ -7,11 +7,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import java.util.List;
 import java.util.Arrays;
@@ -119,7 +117,6 @@ public class VirtualClassesViewController {
         lblNomeClasse.setCursor(Cursor.HAND);
 
         lblNomeClasse.setOnMouseClicked(event -> {
-            System.out.println("Utente ha cliccato sulla classe: " + classe.nome);
         });
 
         // --- COLORE NOME PROFESSORE ---
@@ -136,6 +133,6 @@ public class VirtualClassesViewController {
 
     @FXML
     void handleCreaClasse(ActionEvent event) {
-        System.out.println("Apertura schermata per la creazione di una nuova classe...");
+
     }
 }

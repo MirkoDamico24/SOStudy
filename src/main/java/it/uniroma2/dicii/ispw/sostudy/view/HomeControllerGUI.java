@@ -84,19 +84,16 @@ public class HomeControllerGUI {
 
     @FXML
     void handleNavCreaTest(ActionEvent event) {
-        System.out.println("Navigazione: Crea Test");
         // Logica per caricare la schermata "Crea Test"
     }
 
     @FXML
     void handleNavClassiVirtuali(ActionEvent event) {
-        System.out.println("Navigazione: Classi Virtuali");
         // Logica per caricare la schermata "Classi Virtuali"
     }
 
     @FXML
     void handleLogout(ActionEvent event) {
-        System.out.println("Logout...");
         // Logica per chiudere la sessione e tornare al login
     }
 }

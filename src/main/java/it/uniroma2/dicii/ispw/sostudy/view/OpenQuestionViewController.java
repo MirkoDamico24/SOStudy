@@ -1,10 +1,10 @@
 package it.uniroma2.dicii.ispw.sostudy.view;
 
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
@@ -104,11 +104,10 @@ public class OpenQuestionViewController {
 
             if (secondiRimanenti <= 0) {
                 timeline.stop();
-                System.out.println("Tempo Scaduto! Consegna automatica del test.");
             }
         }));
 
-        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
 
@@ -149,9 +148,6 @@ public class OpenQuestionViewController {
 
     @FXML
     void handleProssimaDomanda(ActionEvent event) {
-        String rispostaInserita = txtRisposta.getText();
-        System.out.println("Risposta salvata: " + rispostaInserita);
-
         // Logica per caricare la domanda successiva...
     }
 }
