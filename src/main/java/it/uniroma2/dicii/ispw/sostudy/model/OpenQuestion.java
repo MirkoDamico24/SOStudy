@@ -1,6 +1,7 @@
 package it.uniroma2.dicii.ispw.sostudy.model;
 
 import it.uniroma2.dicii.ispw.sostudy.exception.ModelException;
+import it.uniroma2.dicii.ispw.sostudy.exception.OpenModelException;
 
 public class OpenQuestion extends Question/*<OpenAnswer>*/{
 
@@ -10,7 +11,7 @@ public class OpenQuestion extends Question/*<OpenAnswer>*/{
 
     @Override
     public void evaluate(TestAttemptAnswer answer) throws ModelException {
-        throw new ModelException("[Class: OpenQuestion] Cannot auto-evaluate an OpenQuestion");
+        throw new OpenModelException("[Class: OpenQuestion] Cannot auto-evaluate an OpenQuestion");
     }
 
     @Override

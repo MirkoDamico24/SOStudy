@@ -1,6 +1,7 @@
 package it.uniroma2.dicii.ispw.sostudy.model;
 
 import it.uniroma2.dicii.ispw.sostudy.exception.ModelException;
+import it.uniroma2.dicii.ispw.sostudy.exception.OpenModelException;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -56,8 +57,6 @@ public class Test {
         this.questions.remove(question);
     }
 
-    public List<Question> getQuestions() {return this.questions;}
-
     public Question getNextQuestion(Question current) throws ModelException{
         if(current == null) throw new ModelException("[Class: Test] There is no next QUESTION for a null object");
 
@@ -75,7 +74,11 @@ public class Test {
             Question q = this.questions.get(index);
 
             try {
-                q.evaluate(a);  //TODO: in questo caso vengono valutate solo le domande autovalutabili, implementare le altre
+                q.evaluate(a);
+            }
+            catch(OpenModelException e){
+                //professor will have to evaluate open questions
+                test.setTestGradingStatus(TestGradingStatus.INCOMPLETE);
             }
             catch(ModelException e){
                 throw new ModelException(e.getMessage(), e.getCause());
@@ -88,7 +91,8 @@ public class Test {
     public String getName() {return this.name;}
     public LocalDateTime getDueDate() {return this.dueDate;}
     public Duration getDuration() {return this.duration;}
-    public int getMaxScore() {return this.maxScore;}
+    public int getMaxScore() {return this.maxScore; }
+    public List<Question> getQuestions() {return this.questions;}
     public void setName(String name) {this.name = name;}
     public void setDueDate(LocalDateTime dueDate) {this.dueDate = dueDate;}
     public void setDuration(Duration duration) {this.duration = duration;}

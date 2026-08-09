@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.dicii.ispw.sostudy.view.InsideClassViewControllerGUI">
+
+    <!-- ==================== HEADER / NAV BAR ==================== -->
+    <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+        <children>
+            <HBox alignment="CENTER_LEFT" spacing="50.0" style="-fx-border-color: #8CB8F5; -fx-border-radius: 12; -fx-border-width: 1.5; -fx-padding: 15 60 15 40; -fx-background-color: #FAFAFA; -fx-background-radius: 12;">
+                <children>
+                    <!-- Logo -->
+                    <Label style="-fx-text-fill: #4D4CFF;" text="SoStudy">
+                        <font><Font name="System Bold Italic" size="36.0" /></font>
+                        <HBox.margin><Insets right="30.0" /></HBox.margin>
+                    </Label>
+
+                    <!-- Sezione 1: Home -->
+                    <Button fx:id="btnHome" mnemonicParsing="false" onAction="#handleNavHome" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Home">
+                        <font><Font name="Serif Regular" size="26.0" /></font>
+                    </Button>
+
+                    <!-- Sezione 2: Crea test (Viene nascosto se Utente = Studente) -->
+                    <Button fx:id="btnCreaTest" mnemonicParsing="false" onAction="#handleNavCreaTest" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Crea test">
+                        <font><Font name="Serif Regular" size="26.0" /></font>
+                    </Button>
+
+                    <!-- Sezione 3: Nome della Classe (Dinamico e Attivo) -->
+                    <Button fx:id="btnNomeClasseNav" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: transparent transparent #1C77FF transparent; -fx-border-width: 0 0 3 0; -fx-cursor: hand;" text="NomeClasse">
+                        <font><Font name="Serif Regular" size="26.0" /></font>
+                        <padding><Insets bottom="5.0" left="10.0" right="10.0" top="5.0" /></padding>
+                    </Button>
+                </children>
+            </HBox>
+        </children>
+    </HBox>
+
+    <!-- ==================== PROFILO UTENTE (Top-Right) ==================== -->
+    <HBox alignment="CENTER" spacing="20.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="50.0">
+        <children>
+            <ImageView fx:id="userAvatar" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="userNameLabel" style="-fx-border-color: #8CB8F5; -fx-border-width: 1; -fx-padding: 8 20 8 20; -fx-background-color: white; -fx-text-fill: #555555;" text="Caricamento...">
+                <font><Font name="System Regular" size="16.0" /></font>
+            </Label>
+        </children>
+    </HBox>
+
+    <!-- ==================== CONTENUTO CENTRALE ==================== -->
+    <VBox alignment="TOP_CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="220.0">
+        <children>
+
+            <!-- Intestazione con Titolo Centrato e Bottone a Destra -->
+            <!-- FIX: Rimosso maxWidth="1000.0" per permettere all'AnchorPane di espandersi a tutto schermo -->
+            <AnchorPane>
+                <children>
+                    <!-- Titolo Centrato -->
+                    <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <children>
+                            <Label style="-fx-text-fill: #000000;" text="Test Recenti Assegnati">
+                                <font><Font name="Serif Bold" size="48.0" /></font>
+                            </Label>
+                        </children>
+                    </HBox>
+
+                    <!-- Bottone Invita Studente (Nascosto per gli studenti) -->
+                    <!-- FIX: Ancoraggio destro impostato a 120.0 per spostarlo all'estrema destra -->
+                    <Button fx:id="btnInvitaStudente" mnemonicParsing="false" onAction="#handleInvitaStudente" style="-fx-background-color: #1C77FF; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Invita studente" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="10.0">
+                        <font><Font name="Serif Regular" size="24.0" /></font>
+                        <padding><Insets bottom="5.0" left="20.0" right="20.0" top="5.0" /></padding>
+                    </Button>
+                </children>
+            </AnchorPane>
+
+            <!-- Box dei Test Assegnati -->
+            <VBox fx:id="listaTestVBox" maxWidth="1000.0" style="-fx-border-color: #555555; -fx-border-width: 2.5; -fx-border-radius: 12; -fx-background-radius: 12; -fx-background-color: #FFFFFF;">
+                <padding>
+                    <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+                </padding>
+                <VBox.margin>
+                    <Insets top="50.0" />
+                </VBox.margin>
+                <!-- I test verranno inseriti dinamicamente qui -->
+            </VBox>
+
+        </children>
+    </VBox>
+
+    <!-- ==================== CAMPANELLA NOTIFICHE (Top-Left) ==================== -->
+    <Button fx:id="btnNotifiche" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="80.0" prefWidth="80.0" style="-fx-background-color: #1C77FF; -fx-background-radius: 50em; -fx-border-color: #000000; -fx-border-radius: 50em; -fx-border-width: 1.5; -fx-cursor: hand;" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="40.0">
+        <graphic>
+            <Label style="-fx-text-fill: #000000;" text="🔔">
+                <font><Font size="36.0" /></font>
+            </Label>
+        </graphic>
+    </Button>
+
+</AnchorPane>

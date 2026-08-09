@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #C3E0F5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.dicii.ispw.sostudy.view.LoginControllerGUI">
+
+    <!-- BANNER SUPERIORE -->
+    <top>
+        <StackPane BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+                <Insets top="60.0" />
+            </BorderPane.margin>
+            <children>
+                <VBox alignment="CENTER" maxWidth="750.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #2D7AF1; -fx-border-width: 1.5; -fx-border-radius: 4; -fx-background-radius: 4;">
+                    <padding>
+                        <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+                    </padding>
+                    <children>
+                        <Label text="Welcome to SoStudy">
+                            <font>
+                                <Font name="Serif Bold" size="42.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+            </children>
+        </StackPane>
+    </top>
+
+    <!-- CARD CENTRALE DI LOGIN -->
+    <center>
+        <StackPane BorderPane.alignment="CENTER">
+            <children>
+                <VBox alignment="TOP_CENTER" maxHeight="500.0" maxWidth="850.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #2D7AF1; -fx-border-width: 1.5; -fx-border-radius: 6; -fx-background-radius: 6;">
+                    <padding>
+                        <Insets bottom="60.0" left="120.0" right="120.0" top="50.0" />
+                    </padding>
+                    <children>
+
+                        <!-- Titolo Card -->
+                        <Label text="SoStudy - Login" textFill="#2D7AF1">
+                            <font>
+                                <Font name="Serif Bold" size="48.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets bottom="40.0" />
+                            </VBox.margin>
+                        </Label>
+
+                        <!-- Contenitore Campi Input -->
+                        <VBox spacing="20.0">
+                            <children>
+                                <!-- Campo Email -->
+                                <VBox spacing="5.0">
+                                    <children>
+                                        <Label text="Email" textFill="#555555">
+                                            <font>
+                                                <Font name="Serif Regular" size="22.0" />
+                                            </font>
+                                        </Label>
+                                        <TextField fx:id="emailField" prefHeight="40.0" promptText="Email Address" style="-fx-background-color: #FFFFFF; -fx-border-color: #8CB8F5; -fx-border-radius: 3; -fx-border-width: 1.5;">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </TextField>
+                                    </children>
+                                </VBox>
+
+                                <!-- Campo Password -->
+                                <VBox spacing="5.0">
+                                    <children>
+                                        <Label text="Password" textFill="#555555">
+                                            <font>
+                                                <Font name="Serif Regular" size="22.0" />
+                                            </font>
+                                        </Label>
+                                        <PasswordField fx:id="passwordField" prefHeight="40.0" promptText="Password" style="-fx-background-color: #FFFFFF; -fx-border-color: #8CB8F5; -fx-border-radius: 3; -fx-border-width: 1.5;">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </PasswordField>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+
+                        <!-- Bottone Login -->
+                        <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLoginAction" style="-fx-background-color: #2D7AF1; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Login">
+                            <font>
+                                <Font name="System Bold" size="24.0" />
+                            </font>
+                            <padding>
+                                <Insets bottom="10.0" left="40.0" right="40.0" top="10.0" />
+                            </padding>
+                            <VBox.margin>
+                                <Insets top="40.0" />
+                            </VBox.margin>
+                        </Button>
+
+                    </children>
+                </VBox>
+            </children>
+        </StackPane>
+    </center>
+</BorderPane>

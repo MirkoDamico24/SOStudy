@@ -2,11 +2,15 @@ package it.uniroma2.dicii.ispw.sostudy.model;
 
 import it.uniroma2.dicii.ispw.sostudy.exception.ModelException;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TestAttempt{
     private int grade;
+    private TestGradingStatus testGradingStatus;
+    private LocalDateTime handInTime;
+    private LocalDateTime handInDate;
 
     private List<TestAttemptAnswer> answers;
     private Student student;
@@ -37,7 +41,7 @@ public class TestAttempt{
 
         int currentPosition;
         currentPosition = answers.indexOf(a);
-        if( currentPosition == -1 || currentPosition >= this.answers.size() - 1) throw new ModelException("[Class: TestAttempt] Trying to access outside of TestAttempt answer's bound");
+        if( currentPosition == -1 || currentPosition >= this.answers.size() - 1) throw new ModelException("[Class: TestAttempt] Trying to access outside of TestAttempt answers' bound");
 
         return answers.get(currentPosition + 1);
     }
@@ -55,4 +59,10 @@ public class TestAttempt{
     public List<TestAttemptAnswer> getAnswers() { return answers; }
     public Student getStudent() { return student; }
     public int getGrade() { return grade; }
+    public void setTestGradingStatus(TestGradingStatus testGradingStatus) { this.testGradingStatus = testGradingStatus; }
+    public TestGradingStatus getTestGradingStatus() { return testGradingStatus; }
+    public void setHandInTime(LocalDateTime handInTime) { this.handInTime = handInTime; }
+    public LocalDateTime getHandInTime() { return this.handInTime; }
+    public void setHandInDate(LocalDateTime handInDate) { this.handInDate = handInDate; }
+    public LocalDateTime getHandInDate() { return this.handInDate; }
 }

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.Cursor?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.dicii.ispw.sostudy.view.VirtualClassesViewController">
+
+    <!-- ==================== HEADER / NAV BAR ==================== -->
+    <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+        <children>
+            <HBox fx:id="navBarContainer" alignment="CENTER_LEFT" spacing="50.0" style="-fx-border-color: #8CB8F5; -fx-border-radius: 12; -fx-border-width: 1.5; -fx-padding: 15 60 15 40; -fx-background-color: #FAFAFA; -fx-background-radius: 12;">
+                <children>
+                    <!-- Logo -->
+                    <Label text="SoStudy" textFill="#4D4CFF">
+                        <font><Font name="System Bold Italic" size="36.0" /></font>
+                        <HBox.margin><Insets right="30.0" /></HBox.margin>
+                    </Label>
+
+                    <!-- Home -->
+                    <Button fx:id="btnHome" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Home">
+                        <font><Font name="Serif Regular" size="26.0" /></font>
+                    </Button>
+
+                    <!-- Crea test (Verrà nascosto per gli studenti) -->
+                    <Button fx:id="btnCreaTest" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Crea test">
+                        <font><Font name="Serif Regular" size="26.0" /></font>
+                    </Button>
+
+                    <!-- Classi Virtuali (ATTIVA) -->
+                    <Button fx:id="btnClassiVirtuali" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: transparent transparent #1C77FF transparent; -fx-border-width: 0 0 3 0; -fx-cursor: hand;" text="Classi Virtuali">
+                        <font><Font name="Serif Regular" size="26.0" /></font>
+                        <padding><Insets bottom="5.0" left="10.0" right="10.0" top="5.0" /></padding>
+                    </Button>
+                </children>
+            </HBox>
+        </children>
+    </HBox>
+
+    <!-- ==================== PROFILO UTENTE (Top-Right) ==================== -->
+    <HBox alignment="CENTER" spacing="20.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="50.0">
+        <children>
+            <ImageView fx:id="profAvatar" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="profNameLabel" style="-fx-border-color: #8CB8F5; -fx-border-width: 1; -fx-padding: 8 20 8 20; -fx-background-color: white;" text="Caricamento..." textFill="#555555">
+                <font><Font name="System Regular" size="16.0" /></font>
+            </Label>
+        </children>
+    </HBox>
+
+    <!-- ==================== CONTENUTO CENTRALE ==================== -->
+    <VBox alignment="TOP_CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0">
+        <children>
+
+            <!-- Titolo Pagina -->
+            <Label text="Classi Virtuali">
+                <font><Font name="Serif Bold" size="48.0" /></font>
+                <VBox.margin><Insets bottom="40.0" /></VBox.margin>
+            </Label>
+
+            <!-- Contenitore a Scorrimento -->
+            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
+                <content>
+                    <!-- FlowPane: dispone gli elementi a griglia e va a capo automaticamente -->
+                    <FlowPane fx:id="classiFlowPane" alignment="TOP_CENTER" hgap="60.0" vgap="60.0">
+                        <padding>
+                            <Insets bottom="60.0" left="60.0" right="60.0" top="20.0" />
+                        </padding>
+                        <!-- Le card delle classi verranno iniettate qui dal Controller -->
+                    </FlowPane>
+                </content>
+            </ScrollPane>
+
+        </children>
+    </VBox>
+
+    <!-- ==================== CAMPANELLA NOTIFICHE (Top-Left) ==================== -->
+    <Button fx:id="btnNotifiche" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="80.0" prefWidth="80.0" style="-fx-background-color: #1C77FF; -fx-background-radius: 50em; -fx-border-color: #000000; -fx-border-radius: 50em; -fx-border-width: 1.5; -fx-cursor: hand;" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="40.0">
+        <graphic>
+            <Label style="-fx-text-fill: #000000;" text="🔔">
+                <font><Font size="36.0" /></font>
+            </Label>
+        </graphic>
+    </Button>
+
+    <!-- ==================== BOTTONE CREA CLASSE (Bottom-Left) ==================== -->
+    <!-- Questo bottone è visibile solo ai professori e allineato con la campanella -->
+    <Button fx:id="btnCreaClasse" mnemonicParsing="false" onAction="#handleCreaClasse" style="-fx-background-color: #1C77FF; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="+ Crea nuova classe" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="60.0">
+        <font>
+            <Font name="System Bold" size="20.0" />
+        </font>
+        <padding>
+            <Insets bottom="12.0" left="25.0" right="25.0" top="12.0" />
+        </padding>
+    </Button>
+
+</AnchorPane>

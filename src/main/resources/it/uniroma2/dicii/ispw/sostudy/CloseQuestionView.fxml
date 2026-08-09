@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.dicii.ispw.sostudy.view.CloseQuestionViewController">
+
+    <!-- ==================== HEADER ==================== -->
+    <Label style="-fx-text-fill: #4D4CFF;" text="SoStudy" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="40.0">
+        <font>
+            <Font name="System Bold Italic" size="48.0" />
+        </font>
+    </Label>
+
+    <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
+        <children>
+            <Label fx:id="lblNomeTest" style="-fx-text-fill: #000000;" text="NOME DEL TEST">
+                <font>
+                    <Font name="Serif Bold" size="48.0" />
+                </font>
+            </Label>
+        </children>
+    </HBox>
+
+    <HBox alignment="CENTER" spacing="20.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="50.0">
+        <children>
+            <ImageView fx:id="studentAvatar" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="studentNameLabel" style="-fx-border-color: #8CB8F5; -fx-border-width: 1; -fx-padding: 8 20 8 20; -fx-background-color: white; -fx-text-fill: #555555;" text="Student Name">
+                <font>
+                    <Font name="System Regular" size="16.0" />
+                </font>
+            </Label>
+        </children>
+    </HBox>
+
+    <!-- ==================== AREA DOMANDA E OPZIONI (A Sinistra) ==================== -->
+    <VBox spacing="30.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="180.0">
+        <children>
+
+            <!-- Box del testo della domanda (Sfondo azzurro chiarissimo) -->
+            <VBox alignment="CENTER" prefWidth="1000.0" style="-fx-background-color: #F5FCFF; -fx-border-color: #8CB8F5; -fx-border-width: 1.5; -fx-border-radius: 12; -fx-background-radius: 12;">
+                <padding>
+                    <Insets bottom="35.0" left="40.0" right="40.0" top="35.0" />
+                </padding>
+                <children>
+                    <Label fx:id="lblTestoDomanda" style="-fx-text-fill: #000000;" text="Il BCE è un pattern di analisi?" textAlignment="CENTER" wrapText="true">
+                        <font>
+                            <Font name="Serif Regular" size="42.0" />
+                        </font>
+                    </Label>
+                </children>
+            </VBox>
+
+            <!-- ScrollPane Adattabile per le Opzioni Multiple -->
+            <ScrollPane fitToWidth="true" prefHeight="400.0" prefWidth="1000.0" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
+                <content>
+                    <!-- Contenitore iniettato dinamicamente da Java -->
+                    <VBox fx:id="optionsVBox" spacing="20.0">
+                        <padding>
+                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+            <!-- Bottone Prossima Domanda -->
+            <Button fx:id="btnProssimaDomanda" mnemonicParsing="false" onAction="#handleProssimaDomanda" style="-fx-background-color: #1C77FF; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Prossima domanda">
+                <font>
+                    <Font name="Serif Regular" size="24.0" />
+                </font>
+                <padding>
+                    <Insets bottom="10.0" left="25.0" right="25.0" top="10.0" />
+                </padding>
+                <VBox.margin>
+                    <Insets top="10.0" />
+                </VBox.margin>
+            </Button>
+
+        </children>
+    </VBox>
+
+    <!-- ==================== SIDEBAR TIMER E PROGRESSO (A Destra) ==================== -->
+    <VBox alignment="TOP_CENTER" spacing="50.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="180.0">
+        <children>
+
+            <!-- CARD TIMER -->
+            <VBox alignment="TOP_CENTER" prefWidth="320.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #555555; -fx-border-width: 1.5; -fx-border-radius: 12; -fx-background-radius: 12;">
+                <padding>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="15.0" />
+                </padding>
+                <children>
+                    <Label style="-fx-text-fill: #000000;" text="Tempo rimanente">
+                        <font>
+                            <Font name="Serif Regular" size="24.0" />
+                        </font>
+                        <VBox.margin>
+                            <Insets bottom="15.0" />
+                        </VBox.margin>
+                    </Label>
+
+                    <StackPane>
+                        <children>
+                            <ProgressIndicator fx:id="progressTimer" minHeight="140.0" minWidth="140.0" progress="0.75" style="-fx-progress-color: #1C77FF;" />
+                            <Label fx:id="lblTimer" style="-fx-text-fill: #333333;" text="45:20">
+                                <font>
+                                    <Font name="System Regular" size="24.0" />
+                                </font>
+                            </Label>
+                        </children>
+                    </StackPane>
+                </children>
+            </VBox>
+
+            <!-- CARD PROGRESSO DOMANDE -->
+            <VBox alignment="TOP_CENTER" spacing="10.0">
+                <children>
+                    <Label style="-fx-text-fill: #000000;" text="Progresso">
+                        <font>
+                            <Font name="Serif Regular" size="28.0" />
+                        </font>
+                    </Label>
+
+                    <VBox prefWidth="240.0" style="-fx-background-color: #F5FCFF; -fx-border-color: #8CB8F5; -fx-border-width: 1.5; -fx-border-radius: 12; -fx-background-radius: 12;">
+                        <padding>
+                            <Insets bottom="15.0" left="20.0" right="20.0" top="15.0" />
+                        </padding>
+                        <children>
+                            <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent; -fx-border-color: transparent;">
+                                <content>
+                                    <VBox fx:id="listaProgressoVBox" spacing="10.0" />
+                                </content>
+                            </ScrollPane>
+                        </children>
+                    </VBox>
+                </children>
+            </VBox>
+
+        </children>
+    </VBox>
+
+</AnchorPane>

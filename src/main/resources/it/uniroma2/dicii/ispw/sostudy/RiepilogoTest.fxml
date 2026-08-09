@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.dicii.ispw.sostudy.view.RiepilogoTestController">
+
+    <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+        <children>
+            <HBox alignment="CENTER_LEFT" spacing="50.0" style="-fx-border-color: #8CB8F5; -fx-border-radius: 12; -fx-border-width: 1.5; -fx-padding: 15 60 15 40; -fx-background-color: #FAFAFA; -fx-background-radius: 12;">
+                <children>
+                    <Label text="SoStudy" textFill="#4D4CFF"><font><Font name="System Bold Italic" size="36.0" /></font><HBox.margin><Insets right="30.0" /></HBox.margin></Label>
+                    <Button fx:id="btnHome" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Home"><font><Font name="Serif Regular" size="26.0" /></font></Button>
+                    <Button fx:id="btnCreaTest" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: transparent transparent #1C77FF transparent; -fx-border-width: 0 0 3 0; -fx-cursor: hand;" text="Crea test"><font><Font name="Serif Regular" size="26.0" /></font><padding><Insets bottom="5.0" left="10.0" right="10.0" top="5.0" /></padding></Button>
+                    <Button fx:id="btnClassiVirtuali" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Classi Virtuali"><font><Font name="Serif Regular" size="26.0" /></font></Button>
+                </children>
+            </HBox>
+        </children>
+    </HBox>
+    <HBox alignment="CENTER" spacing="20.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="50.0">
+        <children>
+            <ImageView fx:id="profAvatar" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="profNameLabel" style="-fx-border-color: #8CB8F5; -fx-border-width: 1; -fx-padding: 8 20 8 20; -fx-background-color: white; -fx-text-fill: #555555;" text="Caricamento..."><font><Font name="System Regular" size="16.0" /></font></Label>
+        </children>
+    </HBox>
+
+    <!-- ==================== TITOLO PAGINA ==================== -->
+    <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="180.0">
+        <children>
+            <Label style="-fx-text-fill: #000000;" text="Riepilogo test">
+                <font><Font name="Serif Bold" size="48.0" /></font>
+            </Label>
+        </children>
+    </HBox>
+
+    <!-- ==================== CONTENUTO PRINCIPALE (Due Colonne) ==================== -->
+    <HBox alignment="TOP_CENTER" spacing="80.0" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="300.0">
+        <children>
+
+            <!-- COLONNA SINISTRA: Dettagli Test -->
+            <VBox alignment="TOP_CENTER" spacing="20.0">
+                <children>
+                    <Label style="-fx-text-fill: #000000;" text="Dettagli test">
+                        <font><Font name="Serif Regular" size="32.0" /></font>
+                        <VBox.margin><Insets bottom="10.0" /></VBox.margin>
+                    </Label>
+
+                    <!-- Box Dettagli ADATTABILE -->
+                    <VBox minWidth="350.0" style="-fx-background-color: #F5FCFF; -fx-border-color: #8CB8F5; -fx-border-width: 1.5; -fx-border-radius: 12; -fx-background-radius: 12;">
+                        <padding><Insets bottom="15.0" left="20.0" right="20.0" top="15.0" /></padding>
+                        <children>
+                            <Label fx:id="lblNomeTest" style="-fx-text-fill: #555555;" text="Nome test: nome">
+                                <font><Font name="Serif Regular" size="24.0" /></font>
+                                <padding><Insets bottom="10.0" top="10.0" /></padding>
+                            </Label>
+                            <Separator prefWidth="200.0" />
+
+                            <Label fx:id="lblClasse" style="-fx-text-fill: #555555;" text="Assegnato a: classe">
+                                <font><Font name="Serif Regular" size="24.0" /></font>
+                                <padding><Insets bottom="10.0" top="10.0" /></padding>
+                            </Label>
+                            <Separator prefWidth="200.0" />
+
+                            <Label fx:id="lblData" style="-fx-text-fill: #555555;" text="Data di consegna: data">
+                                <font><Font name="Serif Regular" size="24.0" /></font>
+                                <padding><Insets bottom="10.0" top="10.0" /></padding>
+                            </Label>
+                            <Separator prefWidth="200.0" />
+
+                            <Label fx:id="lblOra" style="-fx-text-fill: #555555;" text="Ora di consegna: ora">
+                                <font><Font name="Serif Regular" size="24.0" /></font>
+                                <padding><Insets bottom="10.0" top="10.0" /></padding>
+                            </Label>
+                            <Separator prefWidth="200.0" />
+
+                            <Label fx:id="lblDurata" style="-fx-text-fill: #555555;" text="Durata test: minutes">
+                                <font><Font name="Serif Regular" size="24.0" /></font>
+                                <padding><Insets bottom="10.0" top="10.0" /></padding>
+                            </Label>
+                        </children>
+                    </VBox>
+
+                    <!-- Bottone Modifica -->
+                    <Button mnemonicParsing="false" onAction="#handleModificaDettagli" style="-fx-background-color: #1C77FF; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Modifica dettagli">
+                        <font><Font name="System Regular" size="22.0" /></font>
+                        <padding><Insets bottom="10.0" left="20.0" right="20.0" top="10.0" /></padding>
+                    </Button>
+                </children>
+            </VBox>
+
+            <!-- COLONNA DESTRA: Gestione Domande -->
+            <VBox prefWidth="1100.0" style="-fx-background-color: #F5FCFF; -fx-border-color: #1C77FF; -fx-border-width: 1.5; -fx-border-radius: 4; -fx-background-radius: 4;">
+                <padding><Insets bottom="30.0" left="40.0" right="40.0" top="20.0" /></padding>
+                <children>
+
+                    <!-- Header Box (Totali) -->
+                    <HBox alignment="CENTER_LEFT">
+                        <children>
+                            <Label fx:id="lblTotaleDomande" style="-fx-text-fill: #777777;" text="Totale domande aggiunte: 0">
+                                <font><Font name="System Regular" size="22.0" /></font>
+                            </Label>
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label fx:id="lblPunteggioTotale" style="-fx-text-fill: #777777;" text="Punteggio totale test: 0">
+                                <font><Font name="System Regular" size="22.0" /></font>
+                            </Label>
+                        </children>
+                        <VBox.margin><Insets bottom="10.0" /></VBox.margin>
+                    </HBox>
+                    <Separator prefWidth="200.0"><VBox.margin><Insets bottom="30.0" /></VBox.margin></Separator>
+
+                    <!-- Intestazioni Colonne della Tabella (Allineate alla Griglia) -->
+                    <GridPane>
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="650.0" />
+                            <ColumnConstraints halignment="CENTER" hgrow="NEVER" minWidth="100.0" prefWidth="150.0" />
+                            <ColumnConstraints halignment="CENTER" hgrow="NEVER" minWidth="100.0" prefWidth="120.0" />
+                        </columnConstraints>
+                        <rowConstraints><RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" /></rowConstraints>
+                        <children>
+                            <Label style="-fx-text-fill: #000000;" text="Domande" GridPane.columnIndex="0" GridPane.halignment="CENTER">
+                                <font><Font name="System Bold" size="18.0" /></font>
+                            </Label>
+                            <Label style="-fx-text-fill: #000000;" text="Punteggio" GridPane.columnIndex="1">
+                                <font><Font name="System Bold" size="18.0" /></font>
+                            </Label>
+                        </children>
+                    </GridPane>
+
+                    <!-- Linea separatrice sotto i titoli della tabella -->
+                    <Region prefHeight="1.5" minHeight="1.5" style="-fx-background-color: #8CB8F5;">
+                        <VBox.margin><Insets bottom="10.0" top="10.0" /></VBox.margin>
+                    </Region>
+
+                    <!-- Lista Domande (Dinamica) -->
+                    <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
+                        <content>
+                            <!-- Qui il Controller inietterà le righe delle domande -->
+                            <VBox fx:id="listaDomandeVBox" spacing="10.0" />
+                        </content>
+                    </ScrollPane>
+
+                    <!-- Bottone Aggiungi Domanda -->
+                    <HBox alignment="CENTER">
+                        <VBox.margin><Insets top="30.0" /></VBox.margin>
+                        <children>
+                            <Button mnemonicParsing="false" onAction="#handleAggiungiDomanda" style="-fx-background-color: #1C77FF; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Aggiungi domanda">
+                                <font><Font name="System Regular" size="20.0" /></font>
+                                <padding><Insets bottom="10.0" left="30.0" right="30.0" top="10.0" /></padding>
+                            </Button>
+                        </children>
+                    </HBox>
+
+                </children>
+            </VBox>
+
+        </children>
+    </HBox>
+
+    <!-- ==================== HEADER (Campanella, Menu, Profilo) ==================== -->
+    <Button fx:id="btnNotifiche" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="80.0" prefWidth="80.0" style="-fx-background-color: #1C77FF; -fx-background-radius: 50em; -fx-border-color: #000000; -fx-border-radius: 50em; -fx-border-width: 1.5; -fx-cursor: hand;" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="40.0">
+        <graphic><Label style="-fx-text-fill: #000000;" text="🔔"><font><Font size="36.0" /></font></Label></graphic>
+    </Button>
+
+    <!-- ==================== BOTTONE SALVA E PUBBLICA (Bottom-Center) ==================== -->
+    <HBox alignment="CENTER" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <children>
+            <Button mnemonicParsing="false" onAction="#handleSalvaPubblica" style="-fx-background-color: #1C77FF; -fx-text-fill: white; -fx-background-radius: 12; -fx-cursor: hand;" text="Salva e pubblica">
+                <font><Font name="System Regular" size="32.0" /></font>
+                <padding><Insets bottom="15.0" left="40.0" right="40.0" top="15.0" /></padding>
+            </Button>
+        </children>
+    </HBox>
+
+</AnchorPane>
