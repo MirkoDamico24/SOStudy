@@ -1,8 +1,10 @@
 package it.uniroma2.dicii.ispw.sostudy.view;
 
+import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -24,7 +26,6 @@ public class HomeControllerGUI {
     @FXML
     private Button btnLogout;
 
-    // Nomi generalizzati per adattarsi sia al prof che allo studente
     @FXML
     private Label userNameLabel;
     @FXML
@@ -32,25 +33,22 @@ public class HomeControllerGUI {
     @FXML
     private VBox listaComunicazioni;
 
+    private NavigatorGUI navigatorGUI;
+    private Parent view;
+
     /**
      * Adatta l'interfaccia in base al tipo di utente loggato.
      * @param isProfessore true se è prof, false se è studente
      */
-    public void configuraVistaPerRuolo(boolean isProfessore) {
+    public void configureViewByRole(boolean isProfessore) {
         if (!isProfessore) {
-            // Nasconde il tab "Crea Test" nella barra di navigazione
             btnCreaTest.setVisible(false);
-
-            // Rimuove l'ingombro del bottone, permettendo all'HBox
-            // di ricentrare automaticamente "Home" e "Classi Virtuali"
             btnCreaTest.setManaged(false);
         }
     }
 
-    /**
-     * Imposta i dati visivi dell'utente loggato.
-     */
-    public void setDatiUtente(String nomeUtente, Image immagineAvatar) {
+
+    public void setLabelUsername(String nomeUtente, Image immagineAvatar) {
         userNameLabel.setText(nomeUtente);
         if (immagineAvatar != null) {
             userAvatar.setImage(immagineAvatar);
@@ -96,4 +94,9 @@ public class HomeControllerGUI {
     void handleLogout(ActionEvent event) {
         // Logica per chiudere la sessione e tornare al login
     }
+
+    public void setNavigatorGUI(NavigatorGUI navigatorGUI) { this.navigatorGUI = navigatorGUI; }
+    public void setView(Parent view) { this.view = view; }
+    public NavigatorGUI getNavigatorGUI() { return this.navigatorGUI; }
+    public Parent getView() { return this.view; }
 }

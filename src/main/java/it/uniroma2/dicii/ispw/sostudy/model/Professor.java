@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Professor {
-    private int id;
+    //private int id;
     private String name;
     private String surname;
     private String email;
 
     private List<VirtualClass> classes;
 
-    public Professor(int id, String name, String surname, String email) {
-        this.id = id;
+    public Professor(String name, String surname, String email) {
+        //this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -25,7 +25,7 @@ public class Professor {
         this.classes.add(cls);
     }
 
-    public int getId() { return this.id; }
+    //public int getId() { return this.id; }
     public String getName() { return this.name; }
     public String getSurname() { return this.surname; }
     public String getEmail() { return this.email; }

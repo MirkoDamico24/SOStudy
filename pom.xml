@@ -60,7 +60,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>it.uniroma2.dicii.ispw.sostudy/it.uniroma2.dicii.ispw.sostudy.HelloApplication
+                            <mainClass>it.uniroma2.dicii.ispw.sostudy/it.uniroma2.dicii.ispw.sostudy.application.HelloApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

@@ -1,4 +1,4 @@
-package it.uniroma2.dicii.ispw.sostudy;
+package it.uniroma2.dicii.ispw.sostudy.application;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
