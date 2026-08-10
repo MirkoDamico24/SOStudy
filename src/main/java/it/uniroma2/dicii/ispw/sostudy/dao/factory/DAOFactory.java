@@ -1,8 +1,8 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.factory;
 
-import it.uniroma2.dicii.ispw.sostudy.dao.Authentication.AuthenticationDAO;
-import it.uniroma2.dicii.ispw.sostudy.dao.Professor.ProfessorDao;
-import it.uniroma2.dicii.ispw.sostudy.dao.Student.StudentDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.authentication.AuthenticationDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.professor.ProfessorDao;
+import it.uniroma2.dicii.ispw.sostudy.dao.student.StudentDAO;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 
 import java.io.FileInputStream;

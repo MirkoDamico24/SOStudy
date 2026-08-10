@@ -12,7 +12,6 @@ public class Professor {
     private List<VirtualClass> classes;
 
     public Professor(String name, String surname, String email) {
-        //this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -25,7 +24,6 @@ public class Professor {
         this.classes.add(cls);
     }
 
-    //public int getId() { return this.id; }
     public String getName() { return this.name; }
     public String getSurname() { return this.surname; }
     public String getEmail() { return this.email; }

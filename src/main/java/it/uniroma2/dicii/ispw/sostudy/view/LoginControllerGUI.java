@@ -4,7 +4,6 @@ import it.uniroma2.dicii.ispw.sostudy.bean.SessionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.UserBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.LoginController;
 import it.uniroma2.dicii.ispw.sostudy.exception.InvalidCredentialException;
-import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

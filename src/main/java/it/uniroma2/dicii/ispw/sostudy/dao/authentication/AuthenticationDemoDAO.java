@@ -1,13 +1,13 @@
-package it.uniroma2.dicii.ispw.sostudy.dao.Authentication;
+package it.uniroma2.dicii.ispw.sostudy.dao.authentication;
 
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 
 public class AuthenticationDemoDAO implements AuthenticationDAO {
-    private final String emailProf = "mario.rossi@gmail.com";
-    private final String passwordProf = "mario.rossi";
-    private final String emailStud = "giuseppe.bianchi@gmail.com";
-    private final String passwordStud = "giuseppe.bianchi";
+    private static final String emailProf = "mario.rossi@gmail.com";
+    private static final String passwordProf = "mario.rossi";
+    private static final String emailStud = "giuseppe.bianchi@gmail.com";
+    private static final String passwordStud = "giuseppe.bianchi";
 
     @Override
     public String getCredentials(String email) throws DAOException {

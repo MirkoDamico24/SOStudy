@@ -1,4 +1,4 @@
-package it.uniroma2.dicii.ispw.sostudy.dao.Student;
+package it.uniroma2.dicii.ispw.sostudy.dao.student;
 
 import it.uniroma2.dicii.ispw.sostudy.model.Student;
 

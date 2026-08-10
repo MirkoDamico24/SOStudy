@@ -1,14 +1,12 @@
 package it.uniroma2.dicii.ispw.sostudy.view.navigator;
 
-import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.view.HomeControllerCLI;
 import it.uniroma2.dicii.ispw.sostudy.view.LoginControllerCLI;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
-import java.io.Console;
 import java.io.IOException;
-import java.util.Scanner;
+
 
 public class NavigatorCLI extends Navigator{
     private LoginControllerCLI login;
@@ -35,5 +33,13 @@ public class NavigatorCLI extends Navigator{
             this.home.setNavigator(this);
         }
         this.home.start();
+    }
+
+    @Override
+    public void creatTestView(){
+    }
+
+    @Override
+    public void createClassesView(){
     }
 }

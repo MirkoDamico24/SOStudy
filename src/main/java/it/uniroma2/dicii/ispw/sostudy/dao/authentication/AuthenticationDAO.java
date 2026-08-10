@@ -1,4 +1,4 @@
-package it.uniroma2.dicii.ispw.sostudy.dao.Authentication;
+package it.uniroma2.dicii.ispw.sostudy.dao.authentication;
 
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;

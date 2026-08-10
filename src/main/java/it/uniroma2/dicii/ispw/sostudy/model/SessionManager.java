@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class SessionManager {
     private final HashMap<Integer, Session> sessions;
 
-    private int IDs;
+    private int ids;
 
     public SessionManager() {
         sessions = new HashMap<>();
@@ -22,16 +22,16 @@ public class SessionManager {
     }
 
     public Session createSession(Student student){
-        Session s = new Session(this.IDs, student);
-        this.sessions.put(this.IDs, s);
-        this.IDs++;
+        Session s = new Session(this.ids, student);
+        this.sessions.put(this.ids, s);
+        this.ids++;
         return s;
     }
 
     public Session createSession(Professor currentProfessor){
-        Session s = new Session(this.IDs, currentProfessor);
-        this.sessions.put(this.IDs, s);
-        this.IDs++;
+        Session s = new Session(this.ids, currentProfessor);
+        this.sessions.put(this.ids, s);
+        this.ids++;
         return s;
     }
 

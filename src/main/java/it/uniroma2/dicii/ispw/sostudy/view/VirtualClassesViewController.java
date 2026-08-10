@@ -1,10 +1,14 @@
 package it.uniroma2.dicii.ispw.sostudy.view;
 
+import it.uniroma2.dicii.ispw.sostudy.bean.VirtualClassBean;
+import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
+import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -28,30 +32,27 @@ public class VirtualClassesViewController {
     // --- Contenitore Classi ---
     @FXML private FlowPane classiFlowPane;
 
-    /**
-     * Classe fittizia per simulare i dati provenienti dal database
-     */
-    class ClasseMock {
-        String id;
-        String nome;
-        String nomeProfessore;
-        String imagePath; // Percorso dell'immagine
+    private NavigatorGUI navigatorGUI;
+    private Parent root;
 
-        public ClasseMock(String id, String nome, String nomeProfessore, String imagePath) {
-            this.id = id; this.nome = nome; this.nomeProfessore = nomeProfessore; this.imagePath = imagePath;
-        }
+    public void setNavigatorGUI(NavigatorGUI navigatorGUI) {
+        this.navigatorGUI = navigatorGUI;
     }
 
-    @FXML
-    public void initialize() {
-        // Esempio di caricamento dati (questo andrà fatto dopo aver capito chi fa il login)
+    public void setView(Parent root) {
+        this.root = root;
+    }
 
-        // 1. Diciamo all'interfaccia che chi ha fatto il login è uno Studente (false) o un Prof (true)
-        // CAMBIA QUESTO VALORE A 'false' PER VEDERE LA VISTA STUDENTE!
-        configuraVistaPerRuolo(true);
+    public Parent getView(){
+        return root;
+    }
 
-        // 2. Creiamo una lista fittizia di classi
-        List<ClasseMock> mieClassi = Arrays.asList(
+
+    public void prepare() {
+        configureViewByRole(navigatorGUI.getContext().getSession().getCurrentRole() == UserRole.PROFESSOR);
+
+        /*// 2. Creiamo una lista fittizia di classi
+        List<VirtualClassBean> mieClassi = Arrays.asList(
                 new ClasseMock("C1", "Informatica - 5A", "Prof. Mario Rossi", null),
                 new ClasseMock("C2", "Matematica - 3B", "Prof. Luigi Verdi", null),
                 new ClasseMock("C3", "Sistemi e Reti - 5A", "Prof. Mario Rossi", null),
@@ -59,22 +60,17 @@ public class VirtualClassesViewController {
         );
 
         // 3. Popoliamo la schermata
-        popolaClassi(mieClassi);
+        popolaClassi(mieClassi);*/
     }
 
     /**
      * Adatta l'interfaccia in base al tipo di utente loggato.
      * @param isProfessore true se è prof, false se è studente
      */
-    public void configuraVistaPerRuolo(boolean isProfessore) {
+    public void configureViewByRole(boolean isProfessore) {
         if (!isProfessore) {
-            // Nasconde il tasto Crea Classe in basso a sinistra (gli studenti non possono creare classi)
             btnCreaClasse.setVisible(false);
-
-            // Nasconde il tab "Crea Test" nella barra di navigazione
             btnCreaTest.setVisible(false);
-            // setManaged(false) è FONDAMENTALE: rimuove lo spazio occupato dal tasto.
-            // Così l'HBox si ridimensiona e centra perfettamente "Home" e "Classi Virtuali".
             btnCreaTest.setManaged(false);
         }
     }
@@ -82,18 +78,18 @@ public class VirtualClassesViewController {
     /**
      * Pulisce la vista e inserisce tutte le card delle classi.
      */
-    public void popolaClassi(List<ClasseMock> classi) {
+    /*public void popolaClassi(List<ClasseMock> classi) {
         classiFlowPane.getChildren().clear();
         for (ClasseMock classe : classi) {
             VBox card = creaCardClasse(classe);
             classiFlowPane.getChildren().add(card);
         }
-    }
+    }*/
 
     /**
      * Costruisce graficamente la singola Card della classe.
      */
-    private VBox creaCardClasse(ClasseMock classe) {
+    private VBox creaCardClasse(VirtualClassBean cls) {
         VBox card = new VBox(15);
         card.setAlignment(Pos.TOP_CENTER);
         card.setPrefWidth(320);
@@ -110,7 +106,7 @@ public class VirtualClassesViewController {
         imagePlaceholder.setStyle("-fx-background-color: #E0E0E0; -fx-background-radius: 8;");
 
         // --- COLORE NOME CLASSE ---
-        Label lblNomeClasse = new Label(classe.nome);
+        Label lblNomeClasse = new Label(cls.getClassName());
         lblNomeClasse.setFont(new Font("Serif Bold", 24));
         lblNomeClasse.setStyle("-fx-text-fill: #555555;");
         lblNomeClasse.setUnderline(true);
@@ -120,7 +116,7 @@ public class VirtualClassesViewController {
         });
 
         // --- COLORE NOME PROFESSORE ---
-        Label lblProfessore = new Label(classe.nomeProfessore);
+        Label lblProfessore = new Label(cls.getProfessor().getName());
         lblProfessore.setFont(new Font("System Regular", 18));
         lblProfessore.setStyle("-fx-text-fill: #777777;");
 

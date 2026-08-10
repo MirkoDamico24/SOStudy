@@ -1,5 +1,7 @@
 package it.uniroma2.dicii.ispw.sostudy.view;
 
+import it.uniroma2.dicii.ispw.sostudy.bean.ProfessorBean;
+import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -38,12 +40,28 @@ public class CreaTestDetailControllerGUI {
     @FXML private TextField durataField;
     @FXML private Button btnSalva;
 
+    private Parent root;
+    private NavigatorGUI navigatorGUI;
+
+    public void setNavigatorGUI(NavigatorGUI navigatorGUI) {
+        this.navigatorGUI = navigatorGUI;
+    }
+
+    public void setView(Parent root) {
+        this.root = root;
+    }
+
+    public Parent getView() {
+        return root;
+    }
+
     /**
      * Questo metodo viene chiamato automaticamente da JavaFX dopo
      * aver caricato il file FXML. Ideale per configurare i componenti.
      */
-    @FXML
-    public void initialize() {
+    public void prepare() {
+        setUsernameBundle();
+
         // 1. Popola la ComboBox delle Classi (da sostituire con dati dal DB)
         ObservableList<String> classi = FXCollections.observableArrayList(
                 "Classe 1A - Informatica",
@@ -56,19 +74,19 @@ public class CreaTestDetailControllerGUI {
         ObservableList<String> orari = FXCollections.observableArrayList(
                 "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
                 "11:00", "11:30", "12:00", "12:30", "14:00", "14:30",
-                "15:00", "15:30", "16:00", "16:30"
+                "15:00", "15:30", "16:00", "16:30", "17:00"
         );
         orarioComboBox.setItems(orari);
     }
 
-    /**
-     * Imposta i dati del professore nell'header (da richiamare post-login)
-     */
-    public void setDatiProfessore(String nomeProfessore, Image immagineAvatar) {
-        profNameLabel.setText(nomeProfessore);
-        if (immagineAvatar != null) {
-            profAvatar.setImage(immagineAvatar);
+
+    public void setUsernameBundle() {
+        String nameToPrint = "Unavailable";
+        ProfessorBean pb = navigatorGUI.getContext().getSession().getProfessor();
+        if(pb != null) {
+            nameToPrint = pb.getName() + pb.getSurname();
         }
+        profNameLabel.setText(nameToPrint);
     }
 
     // --- Azioni dei Bottoni ---

@@ -14,7 +14,7 @@ public class HomeControllerCLI {
 
     private void showHomeView() {
         System.out.println("\n============================================================");
-        System.out.printf("  SoStudy | HOME | %s\n", "Mario");
+        System.out.printf("  SoStudy | HOME | %s%n", "Mario");
         System.out.println("============================================================");
 
         printNavBar();
@@ -40,7 +40,7 @@ public class HomeControllerCLI {
     }
 
     private void printNotifications() {
-        List<String> comunicazioni = new ArrayList<>();
+        //List<String> comunicazioni = new ArrayList<>();
 
         if (nav.getContext().getSession().getCurrentRole() == UserRole.STUDENT) {
             System.out.println("Implementa notifihce studente");

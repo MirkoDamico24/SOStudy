@@ -2,8 +2,10 @@ package it.uniroma2.dicii.ispw.sostudy.view.navigator;
 
 
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
+import it.uniroma2.dicii.ispw.sostudy.view.CreaTestDetailControllerGUI;
 import it.uniroma2.dicii.ispw.sostudy.view.HomeControllerGUI;
 import it.uniroma2.dicii.ispw.sostudy.view.LoginControllerGUI;
+import it.uniroma2.dicii.ispw.sostudy.view.VirtualClassesViewController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,6 +19,8 @@ public class NavigatorGUI extends Navigator{
     private Stage stage;
     private LoginControllerGUI login;
     private HomeControllerGUI home;
+    private CreaTestDetailControllerGUI createTest;
+    private VirtualClassesViewController virtualClasses;
 
     public NavigatorGUI(){
         super();
@@ -90,12 +94,49 @@ public class NavigatorGUI extends Navigator{
                 this.home.setView(root);
                 this.home.setNavigatorGUI(this);
             }
-            this.home.configureViewByRole(getContext().getSession().getCurrentRole() == UserRole.PROFESSOR);
+            this.home.prepare(getContext().getSession().getCurrentRole() == UserRole.PROFESSOR);
             buildView(this.home.getView());
         }
         catch(IOException e){
-            showAlert("Errore grafico", "Risorse non disponibili", "Non è stato possibile trovare il file di configurazione della login view");
+            showAlert("Errore grafico", "Risorse non disponibili", "Non è stato possibile trovare il file di configurazione della home view");
         }
 
     }
+
+    @Override
+    public void creatTestView(){
+        try{
+            if(this.createTest == null) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/it/uniroma2/dicii/ispw/sostudy/CreaTestView.fxml"));
+                Parent root = fxmlLoader.load();
+                this.createTest = fxmlLoader.getController();
+                this.createTest.setView(root);
+                this.createTest.setNavigatorGUI(this);
+            }
+            this.createTest.prepare();
+            buildView(this.createTest.getView());
+        }
+        catch(IOException e) {
+            showAlert("Errore grafico", "Risorse non disponibili", "Non è stato possibile trovare il file di configurazione della test view");
+        }
+    }
+
+    @Override
+    public void createClassesView(){
+        try{
+            if(this.virtualClasses == null) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/it/uniroma2/dicii/ispw/sostudy/VirtualClassesView.fxml"));
+                Parent root = fxmlLoader.load();
+                this.virtualClasses = fxmlLoader.getController();
+                this.virtualClasses.setView(root);
+                this.virtualClasses.setNavigatorGUI(this);
+            }
+            this.virtualClasses.prepare();
+            buildView(this.virtualClasses.getView());
+        }
+        catch(IOException e) {
+            showAlert("Errore grafico", "Risorse non disponibili", "Non è stato possibile trovare il file di configurazione della test view");
+        }
+    }
+
 }

@@ -1,9 +1,9 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.factory;
 
-import it.uniroma2.dicii.ispw.sostudy.dao.Authentication.AuthenticationDAO;
-import it.uniroma2.dicii.ispw.sostudy.dao.Authentication.AuthenticationDemoDAO;
-import it.uniroma2.dicii.ispw.sostudy.dao.Professor.ProfessorDemoDAO;
-import it.uniroma2.dicii.ispw.sostudy.dao.Student.StudentDemoDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.authentication.AuthenticationDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.authentication.AuthenticationDemoDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.professor.ProfessorDemoDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.student.StudentDemoDAO;
 
 public class DemoDAOFactory extends DAOFactory {
     @Override

@@ -1,9 +1,9 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.factory;
 
-import it.uniroma2.dicii.ispw.sostudy.dao.Authentication.AuthenticationDAO;
-import it.uniroma2.dicii.ispw.sostudy.dao.Authentication.AuthenticationFSDAO;
-import it.uniroma2.dicii.ispw.sostudy.dao.Professor.ProfessorFSDAO;
-import it.uniroma2.dicii.ispw.sostudy.dao.Student.StudentFSDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.authentication.AuthenticationDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.authentication.AuthenticationFSDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.professor.ProfessorFSDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.student.StudentFSDAO;
 
 public class FSDAOFactory extends DAOFactory {
 

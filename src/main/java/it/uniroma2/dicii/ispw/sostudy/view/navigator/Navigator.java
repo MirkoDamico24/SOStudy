@@ -1,13 +1,12 @@
 package it.uniroma2.dicii.ispw.sostudy.view.navigator;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.SessionBean;
-import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 
 public abstract class Navigator {
     private Views currentView;
     private ContextContainer contex;
 
-    public Navigator(){
+    protected Navigator(){
         this.contex = new ContextContainer();
     }
 
@@ -37,8 +36,9 @@ public abstract class Navigator {
         switch(currentView){
             case LOGIN -> createLoginView();
             case HOME -> createHomeView();
+            case CREATETEST -> creatTestView();
+            case CLASSVIEW -> createClassesView();
             /*  YET TO IMPLEMENT
-                case CLASSVIEW -> createClassesView();
                 case OPENQUESTIONVIEW -> createOpenQuestionView();
                 case CLOSEQUESTIONVIEW -> createCloseQuestionView();
                 case OPENANSWERVIEW ->  createOpenAnswerView();
@@ -92,9 +92,10 @@ public abstract class Navigator {
     public abstract void startup();
     public abstract void createLoginView();
     public abstract void createHomeView();
+    public abstract void creatTestView();
+    public abstract void createClassesView();
+
     /*  YET TO IMPLEMENT
-        public abstract void createClassesView();
-        public abstract void creatTestView();
 
         //professor only
         public abstract void createOpenQuestionView();
