@@ -26,8 +26,8 @@ public class NavigatorGUI extends Navigator{
     private CreaDomandaMultiplaController closeQuestion;
     private RiepilogoTestController testRecap;
 
-    private final String TITLE_ERROR = "Errore grafico";
-    private final String MESSAGE = "Risorse non disponibili";
+    private static final String TITLEERROR = "Errore grafico";
+    private static final String MESSAGE = "Risorse non disponibili";
 
     public NavigatorGUI(){
         super();
@@ -111,7 +111,7 @@ public class NavigatorGUI extends Navigator{
             buildView(this.login.getView());
         }
         catch(IOException e){
-            showAlert(TITLE_ERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della login view");
+            showAlert(TITLEERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della login view");
         }
 
     }
@@ -130,7 +130,7 @@ public class NavigatorGUI extends Navigator{
             buildView(this.home.getView());
         }
         catch(IOException e){
-            showAlert(TITLE_ERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della home view");
+            showAlert(TITLEERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della home view");
         }
 
     }
@@ -149,7 +149,7 @@ public class NavigatorGUI extends Navigator{
             buildView(this.createTest.getView());
         }
         catch(IOException e) {
-            showAlert(TITLE_ERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della test view");
+            showAlert(TITLEERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della test view");
         }
     }
 
@@ -167,7 +167,7 @@ public class NavigatorGUI extends Navigator{
             buildView(this.virtualClasses.getView());
         }
         catch(IOException e) {
-            showAlert(TITLE_ERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della virtual class view");
+            showAlert(TITLEERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della virtual class view");
         }
     }
 
@@ -185,7 +185,7 @@ public class NavigatorGUI extends Navigator{
             buildView(this.openQuestion.getView());
         }
         catch(IOException e) {
-            showAlert(TITLE_ERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della open question creation view");
+            showAlert(TITLEERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della open question creation view");
         }
     }
 
@@ -203,7 +203,7 @@ public class NavigatorGUI extends Navigator{
             buildView(this.closeQuestion.getView());
         }
         catch(IOException e) {
-            showAlert(TITLE_ERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della close question creation view");
+            showAlert(TITLEERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della close question creation view");
         }
     }
 
@@ -221,7 +221,7 @@ public class NavigatorGUI extends Navigator{
             buildView(this.testRecap.getView());
         }
         catch(IOException e) {
-            showAlert(TITLE_ERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della test recap view");
+            showAlert(TITLEERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della test recap view");
         }
     }
 }

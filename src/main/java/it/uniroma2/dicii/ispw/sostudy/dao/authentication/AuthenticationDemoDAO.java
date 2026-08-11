@@ -3,27 +3,54 @@ package it.uniroma2.dicii.ispw.sostudy.dao.authentication;
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 
-public class AuthenticationDemoDAO implements AuthenticationDAO {
-    private static final String EMAILPROF = "mario.rossi@gmail.com";
-    private static final String PASSWORDPROF = "mario.rossi";
-    private static final String EMAILSTUD = "giuseppe.bianchi@gmail.com";
-    private static final String PASSWORDSTUD = "giuseppe.bianchi";
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+public class AuthenticationDemoDAO extends AuthenticationDAO {
 
     @Override
     public String getCredentials(String email) throws DAOException {
-        return switch(email){
-            case EMAILPROF -> PASSWORDPROF;
-            case EMAILSTUD -> PASSWORDSTUD;
-            default -> throw new DAOException("Invalid email address");
-        };
+        try(InputStream input = new FileInputStream("src/main/resources/config.properties")) {
+            Properties prop = new Properties();
+            prop.load(input);
+
+            String emailProf = prop.getProperty("profemail");
+            String emailStud = prop.getProperty("studentemail");
+
+            if(email.equals(emailProf)) {
+                return prop.getProperty("profpasswd");
+            }
+            else if(email.equals(emailStud)) {return prop.getProperty("studentpasswd");}
+
+            throw new DAOException("Invalid email address");
+        }
+        catch(IOException e)
+        {
+            throw new DAOException("Error occurred while opening the config.properties file");
+        }
     }
 
      @Override
     public UserRole getUserRole(String email) throws DAOException {
-        return switch(email){
-            case EMAILPROF -> UserRole.PROFESSOR;
-            case EMAILSTUD -> UserRole.STUDENT;
-            default -> throw new DAOException("Invalid email address");
-        };
+         try(InputStream input = new FileInputStream("src/main/resources/config.properties")) {
+             Properties prop = new Properties();
+             prop.load(input);
+
+             String emailProf = prop.getProperty("profemail");
+             String emailStud = prop.getProperty("studentemail");
+
+             if(email.equals(emailProf)) {
+                 return UserRole.PROFESSOR;
+             }
+             else if(email.equals(emailStud)) {return UserRole.STUDENT;}
+
+             throw new DAOException("Invalid email address");
+         }
+         catch(IOException e)
+         {
+             throw new DAOException("Error occurred while opening the config.properties file");
+         }
      }
 }

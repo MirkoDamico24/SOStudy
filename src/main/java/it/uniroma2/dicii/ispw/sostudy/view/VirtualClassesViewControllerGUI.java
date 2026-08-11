@@ -62,10 +62,7 @@ public class VirtualClassesViewControllerGUI {
         popolaClassi(mieClassi);*/
     }
 
-    /**
-     * Adatta l'interfaccia in base al tipo di utente loggato.
-     * @param isProfessore true se è prof, false se è studente
-     */
+
     public void configureViewByRole(boolean isProfessore) {
         if (!isProfessore) {
             btnCreaClasse.setVisible(false);
@@ -74,9 +71,7 @@ public class VirtualClassesViewControllerGUI {
         }
     }
 
-    /**
-     * Pulisce la vista e inserisce tutte le card delle classi.
-     */
+
     /*public void popolaClassi(List<ClasseMock> classi) {
         classiFlowPane.getChildren().clear();
         for (ClasseMock classe : classi) {
@@ -85,9 +80,6 @@ public class VirtualClassesViewControllerGUI {
         }
     }*/
 
-    /**
-     * Costruisce graficamente la singola Card della classe.
-     */
     private VBox creaCardClasse(VirtualClassBean cls) {
         VBox card = new VBox(15);
         card.setAlignment(Pos.TOP_CENTER);

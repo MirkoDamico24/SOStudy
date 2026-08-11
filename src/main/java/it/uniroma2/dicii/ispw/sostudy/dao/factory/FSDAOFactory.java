@@ -4,8 +4,8 @@ import it.uniroma2.dicii.ispw.sostudy.dao.authentication.AuthenticationDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.authentication.AuthenticationFSDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.professor.ProfessorFSDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.student.StudentFSDAO;
-import it.uniroma2.dicii.ispw.sostudy.dao.virtualClass.VirtualClassDAO;
-import it.uniroma2.dicii.ispw.sostudy.dao.virtualClass.VirtualClassFSDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.virtualclass.VirtualClassDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.virtualclass.VirtualClassFSDAO;
 
 public class FSDAOFactory extends DAOFactory {
 

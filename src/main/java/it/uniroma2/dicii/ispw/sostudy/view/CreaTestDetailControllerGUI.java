@@ -15,7 +15,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import javafx.scene.Parent;
 import java.time.LocalTime;
-import java.util.Optional;
 
 public class CreaTestDetailControllerGUI {
     @FXML private Button btnHome;
@@ -119,12 +118,5 @@ public class CreaTestDetailControllerGUI {
     void handleNavClassiVirtuali(ActionEvent event) {
         
     }
-
-    private void showAlert(String title, String message, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(message);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
+    
 }

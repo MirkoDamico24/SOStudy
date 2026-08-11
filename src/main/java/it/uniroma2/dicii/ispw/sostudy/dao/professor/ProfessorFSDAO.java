@@ -2,7 +2,7 @@ package it.uniroma2.dicii.ispw.sostudy.dao.professor;
 
 import it.uniroma2.dicii.ispw.sostudy.model.Professor;
 
-public class ProfessorFSDAO implements ProfessorDao{
+public class ProfessorFSDAO extends ProfessorDAO {
     @Override
     public Professor getProfessorByEmail(String email){
         return null;

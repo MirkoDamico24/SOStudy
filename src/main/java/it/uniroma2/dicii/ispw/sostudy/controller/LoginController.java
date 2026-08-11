@@ -5,7 +5,7 @@ import it.uniroma2.dicii.ispw.sostudy.bean.SessionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.StudentBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.UserBean;
 import it.uniroma2.dicii.ispw.sostudy.dao.authentication.AuthenticationDAO;
-import it.uniroma2.dicii.ispw.sostudy.dao.professor.ProfessorDao;
+import it.uniroma2.dicii.ispw.sostudy.dao.professor.ProfessorDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.student.StudentDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.exception.InvalidCredentialException;
@@ -22,7 +22,7 @@ public class LoginController {
 
         if(password.equals(dao.getCredentials(email))) {
             if(dao.getUserRole(email) == UserRole.PROFESSOR) {
-                ProfessorDao profDAO = DAOFactory.getInstance().getProfessorDAO();
+                ProfessorDAO profDAO = DAOFactory.getInstance().getProfessorDAO();
                 Professor prof = profDAO.getProfessorByEmail(email);
                 Session currentSession = SessionManager.getInstance().createSession(prof);
                 ProfessorBean pb = new ProfessorBean(prof.getName(), prof.getSurname(), prof.getEmail());

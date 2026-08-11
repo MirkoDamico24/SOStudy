@@ -3,7 +3,7 @@ package it.uniroma2.dicii.ispw.sostudy.controller;
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
-import it.uniroma2.dicii.ispw.sostudy.dao.virtualClass.VirtualClassDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.virtualclass.VirtualClassDAO;
 import it.uniroma2.dicii.ispw.sostudy.model.*;
 
 import java.util.ArrayList;

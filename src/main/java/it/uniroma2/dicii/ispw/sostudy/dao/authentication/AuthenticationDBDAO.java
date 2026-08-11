@@ -3,7 +3,7 @@ package it.uniroma2.dicii.ispw.sostudy.dao.authentication;
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 
-public class AuthenticationDBDAO implements AuthenticationDAO {
+public class AuthenticationDBDAO extends AuthenticationDAO {
 
     @Override
     public String getCredentials(String username) throws DAOException{
