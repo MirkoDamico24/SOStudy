@@ -1,5 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.view;
 
+import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -12,6 +13,16 @@ public class PopupControllerSceltaTipoDomanda {
 
     @FXML
     private Button btnRispostaMultipla;
+
+    private NavigatorGUI navigatorGUI;
+
+    public void setNavigatorGUI(NavigatorGUI navigatorGUI) {
+        this.navigatorGUI = navigatorGUI;
+    }
+
+    public NavigatorGUI getNavigatorGUI() {
+        return navigatorGUI;
+    }
 
     @FXML
     void handleRispostaAperta(ActionEvent event) {

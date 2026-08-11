@@ -2,25 +2,32 @@ package it.uniroma2.dicii.ispw.sostudy.view.navigator;
 
 
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
-import it.uniroma2.dicii.ispw.sostudy.view.CreaTestDetailControllerGUI;
-import it.uniroma2.dicii.ispw.sostudy.view.HomeControllerGUI;
-import it.uniroma2.dicii.ispw.sostudy.view.LoginControllerGUI;
-import it.uniroma2.dicii.ispw.sostudy.view.VirtualClassesViewController;
+import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
+import it.uniroma2.dicii.ispw.sostudy.view.*;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class NavigatorGUI extends Navigator{
     private Stage stage;
     private LoginControllerGUI login;
     private HomeControllerGUI home;
     private CreaTestDetailControllerGUI createTest;
-    private VirtualClassesViewController virtualClasses;
+    private VirtualClassesViewControllerGUI virtualClasses;
+    private CreaDomandaApertaController openQuestion;
+    private CreaDomandaMultiplaController closeQuestion;
+    private RiepilogoTestController testRecap;
+
+    private final String TITLE_ERROR = "Errore grafico";
+    private final String MESSAGE = "Risorse non disponibili";
 
     public NavigatorGUI(){
         super();
@@ -36,6 +43,31 @@ public class NavigatorGUI extends Navigator{
         alert.setHeaderText(message);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    public static QuestionType showPopUp(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Scelta tipo domanda");
+        alert.setHeaderText("Tipo di domanda");
+        alert.setContentText("Seleziona il tipo di domanda da aggiungere al test");
+
+        ButtonType btnOpenQuestion = new ButtonType("A risposta aperta");
+        ButtonType btnMultipleChoice = new ButtonType("A risposta multipla");
+        ButtonType btnCancel = new ButtonType("Annulla", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(btnOpenQuestion, btnMultipleChoice, btnCancel);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent()) {
+            if (result.get() == btnOpenQuestion) {
+                return QuestionType.OPENQUESTION;
+
+            } else if (result.get() == btnMultipleChoice) {
+                return QuestionType.CLOSEQUESTION;
+            }
+        }
+        return null;
     }
 
     public void buildView(Parent root)
@@ -79,7 +111,7 @@ public class NavigatorGUI extends Navigator{
             buildView(this.login.getView());
         }
         catch(IOException e){
-            showAlert("Errore grafico", "Risorse non disponibili", "Non è stato possibile trovare il file di configurazione della login view");
+            showAlert(TITLE_ERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della login view");
         }
 
     }
@@ -98,7 +130,7 @@ public class NavigatorGUI extends Navigator{
             buildView(this.home.getView());
         }
         catch(IOException e){
-            showAlert("Errore grafico", "Risorse non disponibili", "Non è stato possibile trovare il file di configurazione della home view");
+            showAlert(TITLE_ERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della home view");
         }
 
     }
@@ -117,7 +149,7 @@ public class NavigatorGUI extends Navigator{
             buildView(this.createTest.getView());
         }
         catch(IOException e) {
-            showAlert("Errore grafico", "Risorse non disponibili", "Non è stato possibile trovare il file di configurazione della test view");
+            showAlert(TITLE_ERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della test view");
         }
     }
 
@@ -135,8 +167,61 @@ public class NavigatorGUI extends Navigator{
             buildView(this.virtualClasses.getView());
         }
         catch(IOException e) {
-            showAlert("Errore grafico", "Risorse non disponibili", "Non è stato possibile trovare il file di configurazione della test view");
+            showAlert(TITLE_ERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della virtual class view");
         }
     }
 
+    @Override
+    public void createOpenQuestionView(){
+        try{
+            if(this.openQuestion == null) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/it/uniroma2/dicii/ispw/sostudy/CreaDomandaAperta.fxml"));
+                Parent root = fxmlLoader.load();
+                this.openQuestion = fxmlLoader.getController();
+                this.openQuestion.setView(root);
+                this.openQuestion.setNavigatorGUI(this);
+            }
+            this.openQuestion.prepare();
+            buildView(this.openQuestion.getView());
+        }
+        catch(IOException e) {
+            showAlert(TITLE_ERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della open question creation view");
+        }
+    }
+
+    @Override
+    public void createCloseQuestionView(){
+        try{
+            if(this.closeQuestion == null) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/it/uniroma2/dicii/ispw/sostudy/CreaDomandaMultipla.fxml"));
+                Parent root = fxmlLoader.load();
+                this.closeQuestion = fxmlLoader.getController();
+                this.closeQuestion.setView(root);
+                this.closeQuestion.setNavigatorGUI(this);
+            }
+            this.closeQuestion.prepare();
+            buildView(this.closeQuestion.getView());
+        }
+        catch(IOException e) {
+            showAlert(TITLE_ERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della close question creation view");
+        }
+    }
+
+    @Override
+    public void createRecapView(){
+        try{
+            if(this.testRecap == null) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/it/uniroma2/dicii/ispw/sostudy/RiepilogoTest.fxml"));
+                Parent root = fxmlLoader.load();
+                this.testRecap = fxmlLoader.getController();
+                this.testRecap.setView(root);
+                this.testRecap.setNavigatorGUI(this);
+            }
+            this.testRecap.prepare();
+            buildView(this.testRecap.getView());
+        }
+        catch(IOException e) {
+            showAlert(TITLE_ERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della test recap view");
+        }
+    }
 }

@@ -1,9 +1,12 @@
 package it.uniroma2.dicii.ispw.sostudy.view;
 
+import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
+import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -27,38 +30,53 @@ public class CreaDomandaApertaController {
     @FXML private Button btnSalvaDomanda;
     @FXML private Button btnIndietro;
 
-    /**
-     * Inizializzazione automatica per popolare la ComboBox
-     */
-    @FXML
-    public void initialize() {
-        // Popola la ComboBox con i numeri interi da 1 a 20
-        ObservableList<Integer> punteggi = FXCollections.observableArrayList();
-        for (int i = 1; i <= 20; i++) {
-            punteggi.add(i);
-        }
-        punteggioComboBox.setItems(punteggi);
+    private NavigatorGUI navigatorGUI;
+    private Parent root;
+
+    public void setNavigatorGUI(NavigatorGUI navigatorGUI) {
+        this.navigatorGUI = navigatorGUI;
     }
 
-    /**
-     * Imposta i dati dell'utente loggato
-     */
-    public void setDatiProfessore(String nomeProfessore, Image immagineAvatar) {
-        profNameLabel.setText(nomeProfessore);
-        if (immagineAvatar != null) {
-            profAvatar.setImage(immagineAvatar);
+    public void setView(Parent root) {
+        this.root = root;
+    }
+
+    public NavigatorGUI getNavigatorGUI() {
+        return navigatorGUI;
+    }
+
+    public Parent getView() {
+        return root;
+    }
+
+
+    public void prepare() {
+        testoDomandaArea.clear();
+        punteggioComboBox.getSelectionModel().clearSelection();
+        setUsernameBundle();
+        ObservableList<Integer> scores = FXCollections.observableArrayList();
+        for (int i = 1; i <= 100; i++) {
+            scores.add(i);
         }
+        punteggioComboBox.setItems(scores);
+    }
+
+    public void setUsernameBundle() {
+        String username = navigatorGUI.getContext().getSession().getProfessor().getName() + " " + navigatorGUI.getContext().getSession().getProfessor().getSurname();
+        profNameLabel.setText(username);
     }
 
     // --- Azioni dei Bottoni ---
 
     @FXML
     void handleSalvaDomanda(ActionEvent event) {
-        // Lettura dei campi
-        String testo = testoDomandaArea.getText();
-        Integer punteggio = punteggioComboBox.getValue();
+        String header = testoDomandaArea.getText();
+        Integer maxScore = punteggioComboBox.getValue();
 
-        // Logica per aggiungere la domanda al database del test in creazione...
+        QuestionBean qb = new QuestionBean(header, maxScore);
+        navigatorGUI.getContext().setQuestions(qb);
+
+        navigatorGUI.goToRecapView();
     }
 
     @FXML

@@ -4,26 +4,25 @@ import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 
 public class AuthenticationDemoDAO implements AuthenticationDAO {
-    private static final String emailProf = "mario.rossi@gmail.com";
-    private static final String passwordProf = "mario.rossi";
-    private static final String emailStud = "giuseppe.bianchi@gmail.com";
-    private static final String passwordStud = "giuseppe.bianchi";
+    private static final String EMAILPROF = "mario.rossi@gmail.com";
+    private static final String PASSWORDPROF = "mario.rossi";
+    private static final String EMAILSTUD = "giuseppe.bianchi@gmail.com";
+    private static final String PASSWORDSTUD = "giuseppe.bianchi";
 
     @Override
     public String getCredentials(String email) throws DAOException {
         return switch(email){
-            case emailProf -> passwordProf;
-            case emailStud -> passwordStud;
+            case EMAILPROF -> PASSWORDPROF;
+            case EMAILSTUD -> PASSWORDSTUD;
             default -> throw new DAOException("Invalid email address");
         };
     }
 
      @Override
     public UserRole getUserRole(String email) throws DAOException {
-        System.out.println(email);
         return switch(email){
-            case emailProf -> UserRole.PROFESSOR;
-            case emailStud -> UserRole.STUDENT;
+            case EMAILPROF -> UserRole.PROFESSOR;
+            case EMAILSTUD -> UserRole.STUDENT;
             default -> throw new DAOException("Invalid email address");
         };
      }

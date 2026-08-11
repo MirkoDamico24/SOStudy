@@ -1,8 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.bean;
 
-import it.uniroma2.dicii.ispw.sostudy.model.VirtualClass;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class VirtualClassBean {

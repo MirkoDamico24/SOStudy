@@ -1,22 +1,18 @@
 package it.uniroma2.dicii.ispw.sostudy.view;
 
+import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
+import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
+import it.uniroma2.dicii.ispw.sostudy.controller.CreateTestController;
+import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
+import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import java.io.IOException;
 import java.util.List;
-import java.util.Arrays;
 
 public class RiepilogoTestController {
     @FXML private Label lblNomeTest;
@@ -29,64 +25,75 @@ public class RiepilogoTestController {
     @FXML private Label lblTotaleDomande;
     @FXML private Label lblPunteggioTotale;
     @FXML private VBox listaDomandeVBox;
-
-    // --- Header ---
-    @FXML private ImageView profAvatar;
     @FXML private Label profNameLabel;
 
-    // Classe fittizia per rappresentare i dati da caricare
-    class DomandaMock {
-        String tipo; // "Aperta" o "Multipla"
-        String testo;
-        int punteggio;
-        String opzioni; // Es: "Vero, Falso" (null se aperta)
+    private NavigatorGUI navigatorGUI;
+    private Parent view;
 
-        public DomandaMock(String tipo, String testo, int punteggio, String opzioni) {
-            this.tipo = tipo; this.testo = testo; this.punteggio = punteggio; this.opzioni = opzioni;
+    public void setNavigatorGUI(NavigatorGUI navigatorGUI) {
+        this.navigatorGUI = navigatorGUI;
+    }
+
+    public void setView(Parent view) {
+        this.view = view;
+    }
+
+    public NavigatorGUI getNavigatorGUI() {
+        return navigatorGUI;
+    }
+
+    public Parent getView() {
+        return view;
+    }
+
+    public void prepare() {
+        setUsernameBundle();
+
+        TestBean currentTest = navigatorGUI.getContext().getTest();
+        if (currentTest != null) {
+            setTestDetails(
+                    currentTest.getName(),
+                    currentTest.getVirtualClass(),
+                    currentTest.getDueDate().toString(),
+                    currentTest.getDueTime().toString(),
+                    String.valueOf(currentTest.getDuration().toMinutes())
+            );
         }
+
+        List<QuestionBean> questions = navigatorGUI.getContext().getQuestions();
+        populateQuestionList(questions);
     }
 
-    @FXML
-    public void initialize() {
-        // Esempio di caricamento dati (Simulazione)
-        setDettagliTest("Verifica di UML", "Classe 5A", "20/10/2026", "10:00", "60");
-
-        List<DomandaMock> mieDomande = Arrays.asList(
-                new DomandaMock("Aperta", "Per cosa è utilizzato lo use case diagram?", 10, null),
-                new DomandaMock("Multipla", "Il BCE è un pattern di analisi?", 3, "Vero, Falso")
-        );
-        popolaListaDomande(mieDomande);
+    public void setUsernameBundle() {
+        String username = navigatorGUI.getContext().getSession().getProfessor().getName() + " " + navigatorGUI.getContext().getSession().getProfessor().getSurname();
+        profNameLabel.setText(username);
     }
 
-    /**
-     * Aggiorna i dettagli nella colonna di sinistra.
-     */
-    public void setDettagliTest(String nome, String classe, String data, String ora, String durata) {
-        lblNomeTest.setText("Nome test: " + nome);
-        lblClasse.setText("Assegnato a: " + classe);
-        lblData.setText("Data di consegna: " + data);
-        lblOra.setText("Ora di consegna: " + ora);
-        lblDurata.setText("Durata test: " + durata + " minutes");
+    public void setTestDetails(String name, String virtualClass, String date, String time, String duration) {
+        lblNomeTest.setText("Nome test: " + name);
+        lblClasse.setText("Assegnato a: " + virtualClass);
+        lblData.setText("Data di consegna: " + date);
+        lblOra.setText("Ora di consegna: " + time);
+        lblDurata.setText("Durata test: " + duration + " minutes");
     }
 
-    /**
-     * Prende una lista di domande e genera le righe nell'interfaccia
-     */
-    public void popolaListaDomande(List<DomandaMock> domande) {
+    public void populateQuestionList(List<QuestionBean> questions) {
         listaDomandeVBox.getChildren().clear();
-        int index = 1;
 
-        for (DomandaMock d : domande) {
-            aggiungiRigaDomandaUI(index, d.tipo, d.testo, d.punteggio, d.opzioni);
+        if (questions == null || questions.isEmpty()) {
+            updateTotals();
+            return;
+        }
+
+        int index = 1;
+        for (QuestionBean question : questions) {
+            addQuestionRowUI(index, question);
             index++;
         }
-        aggiornaTotali();
+        updateTotals();
     }
 
-    /**
-     * Costruisce visivamente una singola riga per una domanda e i relativi bottoni.
-     */
-    private void aggiungiRigaDomandaUI(int indice, String tipo, String testo, int punteggio, String stringaOpzioni) {
+    private void addQuestionRowUI(int index, QuestionBean question) {
         GridPane row = new GridPane();
 
         ColumnConstraints col1 = new ColumnConstraints();
@@ -97,40 +104,35 @@ public class RiepilogoTestController {
         col3.setPrefWidth(120); col3.setHalignment(javafx.geometry.HPos.CENTER);
         row.getColumnConstraints().addAll(col1, col2, col3);
 
-        // 1. Colonna Testo (e opzioni se multipla)
-        VBox textContainer = new VBox(5);
-        Label lblTesto = new Label(indice + ") [" + tipo + "] " + testo);
-        lblTesto.setStyle("-fx-font-family: 'Serif'; -fx-font-size: 20px; -fx-text-fill: #555555;");
-        lblTesto.setWrapText(true);
-        textContainer.getChildren().add(lblTesto);
+        String questionType = question.isOpenQuestion() ? "Aperta" : "Multipla";
 
-        // Se è multipla, aggiunge la riga compatta delle opzioni
-        if (tipo.equals("Multipla") && stringaOpzioni != null) {
-            Label lblOpzioni = new Label("     Opzioni: " + stringaOpzioni);
-            lblOpzioni.setStyle("-fx-font-family: 'Serif'; -fx-font-size: 16px; -fx-text-fill: #777777;");
-            lblOpzioni.setWrapText(true);
-            textContainer.getChildren().add(lblOpzioni);
+        VBox textContainer = new VBox(5);
+        Label lblText = new Label(index + ") [" + questionType + "] " + question.getHeader());
+        lblText.setStyle("-fx-font-family: 'Serif'; -fx-font-size: 20px; -fx-text-fill: #555555;");
+        lblText.setWrapText(true);
+        textContainer.getChildren().add(lblText);
+
+        if (!question.isOpenQuestion() && question.getOptions() != null) {
+            String optionsString = String.join(", ", question.getOptions());
+            Label lblOptions = new Label("     Opzioni: " + optionsString);
+            lblOptions.setStyle("-fx-font-family: 'Serif'; -fx-font-size: 16px; -fx-text-fill: #777777;");
+            lblOptions.setWrapText(true);
+            textContainer.getChildren().add(lblOptions);
         }
         row.add(textContainer, 0, 0);
 
-        // 2. Colonna Punteggio
-        Label lblPunteggio = new Label(punteggio + " punti");
-        lblPunteggio.setStyle("-fx-font-family: 'Serif'; -fx-font-size: 20px; -fx-text-fill: #555555;");
-        lblPunteggio.getProperties().put("valore", punteggio);
-        row.add(lblPunteggio, 1, 0);
+        Label lblScore = new Label(question.getMaxScore() + " punti");
+        lblScore.setStyle("-fx-font-family: 'Serif'; -fx-font-size: 20px; -fx-text-fill: #555555;");
+        lblScore.getProperties().put("valore", question.getMaxScore());
+        row.add(lblScore, 1, 0);
 
-        // 3. Colonna Azioni (Matita e Cestino) - FIX ICONE
         HBox actionBox = new HBox(15);
         actionBox.setAlignment(Pos.CENTER);
 
-        // Matita
         Button btnEdit = new Button("✎");
-        // Aggiunto -fx-padding: 0; per rimuovere il margine che "schiaccia" l'icona
         btnEdit.setStyle("-fx-background-color: transparent; -fx-text-fill: #555555; -fx-cursor: hand; -fx-font-size: 26px; -fx-padding: 0;");
-        // Forziamo una larghezza e altezza minime per impedire la comparsa dei tre puntini "..."
         btnEdit.setMinSize(40, 40);
 
-        // Cestino
         Button btnDelete = new Button("🗑");
         btnDelete.setStyle("-fx-background-color: transparent; -fx-text-fill: #555555; -fx-cursor: hand; -fx-font-size: 24px; -fx-padding: 0;");
         btnDelete.setMinSize(40, 40);
@@ -139,74 +141,59 @@ public class RiepilogoTestController {
 
         btnDelete.setOnAction(e -> {
             listaDomandeVBox.getChildren().remove(rowWrapper);
-            aggiornaTotali();
+            navigatorGUI.getContext().getQuestions().remove(question);
+            updateTotals();
         });
 
         actionBox.getChildren().addAll(btnEdit, btnDelete);
         row.add(actionBox, 2, 0);
 
-        // FIX LINEA DI DIVISIONE: Usiamo una Region piatta al posto di un Separator
-        Region lineaDivisione = new Region();
-        lineaDivisione.setPrefHeight(1.5);
-        lineaDivisione.setMinHeight(1.5);
-        lineaDivisione.setStyle("-fx-background-color: #8CB8F5;"); // Solo blu, niente ombra nera
+        Region divider = new Region();
+        divider.setPrefHeight(1.5);
+        divider.setMinHeight(1.5);
+        divider.setStyle("-fx-background-color: #8CB8F5;");
 
-        rowWrapper.getChildren().addAll(row, lineaDivisione);
+        rowWrapper.getChildren().addAll(row, divider);
 
         listaDomandeVBox.getChildren().add(rowWrapper);
     }
 
-    /**
-     * Ricalcola dinamicamente domande e punteggio leggendo l'UI.
-     */
-    private void aggiornaTotali() {
-        int totaleDomande = listaDomandeVBox.getChildren().size();
-        int punteggioTotale = 0;
+    private void updateTotals() {
+        int totalQuestions = listaDomandeVBox.getChildren().size();
+        int totalScore = 0;
 
         for (Node node : listaDomandeVBox.getChildren()) {
             if (node instanceof VBox wrapper) {
-                GridPane grid = (GridPane) wrapper.getChildren().get(0);
-                Label puntLabel = (Label) grid.getChildren().get(1); // La colonna 2
+                GridPane grid = (GridPane) wrapper.getChildren().getFirst();
+                Label scoreLabel = (Label) grid.getChildren().get(1);
 
-                int punti = (int) puntLabel.getProperties().get("valore");
-                punteggioTotale += punti;
+                int points = (int) scoreLabel.getProperties().get("valore");
+                totalScore += points;
             }
         }
 
-        lblTotaleDomande.setText("Totale domande aggiunte: " + totaleDomande);
-        lblPunteggioTotale.setText("Punteggio totale test: " + punteggioTotale);
+        lblTotaleDomande.setText("Totale domande aggiunte: " + totalQuestions);
+        lblPunteggioTotale.setText("Punteggio totale test: " + totalScore);
     }
-
-    // --- AZIONI BOTTONI PRINCIPALI ---
 
     @FXML
     void handleModificaDettagli(ActionEvent event) {
-        // Logica per caricare crea_test_1.fxml
+
     }
 
     @FXML
-    void handleAggiungiDomanda(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("popup_scelta_tipo_domanda.fxml"));
-            Parent root = loader.load();
-
-            Stage popupStage = new Stage();
-            popupStage.initStyle(StageStyle.UNDECORATED);
-            popupStage.initModality(Modality.APPLICATION_MODAL);
-            popupStage.setScene(new Scene(root));
-
-            popupStage.showAndWait();
-
-            // Dopo la chiusura del popup, qui puoi intercettare la scelta
-            // per navigare verso la schermata Aperta o Multipla
-
-        } catch (IOException e) {
-            e.printStackTrace();
+    void handleAddQuestion(ActionEvent event) {
+        if(NavigatorGUI.showPopUp() == QuestionType.OPENQUESTION){
+            navigatorGUI.goToOpenQuestionView();
         }
+        else navigatorGUI.goToCloseQuestionView();
     }
 
     @FXML
-    void handleSalvaPubblica(ActionEvent event) {
+    void handleSavePublish(ActionEvent event) {
+        CreateTestController createTestController = new CreateTestController();
+        createTestController.createTest(navigatorGUI.getContext().getTest(),  navigatorGUI.getContext().getQuestions());
 
+        navigatorGUI.goToHomeView();
     }
 }

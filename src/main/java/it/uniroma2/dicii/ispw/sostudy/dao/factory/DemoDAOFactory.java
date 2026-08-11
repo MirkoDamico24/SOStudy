@@ -4,6 +4,8 @@ import it.uniroma2.dicii.ispw.sostudy.dao.authentication.AuthenticationDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.authentication.AuthenticationDemoDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.professor.ProfessorDemoDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.student.StudentDemoDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.virtualClass.VirtualClassDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.virtualClass.VirtualClassDemoDAO;
 
 public class DemoDAOFactory extends DAOFactory {
     @Override
@@ -19,5 +21,10 @@ public class DemoDAOFactory extends DAOFactory {
     @Override
     public StudentDemoDAO getStudentDAO(){
         return new StudentDemoDAO();
+    }
+
+    @Override
+    public VirtualClassDAO getVirtualClassDAO(){
+        return new VirtualClassDemoDAO();
     }
 }

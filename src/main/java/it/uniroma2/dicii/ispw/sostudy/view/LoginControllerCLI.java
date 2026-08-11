@@ -21,7 +21,7 @@ public class LoginControllerCLI {
 
     public void handleLogin() {
         LoginController login = new LoginController();
-
+        clearConsole();
         showBanner();
         Scanner scanner = new Scanner(System.in);
         String email = "";
@@ -55,4 +55,9 @@ public class LoginControllerCLI {
     }
 
     public void setNavigator(NavigatorCLI nav) { this.nav = nav; }
+
+    private void clearConsole(){
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
 }

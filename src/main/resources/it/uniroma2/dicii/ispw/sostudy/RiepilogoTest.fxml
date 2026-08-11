@@ -155,7 +155,7 @@
                     <HBox alignment="CENTER">
                         <VBox.margin><Insets top="30.0" /></VBox.margin>
                         <children>
-                            <Button mnemonicParsing="false" onAction="#handleAggiungiDomanda" style="-fx-background-color: #1C77FF; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Aggiungi domanda">
+                            <Button mnemonicParsing="false" onAction="#handleAddQuestion" style="-fx-background-color: #1C77FF; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Aggiungi domanda">
                                 <font><Font name="System Regular" size="20.0" /></font>
                                 <padding><Insets bottom="10.0" left="30.0" right="30.0" top="10.0" /></padding>
                             </Button>
@@ -176,7 +176,7 @@
     <!-- ==================== BOTTONE SALVA E PUBBLICA (Bottom-Center) ==================== -->
     <HBox alignment="CENTER" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <children>
-            <Button mnemonicParsing="false" onAction="#handleSalvaPubblica" style="-fx-background-color: #1C77FF; -fx-text-fill: white; -fx-background-radius: 12; -fx-cursor: hand;" text="Salva e pubblica">
+            <Button mnemonicParsing="false" onAction="#handleSavePublish" style="-fx-background-color: #1C77FF; -fx-text-fill: white; -fx-background-radius: 12; -fx-cursor: hand;" text="Salva e pubblica">
                 <font><Font name="System Regular" size="32.0" /></font>
                 <padding><Insets bottom="15.0" left="40.0" right="40.0" top="15.0" /></padding>
             </Button>

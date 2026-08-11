@@ -15,10 +15,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import java.util.List;
-import java.util.Arrays;
 
-public class VirtualClassesViewController {
+
+public class VirtualClassesViewControllerGUI {
     @FXML private Button btnCreaClasse;
     @FXML private Button btnNotifiche;
 

@@ -1,10 +1,9 @@
 package it.uniroma2.dicii.ispw.sostudy.view;
 
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
+import it.uniroma2.dicii.ispw.sostudy.model.SessionManager;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorCLI;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class HomeControllerCLI {
@@ -13,8 +12,14 @@ public class HomeControllerCLI {
     private final Scanner scanner = new Scanner(System.in);
 
     private void showHomeView() {
+        String username;
+        if(nav.getContext().getSession().getCurrentRole() == UserRole.PROFESSOR){
+            username = nav.getContext().getSession().getProfessor().getName() + " " +  nav.getContext().getSession().getProfessor().getSurname();
+        }
+        else username = nav.getContext().getSession().getStudent().getName() + " " +  nav.getContext().getSession().getStudent().getSurname();
+
         System.out.println("\n============================================================");
-        System.out.printf("  SoStudy | HOME | %s%n", "Mario");
+        System.out.printf("  SoStudy | HOME | %s%n", username);
         System.out.println("============================================================");
 
         printNavBar();
@@ -71,14 +76,18 @@ public class HomeControllerCLI {
         return switch (input) {
             case "1" -> {
                 System.out.println("\n--> Navigazione verso 'Classi Virtuali' in corso...");
+                nav.goToClassesView();
                 yield true;
             }
             case "2" -> {
                 System.out.println("\n--> Navigazione verso 'Crea test' in corso...");
+                nav.goToCreateTestView();
                 yield true;
             }
             case "0" -> {
                 System.out.println("\n--> Logout in corso. Arrivederci, " + "Mario" + "!");
+                SessionManager.getInstance().deleteSession(nav.getContext().getSession().getSessionID());
+                nav.goToLoginView();
                 yield false;
             }
             default -> {
@@ -91,10 +100,16 @@ public class HomeControllerCLI {
     public void start() {
         boolean running = true;
         while (running) {
+            clearConsole();
             showHomeView();
             running = manageInput();
         }
     }
 
     public void setNavigator(NavigatorCLI nav) { this.nav = nav;}
+
+    private void clearConsole(){
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
 }

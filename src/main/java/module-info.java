@@ -10,5 +10,6 @@ module it.uniroma2.dicii.ispw.sostudy {
     exports it.uniroma2.dicii.ispw.sostudy.application;
     exports it.uniroma2.dicii.ispw.sostudy.exception;
     exports it.uniroma2.dicii.ispw.sostudy.bean;
+    exports it.uniroma2.dicii.ispw.sostudy.model;
     opens it.uniroma2.dicii.ispw.sostudy.application to javafx.fxml;
 }

@@ -3,6 +3,8 @@ package it.uniroma2.dicii.ispw.sostudy.dao.factory;
 import it.uniroma2.dicii.ispw.sostudy.dao.authentication.AuthenticationDBDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.professor.ProfessorDBDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.student.StudentDBDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.virtualClass.VirtualClassDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.virtualClass.VirtualClassDBDAO;
 
 public class DBDAOFactory extends DAOFactory {
     @Override
@@ -18,5 +20,10 @@ public class DBDAOFactory extends DAOFactory {
     @Override
     public StudentDBDAO getStudentDAO(){
         return new StudentDBDAO();
+    }
+
+    @Override
+    public VirtualClassDAO getVirtualClassDAO(){
+        return new VirtualClassDBDAO();
     }
 }

@@ -143,7 +143,7 @@
                             <HBox alignment="CENTER">
                                 <VBox.margin><Insets top="60.0" /></VBox.margin>
                                 <children>
-                                    <Button fx:id="btnSalvaDomanda" mnemonicParsing="false" onAction="#handleSalvaDomanda" style="-fx-background-color: #1C77FF; -fx-text-fill: white; -fx-background-radius: 12; -fx-cursor: hand;" text="Salva domanda">
+                                    <Button fx:id="btnSalvaDomanda" mnemonicParsing="false" onAction="#handleSaveQuestion" style="-fx-background-color: #1C77FF; -fx-text-fill: white; -fx-background-radius: 12; -fx-cursor: hand;" text="Salva domanda">
                                         <font><Font name="System Regular" size="20.0" /></font>
                                         <padding><Insets bottom="10.0" left="30.0" right="30.0" top="10.0" /></padding>
                                     </Button>

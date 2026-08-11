@@ -1,26 +1,21 @@
 package it.uniroma2.dicii.ispw.sostudy.view;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.ProfessorBean;
+import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
+import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+
+import java.time.Duration;
 import java.time.LocalDate;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import java.io.IOException;
+import java.time.LocalTime;
+import java.util.Optional;
 
 public class CreaTestDetailControllerGUI {
     @FXML private Button btnHome;
@@ -92,36 +87,28 @@ public class CreaTestDetailControllerGUI {
     // --- Azioni dei Bottoni ---
 
     @FXML
-    void handleSalvaTest(ActionEvent event) {
-        // Lettura dei dati inseriti
-        String nomeTest = nomeTestField.getText();
-        String classeAssegnata = classeComboBox.getValue();
-        LocalDate dataConsegna = dataConsegnaPicker.getValue();
-        String orario = orarioComboBox.getValue();
-        String durata = durataField.getText();
+    void handleSaveTest(ActionEvent event) {
+        String testName = nomeTestField.getText();
+        String virtualClass = classeComboBox.getValue();
+        LocalDate dueDate = dataConsegnaPicker.getValue();
+        String time = orarioComboBox.getValue();
+        String duration = durataField.getText();
 
+        long durationLong = Long.parseLong(duration);
+        Duration finalDuration = Duration.ofMinutes(durationLong);
+        TestBean test = new TestBean(testName, dueDate, LocalTime.parse(time), finalDuration, virtualClass);
 
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/uniroma2/dicii/ispw/sostudy/PopupSceltaTipoDomanda.fxml"));
-            Parent root = loader.load();
+        navigatorGUI.getContext().setTest(test);
 
-            Stage popupStage = new Stage();
-            // Rimuove la barra di sistema in alto (minimizza, ingrandisci, chiudi) per farlo sembrare un vero popup interno
-            popupStage.initStyle(StageStyle.UNDECORATED);
-            // Blocca la finestra sottostante finché non viene fatta una scelta
-            popupStage.initModality(Modality.APPLICATION_MODAL);
-
-            // Imposta la scena con lo sfondo trasparente se vuoi un effetto più elegante
-            Scene scene = new Scene(root);
-            popupStage.setScene(scene);
-
-            // Mostra il popup e aspetta
-            popupStage.showAndWait();
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(NavigatorGUI.showPopUp() == QuestionType.OPENQUESTION){
+            navigatorGUI.goToOpenQuestionView();
         }
+        else{
+            navigatorGUI.goToCloseQuestionView();
+        }
+
     }
+
 
     @FXML
     void handleNavHome(ActionEvent event) {
@@ -131,5 +118,13 @@ public class CreaTestDetailControllerGUI {
     @FXML
     void handleNavClassiVirtuali(ActionEvent event) {
         
+    }
+
+    private void showAlert(String title, String message, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(message);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

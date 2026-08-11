@@ -9,7 +9,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -39,10 +38,7 @@ public class HomeControllerGUI {
 
     public void prepare(boolean isProfessor){
         configureViewByRole(isProfessor);
-        if(isProfessor){
-            setUsernameBundle(true);
-        }
-        else setUsernameBundle(false);
+        setUsernameBundle(isProfessor);
     }
 
     public void configureViewByRole(boolean isProfessore) {
@@ -54,7 +50,7 @@ public class HomeControllerGUI {
 
 
     public void setUsernameBundle(boolean isProfessor) {
-        String username = "Unknown";
+        String username;
         if (isProfessor) {
             username = navigatorGUI.getContext().getSession().getProfessor().getName() + " " + navigatorGUI.getContext().getSession().getProfessor().getSurname();
         }
