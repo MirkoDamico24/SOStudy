@@ -4,6 +4,7 @@ import it.uniroma2.dicii.ispw.sostudy.bean.ProfessorBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
+import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -99,11 +100,18 @@ public class CreaTestDetailControllerGUI {
 
         navigatorGUI.getContext().setTest(test);
 
-        if(NavigatorGUI.showPopUp() == QuestionType.OPENQUESTION){
-            navigatorGUI.goToOpenQuestionView();
+
+        if(navigatorGUI.getPreviousView() ==  Views.RECAP) {
+            navigatorGUI.setPreviousView(Views.CREATETEST);
+            navigatorGUI.goToRecapView();
         }
-        else{
-            navigatorGUI.goToCloseQuestionView();
+        else {
+            navigatorGUI.setPreviousView(Views.CREATETEST);
+            if (NavigatorGUI.showPopUp() == QuestionType.OPENQUESTION) {
+                navigatorGUI.goToOpenQuestionView();
+            } else {
+                navigatorGUI.goToCloseQuestionView();
+            }
         }
 
     }

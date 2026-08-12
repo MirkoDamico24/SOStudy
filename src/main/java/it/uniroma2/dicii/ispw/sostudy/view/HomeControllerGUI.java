@@ -2,6 +2,7 @@ package it.uniroma2.dicii.ispw.sostudy.view;
 
 import it.uniroma2.dicii.ispw.sostudy.model.SessionManager;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
+import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -86,11 +87,13 @@ public class HomeControllerGUI {
 
     @FXML
     void handleNavCreaTest(ActionEvent event) {
+        navigatorGUI.setPreviousView(Views.HOME);
         navigatorGUI.goToCreateTestView();
     }
 
     @FXML
     void handleNavClassiVirtuali(ActionEvent event) {
+        navigatorGUI.setPreviousView(Views.HOME);
         navigatorGUI.goToClassesView();
     }
 
@@ -98,6 +101,7 @@ public class HomeControllerGUI {
     void handleLogout(ActionEvent event) {
         // Logica per chiudere la sessione e tornare al login
         SessionManager.getInstance().deleteSession(navigatorGUI.getContext().getSession().getSessionID());
+        navigatorGUI.setPreviousView(Views.HOME);
         navigatorGUI.goToLoginView();
     }
 

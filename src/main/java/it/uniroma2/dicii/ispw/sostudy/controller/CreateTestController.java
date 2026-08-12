@@ -3,7 +3,10 @@ package it.uniroma2.dicii.ispw.sostudy.controller;
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
+import it.uniroma2.dicii.ispw.sostudy.dao.test.TestDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.virtualclass.VirtualClassDAO;
+import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
+import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.*;
 
 import java.util.ArrayList;
@@ -12,11 +15,27 @@ import java.util.List;
 public class CreateTestController {
 
 
-    public Test createTest(TestBean test, List<QuestionBean> questions){
+    public Test createTest(TestBean test, List<QuestionBean> questions) throws  ControllerException{
 
         VirtualClassDAO virtualClassDAO = DAOFactory.getInstance().getVirtualClassDAO();
         VirtualClass cls = virtualClassDAO.getVirtualClassByName(test.getName());
 
+        List<Question> questionList = getQuestions(questions);
+
+        Test newTest = new Test(test.getName(), test.getDueDate(), test.getDueTime(), test.getDuration(), questionList, cls);
+        TestDAO td = DAOFactory.getInstance().getTestDAO();
+        try {
+            td.saveTest(newTest);
+        }
+        catch (DAOException e) {
+            throw new ControllerException("Un test con questo nome è presente nel sistema.", e);
+        }
+        cls.addTest(newTest);
+
+        return newTest;
+    }
+
+    private static List<Question> getQuestions(List<QuestionBean> questions) {
         List<Question> questionList = new ArrayList<>();
         Question tempQuestion;
         for(QuestionBean question : questions){
@@ -35,12 +54,7 @@ public class CreateTestController {
             }
             questionList.add(tempQuestion);
         }
-
-        Test newTest = new Test(test.getName(), test.getDueDate(), test.getDueTime(), test.getDuration(), questionList, cls);
-        //TODO: implement DB logic to make the test persistent
-        cls.addTest(newTest);
-
-        return newTest;
+        return questionList;
     }
-    
+
 }

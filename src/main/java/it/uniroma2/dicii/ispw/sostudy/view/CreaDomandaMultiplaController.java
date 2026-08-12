@@ -2,6 +2,7 @@ package it.uniroma2.dicii.ispw.sostudy.view;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
+import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -142,6 +143,7 @@ public class CreaDomandaMultiplaController {
 
         QuestionBean qb = new QuestionBean(header, maxScore, options, solutionIndex);
         navigatorGUI.getContext().setQuestions(qb);
+        navigatorGUI.setPreviousView(Views.CLOSEQUESTIONVIEW);
         navigatorGUI.goToRecapView();
     }
 }

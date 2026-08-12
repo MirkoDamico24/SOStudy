@@ -3,8 +3,10 @@ package it.uniroma2.dicii.ispw.sostudy.view;
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.CreateTestController;
+import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
+import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -176,13 +178,23 @@ public class RiepilogoTestController {
         lblPunteggioTotale.setText("Punteggio totale test: " + totalScore);
     }
 
+    private void showAlert(String title, String message, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(message);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
     @FXML
     void handleModificaDettagli(ActionEvent event) {
-
+        navigatorGUI.setPreviousView(Views.RECAP);
+        navigatorGUI.goToCreateTestView();
     }
 
     @FXML
     void handleAddQuestion(ActionEvent event) {
+        navigatorGUI.setPreviousView(Views.RECAP);
         if(NavigatorGUI.showPopUp() == QuestionType.OPENQUESTION){
             navigatorGUI.goToOpenQuestionView();
         }
@@ -192,8 +204,13 @@ public class RiepilogoTestController {
     @FXML
     void handleSavePublish(ActionEvent event) {
         CreateTestController createTestController = new CreateTestController();
-        createTestController.createTest(navigatorGUI.getContext().getTest(),  navigatorGUI.getContext().getQuestions());
-
+        try {
+            createTestController.createTest(navigatorGUI.getContext().getTest(), navigatorGUI.getContext().getQuestions());
+        }
+        catch (ControllerException e) {
+            showAlert("Titolo esistente", e.getMessage(), "Cambiare il nome del test!!!");
+        }
+        navigatorGUI.setPreviousView(Views.RECAP);
         navigatorGUI.goToHomeView();
     }
 }

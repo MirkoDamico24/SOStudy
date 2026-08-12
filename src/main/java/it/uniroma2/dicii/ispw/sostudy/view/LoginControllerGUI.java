@@ -5,6 +5,7 @@ import it.uniroma2.dicii.ispw.sostudy.bean.UserBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.LoginController;
 import it.uniroma2.dicii.ispw.sostudy.exception.InvalidCredentialException;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
+import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -51,6 +52,7 @@ public class LoginControllerGUI {
         }
 
         navigatorGUI.setSession(currentSession);
+        navigatorGUI.setPreviousView(Views.LOGIN);
         navigatorGUI.goToHomeView();
 
     }

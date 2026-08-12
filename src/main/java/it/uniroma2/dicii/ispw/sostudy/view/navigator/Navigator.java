@@ -4,6 +4,7 @@ import it.uniroma2.dicii.ispw.sostudy.bean.SessionBean;
 
 public abstract class Navigator {
     private Views currentView;
+    private Views previousView;
     private ContextContainer contex;
 
     protected Navigator(){
@@ -12,6 +13,10 @@ public abstract class Navigator {
 
     public void setCurrentView(Views currentView) {
         this.currentView = currentView;
+    }
+
+    public void setPreviousView(Views previousView) {
+        this.previousView = previousView;
     }
 
     public void setContext(ContextContainer contex) {
@@ -29,6 +34,10 @@ public abstract class Navigator {
 
     public SessionBean getSession() {
         return this.contex.getSession();
+    }
+
+    public Views getPreviousView() {
+        return previousView;
     }
 
     public void nextView(){

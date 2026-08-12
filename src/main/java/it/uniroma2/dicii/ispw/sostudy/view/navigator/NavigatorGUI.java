@@ -31,10 +31,6 @@ public class NavigatorGUI extends Navigator{
 
     public NavigatorGUI(){
         super();
-        /*this.stage = new Stage();
-        stage.setTitle("SoStudy");
-        this.stage.setMinWidth(600);
-        this.stage.setMinHeight(400);*/
     }
 
     private void showAlert(String title, String message, String content) {
