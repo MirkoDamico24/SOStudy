@@ -1,0 +1,15 @@
+[
+  {
+    "email": "mario.rossi@gmail.com",
+    "name": "Mario",
+    "surname": "Rossi",
+    "classes": [
+      {
+        "className": "ISPWvirtualclass"
+      },
+      {
+        "className": "ISW2virtalclass"
+      }
+    ]
+  }
+]

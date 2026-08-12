@@ -59,7 +59,7 @@ public class CreaTestDetailControllerGUI {
 
         // 1. Popola la ComboBox delle Classi (da sostituire con dati dal DB)
         ObservableList<String> classi = FXCollections.observableArrayList(
-                "Classe 1A - Informatica",
+                "ISPWvirtualClass",
                 "Classe 2B - Matematica",
                 "Classe 3C - Sistemi"
         );

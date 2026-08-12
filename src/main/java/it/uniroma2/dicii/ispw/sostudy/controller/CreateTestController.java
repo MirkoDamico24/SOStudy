@@ -7,6 +7,7 @@ import it.uniroma2.dicii.ispw.sostudy.dao.test.TestDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.virtualclass.VirtualClassDAO;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
+import it.uniroma2.dicii.ispw.sostudy.exception.ExsistingTestExcpetion;
 import it.uniroma2.dicii.ispw.sostudy.model.*;
 
 import java.util.ArrayList;
@@ -15,20 +16,21 @@ import java.util.List;
 public class CreateTestController {
 
 
-    public Test createTest(TestBean test, List<QuestionBean> questions) throws  ControllerException{
+    public Test createTest(TestBean test, List<QuestionBean> questions) throws ExsistingTestExcpetion, ControllerException{
+        TestDAO td = DAOFactory.getInstance().getTestDAO();
+        if(td.testExists(test.getName())) throw new ExsistingTestExcpetion("Un testo con questo nome è già stato creato");
 
         VirtualClassDAO virtualClassDAO = DAOFactory.getInstance().getVirtualClassDAO();
-        VirtualClass cls = virtualClassDAO.getVirtualClassByName(test.getName());
+        VirtualClass cls = virtualClassDAO.getVirtualClassByName(test.getVirtualClass());
 
         List<Question> questionList = getQuestions(questions);
 
         Test newTest = new Test(test.getName(), test.getDueDate(), test.getDueTime(), test.getDuration(), questionList, cls);
-        TestDAO td = DAOFactory.getInstance().getTestDAO();
         try {
             td.saveTest(newTest);
         }
         catch (DAOException e) {
-            throw new ControllerException("Un test con questo nome è presente nel sistema.", e);
+            throw new ControllerException("Errore durante il salvataggio del test", e);
         }
         cls.addTest(newTest);
 

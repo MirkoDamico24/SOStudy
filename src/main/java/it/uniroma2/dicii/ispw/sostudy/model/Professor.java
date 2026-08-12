@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Professor {
-    //private int id;
     private String name;
     private String surname;
     private String email;
@@ -15,6 +14,13 @@ public class Professor {
         this.name = name;
         this.surname = surname;
         this.email = email;
+    }
+
+    public Professor(String name, String surname, String email, List<VirtualClass> classes) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.classes = classes;
     }
 
     public void addClass(VirtualClass cls) {

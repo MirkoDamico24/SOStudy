@@ -4,6 +4,7 @@ import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.CreateTestController;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
+import it.uniroma2.dicii.ispw.sostudy.exception.ExsistingTestExcpetion;
 import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
@@ -207,8 +208,11 @@ public class RiepilogoTestController {
         try {
             createTestController.createTest(navigatorGUI.getContext().getTest(), navigatorGUI.getContext().getQuestions());
         }
-        catch (ControllerException e) {
+        catch(ExsistingTestExcpetion e){
             showAlert("Titolo esistente", e.getMessage(), "Cambiare il nome del test!!!");
+        }
+        catch (ControllerException e) {
+            showAlert("Errore di risorsa", e.getMessage(), "Riprovare");
         }
         navigatorGUI.setPreviousView(Views.RECAP);
         navigatorGUI.goToHomeView();

@@ -1,0 +1,12 @@
+[
+  {
+    "email": "mario.rossi@gmail.com",
+    "password": "mario.rossi",
+    "role": "PROFESSOR"
+  },
+  {
+    "email": "giuseppe.bianchi@gmail.com",
+    "password": "giuseppe.bianchi",
+    "role": "STUDENT"
+  }
+]

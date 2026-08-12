@@ -1,0 +1,16 @@
+[
+  {
+    "name": "ISPWvirtualClass",
+    "professor": "mario.rossi@gmail.com",
+    "students": [
+      {
+        "email": "giuseppe.bianchi@gmail.com"
+      }
+    ],
+    "tests": [
+      {
+        "name": "testName"
+      }
+    ]
+  }
+]

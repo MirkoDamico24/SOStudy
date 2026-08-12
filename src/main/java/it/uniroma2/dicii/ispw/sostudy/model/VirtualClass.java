@@ -23,6 +23,13 @@ public class VirtualClass {
         this.students = students;
     }
 
+    public VirtualClass(String name, Professor prof, List<Student> students, List<Test> assignedTests) {
+        this.name = name;
+        this.prof = prof;
+        this.students = students;
+        this.assignedTests = assignedTests;
+    }
+
     public void addTest(Test test) {
         if(this.assignedTests == null) {
             this.assignedTests = new ArrayList<>();

@@ -13,4 +13,9 @@ public class TestAttemptDemoDAO extends TestAttemptDAO {
     public void saveTestAttempt(TestAttempt testAttempt) throws DAOException{
 
     }
+
+    @Override
+    public int assignId(TestAttempt testAttempt){
+        return 0;
+    }
 }

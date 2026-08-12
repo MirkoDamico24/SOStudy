@@ -12,4 +12,9 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
     public void saveTestAttempt(TestAttempt testAttempt) {
 
     }
+
+    @Override
+    public int assignId(TestAttempt testAttempt){
+        return 0;
+    }
 }

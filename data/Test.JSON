@@ -1,32 +1,37 @@
-{
-  "nome": "TestName",
-  "dueDate": "2026-08-15",
-  "dueTime": "16:00",
-  "questions": [
+[
     {
-      "header": "Question header",
-      "maxScore": 10
+        "duration": "PT2000H",
+        "dueDate": "2026-08-21",
+        "name": "sdfasdf",
+        "questions": [{
+            "header": "ghfjhgjhg",
+            "maxScore": 4
+        }],
+        "dueTime": "10:00",
+        "class": "ISPWvirtualClass"
     },
     {
-      "header": "Question header",
-      "maxScore": 3,
-      "options": [
-        {
-          "content": "Vero"
-        },
-        {
-          "content": "Falso"
-        }
-      ]
+        "duration": "PT1H30M",
+        "dueDate": "2026-08-29",
+        "name": "sburrevole",
+        "questions": [
+            {
+                "options": [
+                    {"content": "Maiale"},
+                    {"content": "Cane"},
+                    {"content": "Frocio"},
+                    {"content": "Bastardo"},
+                    {"content": "Testa di cazzo"}
+                ],
+                "header": "Qual è il soprannome con cui è meglio conosciuto Dio?",
+                "maxScore": 10
+            },
+            {
+                "header": "Descrivere il controllo di congestion TCP",
+                "maxScore": 5
+            }
+        ],
+        "dueTime": "16:30",
+        "class": "ISPWvirtualClass"
     }
-  ],
-  "testAttempts": [
-    {
-      "id": 1
-    },
-    {
-      "id": 2
-    }
-  ],
-  "class": "class name"
-}
+]

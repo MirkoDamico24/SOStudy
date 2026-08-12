@@ -1,5 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.test;
 
+import it.uniroma2.dicii.ispw.sostudy.application.JSONHelper;
 import it.uniroma2.dicii.ispw.sostudy.dao.attempt.TestAttemptDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
@@ -8,9 +9,7 @@ import it.uniroma2.dicii.ispw.sostudy.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -19,130 +18,152 @@ import java.util.List;
 
 public class TestFSDAO extends TestDAO {
 
-    private static final String FILE_PATH = "Test.JSON";
+    private static final String FILE_PATH = "data/Test.JSON";
+    private static final String KEY_NAME = "name";
+    private static final String KEY_CLASS = "class";
+    private static final String KEY_DUE_DATE = "dueDate";
+    private static final String KEY_DUE_TIME = "dueTime";
+    private static final String KEY_DURATION = "duration";
+    private static final String KEY_QUESTIONS = "questions";
+    private static final String KEY_HEADER = "header";
+    private static final String KEY_MAX_SCORE = "maxScore";
+    private static final String KEY_OPTIONS = "options";
+    private static final String KEY_CONTENT = "content";
+    private static final String KEY_IS_SOLUTION = "isSolution";
+    private static final String KEY_ATTEMPTS = "testAttempts";
+    private static final String KEY_ID = "id";
 
     @Override
-    public Test getTestByName(String testName) {
+    public Test getTestByName(String testName) throws DAOException {
         if (this.containsKey(testName)) {
             return this.getFromCache(testName);
         }
 
         try {
-            Path path = Paths.get(FILE_PATH);
-            if (!Files.exists(path)) {
-                return null;
-            }
-            String content = new String(Files.readAllBytes(path));
-            JSONArray jsonArray = new JSONArray(content);
-
+            JSONArray jsonArray = JSONHelper.readJsonFile(FILE_PATH);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                if (jsonObject.getString("nome").equals(testName)) {
+                if (jsonObject.getString(KEY_NAME).equals(testName)) {
                     return this.buildTest(jsonObject, testName);
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new DAOException("File system error occurred while getting test by name");
         }
         return null;
     }
 
     public Test buildTest(JSONObject jsonObject, String testName) throws DAOException {
-        String name = jsonObject.getString("nome");
-        LocalDate dueDate = LocalDate.parse(jsonObject.getString("dueDate"));
-        LocalTime dueTime = LocalTime.parse(jsonObject.getString("dueTime"));
+        String name = jsonObject.getString(KEY_NAME);
+        LocalDate dueDate = LocalDate.parse(jsonObject.getString(KEY_DUE_DATE));
+        LocalTime dueTime = LocalTime.parse(jsonObject.getString(KEY_DUE_TIME));
+        Duration duration = extractDuration(jsonObject);
 
-        Duration duration = null;
-        if (jsonObject.has("duration")) {
-            duration = Duration.parse(jsonObject.getString("duration"));
-        }
+        VirtualClass virtualClass = DAOFactory.getInstance().getVirtualClassDAO()
+                .getVirtualClassByName(jsonObject.getString(KEY_CLASS));
 
-        VirtualClass virtualClass = DAOFactory.getInstance().getVirtualClassDAO().getVirtualClassByName(jsonObject.getString("class"));
-
-        List<Question> questions = new ArrayList<>();
-        JSONArray questionsArray = jsonObject.getJSONArray("questions");
-
-        for (int i = 0; i < questionsArray.length(); i++) {
-            JSONObject questionObject = questionsArray.getJSONObject(i);
-            String header = questionObject.getString("header");
-            int maxScore = questionObject.getInt("maxScore");
-
-            if (questionObject.has("options")) {
-                JSONArray optionsArray = questionObject.getJSONArray("options");
-                List<Choice> choices = new ArrayList<>();
-                Choice solution = null;
-
-                for (int j = 0; j < optionsArray.length(); j++) {
-                    JSONObject optionObject = optionsArray.getJSONObject(j);
-                    Choice choice = new Choice(optionObject.getString("content"));
-                    choices.add(choice);
-
-                    if (optionObject.has("isSolution") && optionObject.getBoolean("isSolution")) {
-                        solution = choice;
-                    }
-                }
-
-                CloseQuestion closeQuestion = new CloseQuestion(header, maxScore);
-                closeQuestion.addChoice(choices);
-                if (solution != null) {
-                    try {
-                        closeQuestion.addSolution(solution);
-                    } catch (ModelException e) {
-                        throw new DAOException("La soluzione deve essere un'opzione di risposta!!!");
-                    }
-                }
-                questions.add(closeQuestion);
-            } else {
-                OpenQuestion openQuestion = new OpenQuestion(header, maxScore);
-                questions.add(openQuestion);
-            }
-        }
+        List<Question> questions = extractQuestions(jsonObject.getJSONArray(KEY_QUESTIONS));
 
         Test test = new Test(name, dueDate, dueTime, duration, questions, virtualClass);
 
-        if (jsonObject.has("testAttempts")) {
-            TestAttemptDAO testAttemptDAO = DAOFactory.getInstance().getTestAttemptDAO();
-            JSONArray attemptsArray = jsonObject.getJSONArray("testAttempts");
-            List<TestAttempt> testAttempts = new ArrayList<>();
-
-            for (int i = 0; i < attemptsArray.length(); i++) {
-                JSONObject attemptObj = attemptsArray.getJSONObject(i);
-                int attemptId = attemptObj.getInt("id");
-
-                TestAttempt attempt = testAttemptDAO.getTestAttemptById(attemptId);
-                if (attempt != null) {
-                    testAttempts.add(attempt);
-                }
-            }
-            test.setTests(testAttempts);
+        if (jsonObject.has(KEY_ATTEMPTS)) {
+            attachTestAttempts(test, jsonObject.getJSONArray(KEY_ATTEMPTS));
         }
 
         this.addToCache(testName, test);
         return test;
     }
 
+    private Duration extractDuration(JSONObject jsonObject) {
+        if (!jsonObject.has(KEY_DURATION)) {
+            return null;
+        }
+        return Duration.parse(jsonObject.getString(KEY_DURATION));
+    }
+
+    private List<Question> extractQuestions(JSONArray questionsArray) throws DAOException {
+        List<Question> questions = new ArrayList<>();
+        for (int i = 0; i < questionsArray.length(); i++) {
+            questions.add(parseSingleQuestion(questionsArray.getJSONObject(i)));
+        }
+        return questions;
+    }
+
+    private Question parseSingleQuestion(JSONObject questionObject) throws DAOException {
+        String header = questionObject.getString(KEY_HEADER);
+        int maxScore = questionObject.getInt(KEY_MAX_SCORE);
+
+        if (questionObject.has(KEY_OPTIONS)) {
+            return buildCloseQuestion(header, maxScore, questionObject.getJSONArray(KEY_OPTIONS));
+        }
+
+        return new OpenQuestion(header, maxScore);
+    }
+
+    private CloseQuestion buildCloseQuestion(String header, int maxScore, JSONArray optionsArray) throws DAOException {
+        CloseQuestion closeQuestion = new CloseQuestion(header, maxScore);
+        List<Choice> choices = new ArrayList<>();
+        Choice solution = null;
+
+        for (int j = 0; j < optionsArray.length(); j++) {
+            JSONObject optionObject = optionsArray.getJSONObject(j);
+            Choice choice = new Choice(optionObject.getString(KEY_CONTENT));
+            choices.add(choice);
+
+            if (optionObject.has(KEY_IS_SOLUTION) && optionObject.getBoolean(KEY_IS_SOLUTION)) {
+                solution = choice;
+            }
+        }
+
+        closeQuestion.addChoice(choices);
+        setQuestionSolution(closeQuestion, solution);
+
+        return closeQuestion;
+    }
+
+    private void setQuestionSolution(CloseQuestion closeQuestion, Choice solution) throws DAOException {
+        if (solution == null) {
+            return;
+        }
+
+        try {
+            closeQuestion.addSolution(solution);
+        } catch (ModelException e) {
+            throw new DAOException("La soluzione deve essere un'opzione di risposta!!!");
+        }
+    }
+
+    private void attachTestAttempts(Test test, JSONArray attemptsArray) throws DAOException {
+        TestAttemptDAO testAttemptDAO = DAOFactory.getInstance().getTestAttemptDAO();
+        List<TestAttempt> testAttempts = new ArrayList<>();
+
+        for (int i = 0; i < attemptsArray.length(); i++) {
+            JSONObject attemptObj = attemptsArray.getJSONObject(i);
+            TestAttempt attempt = testAttemptDAO.getTestAttemptById(attemptObj.getInt(KEY_ID));
+
+            if (attempt != null) {
+                testAttempts.add(attempt);
+            }
+        }
+        test.setTests(testAttempts);
+    }
+
     @Override
-    public boolean testExists(String testName) {
+    public boolean testExists(String testName) throws DAOException {
         if (this.containsKey(testName)) {
             return true;
         }
 
         try {
-            Path path = Paths.get(FILE_PATH);
-            if (!Files.exists(path)) {
-                return false;
-            }
-            String content = new String(Files.readAllBytes(path));
-            JSONArray jsonArray = new JSONArray(content);
-
+            JSONArray jsonArray = JSONHelper.readJsonFile(FILE_PATH);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                if (jsonObject.getString("nome").equals(testName)) {
+                if (jsonObject.getString(KEY_NAME).equals(testName)) {
                     return true;
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new DAOException("File system error occurred while checking if test exists");
         }
         return false;
     }
@@ -151,84 +172,82 @@ public class TestFSDAO extends TestDAO {
         JSONArray questionsArray = new JSONArray();
         for (Question question : questions) {
             JSONObject questionObject = new JSONObject();
-            questionObject.put("header", question.getHeader());
-            questionObject.put("maxScore", question.getMaxScore());
+            questionObject.put(KEY_HEADER, question.getHeader());
+            questionObject.put(KEY_MAX_SCORE, question.getMaxScore());
 
             if (question instanceof CloseQuestion closeQuestion) {
-                JSONArray optionsArray = new JSONArray();
-                for (Choice choice : closeQuestion.getChoices()) {
-                    JSONObject optionObject = new JSONObject();
-                    optionObject.put("content", choice.getContent());
-
-                    Choice solution = closeQuestion.getSolution();
-                    if (solution != null && choice == solution) {
-                        optionObject.put("isSolution", true);
-                    }
-                    optionsArray.put(optionObject);
-                }
-                questionObject.put("options", optionsArray);
+                questionObject.put(KEY_OPTIONS, serializeChoices(closeQuestion));
             }
             questionsArray.put(questionObject);
         }
         return questionsArray;
     }
 
+    private JSONArray serializeChoices(CloseQuestion closeQuestion) {
+        JSONArray optionsArray = new JSONArray();
+        Choice solution = closeQuestion.getSolution();
+
+        for (Choice choice : closeQuestion.getChoices()) {
+            JSONObject optionObject = new JSONObject();
+            optionObject.put(KEY_CONTENT, choice.getContent());
+
+            if (solution != null && choice.equals(solution)) {
+                optionObject.put(KEY_IS_SOLUTION, true);
+            }
+            optionsArray.put(optionObject);
+        }
+        return optionsArray;
+    }
+
     @Override
     public void saveTest(Test test) throws DAOException {
-        Path path = Paths.get(FILE_PATH);
         try {
-            JSONArray jsonArray = new JSONArray();
-            if (Files.exists(path)) {
-                String content = new String(Files.readAllBytes(path));
-                if (!content.trim().isEmpty()) {
-                    jsonArray = new JSONArray(content);
-                }
-            }
+            JSONArray jsonArray = JSONHelper.readJsonFile(FILE_PATH);
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                if (jsonArray.getJSONObject(i).has("nome") && jsonArray.getJSONObject(i).getString("nome").equals(test.getName())) {
+            /*for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject currentObj = jsonArray.getJSONObject(i);
+                if (currentObj.has(KEY_NAME) && currentObj.getString(KEY_NAME).equals(test.getName())) {
                     jsonArray.remove(i);
                     break;
                 }
-            }
+            }*/
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("nome", test.getName());
-            jsonObject.put("dueDate", test.getDueDate().toString());
-            jsonObject.put("dueTime", test.getDueTime().toString());
+            jsonObject.put(KEY_NAME, test.getName());
+            jsonObject.put(KEY_DUE_DATE, test.getDueDate().toString());
+            jsonObject.put(KEY_DUE_TIME, test.getDueTime().toString());
 
             if (test.getDuration() != null) {
-                jsonObject.put("duration", test.getDuration().toString());
+                jsonObject.put(KEY_DURATION, test.getDuration().toString());
             }
 
-            jsonObject.put("class", test.getVirtualClass().getName());
-
-            JSONArray questionsArray = serializeQuestions(test.getQuestions());
-            jsonObject.put("questions", questionsArray);
+            jsonObject.put(KEY_CLASS, test.getVirtualClass().getName());
+            jsonObject.put(KEY_QUESTIONS, serializeQuestions(test.getQuestions()));
 
             if (test.getTests() != null) {
-                TestAttemptDAO testAttemptDAO = DAOFactory.getInstance().getTestAttemptDAO();
-                JSONArray testAttemptsArray = new JSONArray();
-
-                for (TestAttempt attempt : test.getTests()) {
-                    testAttemptDAO.saveTestAttempt(attempt);
-
-                    JSONObject attemptObj = new JSONObject();
-                    attemptObj.put("id", attempt.getTestId());
-                    testAttemptsArray.put(attemptObj);
-                }
-
-                jsonObject.put("testAttempts", testAttemptsArray);
+                jsonObject.put(KEY_ATTEMPTS, saveAndSerializeTestAttempts(test.getTests()));
             }
 
             jsonArray.put(jsonObject);
-
-            Files.write(path, jsonArray.toString(4).getBytes());
+            JSONHelper.writeJsonFile(FILE_PATH, jsonArray);
 
             this.addToCache(test.getName(), test);
 
         } catch (Exception e) {
             throw new DAOException("Error saving test");
         }
+    }
+
+    private JSONArray saveAndSerializeTestAttempts(List<TestAttempt> attempts) throws DAOException {
+        TestAttemptDAO testAttemptDAO = DAOFactory.getInstance().getTestAttemptDAO();
+        JSONArray testAttemptsArray = new JSONArray();
+
+        for (TestAttempt attempt : attempts) {
+            testAttemptDAO.saveTestAttempt(attempt);
+            JSONObject attemptObj = new JSONObject();
+            attemptObj.put(KEY_ID, attempt.getTestId());
+            testAttemptsArray.put(attemptObj);
+        }
+        return testAttemptsArray;
     }
 }
