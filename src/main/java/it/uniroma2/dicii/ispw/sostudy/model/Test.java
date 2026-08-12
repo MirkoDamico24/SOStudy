@@ -14,28 +14,25 @@ public class Test {
     private LocalDate dueDate;
     private LocalTime dueTime;
     private Duration duration;
-    //private int maxScore;
 
     private List<Question> questions = new ArrayList<>();
     private List<TestAttempt> tests;
     private VirtualClass virtualClass;
 
-    public Test(String name, LocalDate dueDate, LocalTime dueTime, Duration duration, /*int maxScore,*/ Question question, VirtualClass virtualClass) {
+    public Test(String name, LocalDate dueDate, LocalTime dueTime, Duration duration, Question question, VirtualClass virtualClass) {
         this.name = name;
         this.dueDate = dueDate;
         this.dueTime = dueTime;
         this.duration = duration;
-        //this.maxScore = maxScore;
         this.questions.add(question.copy());
         this.virtualClass = virtualClass;
     }
 
-    public Test(String name, LocalDate dueDate, LocalTime dueTime, Duration duration, /*int maxScore,*/ List<Question> questions, VirtualClass virtualClass) {
+    public Test(String name, LocalDate dueDate, LocalTime dueTime, Duration duration, List<Question> questions, VirtualClass virtualClass) {
         this.name = name;
         this.dueDate = dueDate;
         this.dueTime = dueTime;
         this.duration = duration;
-        //this.maxScore = maxScore;
         for (Question question : questions) {
             this.questions.add(question.copy());
         }
@@ -56,7 +53,7 @@ public class Test {
         if(this.tests == null) {
             this.tests = new ArrayList<>();
         }
-        TestAttempt t = new TestAttempt(testAttempt.getAnswers(), testAttempt.getStudent());
+        TestAttempt t = new TestAttempt(this, testAttempt.getAnswers(), testAttempt.getStudent());
         this.tests.add(t);
     }
 
@@ -98,12 +95,10 @@ public class Test {
     public String getName() {return this.name;}
     public LocalDate getDueDate() {return this.dueDate;}
     public Duration getDuration() {return this.duration;}
-    //public int getMaxScore() {return this.maxScore; }
     public List<Question> getQuestions() {return this.questions;}
     public void setName(String name) {this.name = name;}
     public void setDueDate(LocalDate dueDate) {this.dueDate = dueDate;}
     public void setDuration(Duration duration) {this.duration = duration;}
-    //public void setMaxScore(int maxScore) {this.maxScore = maxScore;}
     public List<TestAttempt> getTests() { return tests; }
     public void setTests(List<TestAttempt> tests) { this.tests = tests; }
     public VirtualClass getVirtualClass() {return this.virtualClass;}

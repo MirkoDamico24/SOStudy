@@ -35,7 +35,7 @@ public class CreateTestController {
         return newTest;
     }
 
-    private static List<Question> getQuestions(List<QuestionBean> questions) {
+    private List<Question> getQuestions(List<QuestionBean> questions) {
         List<Question> questionList = new ArrayList<>();
         Question tempQuestion;
         for(QuestionBean question : questions){

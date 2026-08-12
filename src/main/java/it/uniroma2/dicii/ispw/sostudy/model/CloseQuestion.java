@@ -41,11 +41,6 @@ public class CloseQuestion extends Question {
         }
     }
 
-    //TODO: Check if the implementation of this method is doable
-    public void deleteChoice(Choice choice){
-        this.choices.remove(choice);
-    }
-
     public void addSolution(Choice choice) throws ModelException{
         if(this.choices.contains(choice)) {
             this.solution = choice;
@@ -53,6 +48,10 @@ public class CloseQuestion extends Question {
         else{
             throw new ModelException("[Class: CloseQuestion] The provided solution is not a choice of the question. It cannot be a solution.");
         }
+    }
+
+    public Choice getSolution() {
+        return solution;
     }
 
     public List<Choice> getChoices() { return this.choices; }

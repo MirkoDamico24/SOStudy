@@ -1,5 +1,7 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.factory;
 
+import it.uniroma2.dicii.ispw.sostudy.dao.attempt.TestAttemptDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.attempt.TestAttemptDBDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.authentication.AuthenticationDBDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.professor.ProfessorDBDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.student.StudentDBDAO;
@@ -31,4 +33,7 @@ public class DBDAOFactory extends DAOFactory {
 
     @Override
     public TestDAO getTestDAO() {return new TestDBDAO(); }
+
+    @Override
+    public TestAttemptDAO getTestAttemptDAO() {return new TestAttemptDBDAO(); }
 }

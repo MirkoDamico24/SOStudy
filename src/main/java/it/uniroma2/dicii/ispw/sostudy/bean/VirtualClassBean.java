@@ -7,7 +7,7 @@ public class VirtualClassBean {
     private String className;
     private ProfessorBean professor;
     private List<StudentBean> students;
-    // TODO: private List<TestBean> test;
+    private List<TestBean> test;
 
     public VirtualClassBean(String className, ProfessorBean professor, List<StudentBean> students) {
         this.className = className;
@@ -51,5 +51,13 @@ public class VirtualClassBean {
 
     public void setStudents(List<StudentBean> students) {
         this.students = students;
+    }
+
+    public void setTest(List<TestBean> test) {
+        this.test = test;
+    }
+
+    public List<TestBean> getTest() {
+        return test;
     }
 }

@@ -18,7 +18,6 @@ public class TestBean {
         this.dueDate = dueDate;
         this.dueTime = dueTime;
         this.duration = duration;
-        //this.maxScore = maxScore;
         this.virtualClass = virtualClass;
     }
 

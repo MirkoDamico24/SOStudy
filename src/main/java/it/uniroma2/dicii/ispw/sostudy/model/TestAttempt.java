@@ -7,15 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestAttempt{
+    private int testId;
     private int grade;
     private TestGradingStatus testGradingStatus;
     private LocalDateTime handInTime;
     private LocalDateTime handInDate;
 
+    private Test test;
     private List<TestAttemptAnswer> answers;
     private Student student;
 
-    public TestAttempt(List<TestAttemptAnswer> answers, Student student) {
+    public TestAttempt(Test test, List<TestAttemptAnswer> answers, Student student) {
+        this.test = test;
         List<TestAttemptAnswer> tmpAnswers = new ArrayList<>();
         for(TestAttemptAnswer a : answers){
             tmpAnswers.add(a.copy());
@@ -24,7 +27,8 @@ public class TestAttempt{
         this.student = student;
     }
 
-    public TestAttempt(Student student) {
+    public TestAttempt(Test test, Student student) {
+        this.test = test;
         this.student = student;
     }
 
@@ -65,4 +69,8 @@ public class TestAttempt{
     public LocalDateTime getHandInTime() { return this.handInTime; }
     public void setHandInDate(LocalDateTime handInDate) { this.handInDate = handInDate; }
     public LocalDateTime getHandInDate() { return this.handInDate; }
+    public Test getTest() { return test; }
+    public void setStudent(Student student) { this.student = student; }
+    public void setTestId(int id) { this.testId = id; }
+    public int getTestId() { return testId; }
 }

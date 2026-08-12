@@ -1,0 +1,32 @@
+{
+  "nome": "TestName",
+  "dueDate": "2026-08-15",
+  "dueTime": "16:00",
+  "questions": [
+    {
+      "header": "Question header",
+      "maxScore": 10
+    },
+    {
+      "header": "Question header",
+      "maxScore": 3,
+      "options": [
+        {
+          "content": "Vero"
+        },
+        {
+          "content": "Falso"
+        }
+      ]
+    }
+  ],
+  "testAttempts": [
+    {
+      "id": 1
+    },
+    {
+      "id": 2
+    }
+  ],
+  "class": "class name"
+}
