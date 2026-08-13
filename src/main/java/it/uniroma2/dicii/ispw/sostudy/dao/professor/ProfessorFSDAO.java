@@ -21,8 +21,8 @@ public class ProfessorFSDAO extends ProfessorDAO {
 
         for (int j = 0; j < jsonArray.length(); j++) {
             JSONObject classObj = jsonArray.getJSONObject(j);
-            String className = classObj.getString("className");
-            VirtualClass virtualClass = virtualClassDAO.getVirtualClassByName(className);
+            int classID = classObj.getInt("classID");
+            VirtualClass virtualClass = virtualClassDAO.getVirtualClassById(classID);
             if (virtualClass != null) {
                 classes.add(virtualClass);
             }
@@ -55,10 +55,7 @@ public class ProfessorFSDAO extends ProfessorDAO {
         String name = jsonObject.getString("name");
         String surname = jsonObject.getString("surname");
 
-        List<VirtualClass> classes = jsonObject.has("classes")
-                ? this.getProfessorClasses(jsonObject.getJSONArray("classes")) : null;
-
-        Professor professor = new Professor(name, surname, email, classes);
+        Professor professor = new Professor(name, surname, email);
         this.addToCache(email, professor);
         return professor;
     }

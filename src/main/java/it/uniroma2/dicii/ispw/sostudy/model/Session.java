@@ -6,6 +6,7 @@ public class Session {
     private Student currentStudent;
     private Professor currentProfessor;
     private UserRole role;
+    private VirtualClass currentClass;
     private int sessionID;
 
     public Session(int sessionID, Student currentStudent) {
@@ -50,5 +51,13 @@ public class Session {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public void setCurrentClass(VirtualClass currentClass) {
+        this.currentClass = currentClass;
+    }
+
+    public VirtualClass getCurrentClass() {
+        return currentClass;
     }
 }

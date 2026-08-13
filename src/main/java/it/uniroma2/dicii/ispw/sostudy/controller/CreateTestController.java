@@ -2,6 +2,7 @@ package it.uniroma2.dicii.ispw.sostudy.controller;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
+import it.uniroma2.dicii.ispw.sostudy.bean.VirtualClassBean;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.dao.test.TestDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.virtualclass.VirtualClassDAO;
@@ -15,13 +16,33 @@ import java.util.List;
 
 public class CreateTestController {
 
+    private VirtualClass getClass(int sessionID, String virtualClass) throws ControllerException {
+        List<VirtualClass> vcls = null;
 
-    public Test createTest(TestBean test, List<QuestionBean> questions) throws ExsistingTestExcpetion, ControllerException{
+        VirtualClassDAO classDAO = DAOFactory.getInstance().getVirtualClassDAO();
+        Session s = SessionManager.getInstance().getSession(sessionID);
+        try {
+            vcls = classDAO.getClassesByProfessor(s.getCurrentProfessor().getEmail());
+        }
+        catch (DAOException e) {
+            throw new ControllerException(e.getMessage());
+        }
+
+        for(VirtualClass vClass : vcls){
+            if(vClass.getName().equals(virtualClass)){
+                return vClass;
+            }
+        }
+        return null;
+    }
+
+    public void createTest(int sessionID, TestBean test, List<QuestionBean> questions) throws ExsistingTestExcpetion, ControllerException{
         TestDAO td = DAOFactory.getInstance().getTestDAO();
-        if(td.testExists(test.getName())) throw new ExsistingTestExcpetion("Un testo con questo nome è già stato creato");
 
-        VirtualClassDAO virtualClassDAO = DAOFactory.getInstance().getVirtualClassDAO();
-        VirtualClass cls = virtualClassDAO.getVirtualClassByName(test.getVirtualClass());
+        VirtualClass cls = getClass(sessionID, test.getVirtualClass());
+        if(cls == null){
+            throw new ControllerException("Class not found");
+        }
 
         List<Question> questionList = getQuestions(questions);
 
@@ -33,8 +54,6 @@ public class CreateTestController {
             throw new ControllerException("Errore durante il salvataggio del test", e);
         }
         cls.addTest(newTest);
-
-        return newTest;
     }
 
     private List<Question> getQuestions(List<QuestionBean> questions) {

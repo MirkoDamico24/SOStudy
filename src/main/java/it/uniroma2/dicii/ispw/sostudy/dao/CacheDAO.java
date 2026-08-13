@@ -2,6 +2,7 @@ package it.uniroma2.dicii.ispw.sostudy.dao;
 
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class CacheDAO<T,R>{
     private final HashMap<T, R> cache;
@@ -30,5 +31,7 @@ public class CacheDAO<T,R>{
         cache.remove(key);
     }
 
-
+    public Set<T> getKeys(){
+        return cache.keySet();
+    }
 }

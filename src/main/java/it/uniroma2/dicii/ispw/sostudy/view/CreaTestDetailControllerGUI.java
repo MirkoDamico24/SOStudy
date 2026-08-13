@@ -2,6 +2,8 @@ package it.uniroma2.dicii.ispw.sostudy.view;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.ProfessorBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
+import it.uniroma2.dicii.ispw.sostudy.bean.VirtualClassBean;
+import it.uniroma2.dicii.ispw.sostudy.controller.CreateTestController;
 import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
@@ -99,7 +101,6 @@ public class CreaTestDetailControllerGUI {
         TestBean test = new TestBean(testName, dueDate, LocalTime.parse(time), finalDuration, virtualClass);
 
         navigatorGUI.getContext().setTest(test);
-
 
         if(navigatorGUI.getPreviousView() ==  Views.RECAP) {
             navigatorGUI.setPreviousView(Views.CREATETEST);

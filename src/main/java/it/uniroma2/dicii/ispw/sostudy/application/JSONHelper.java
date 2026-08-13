@@ -8,6 +8,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class JSONHelper {
+    private JSONHelper() {}
+
     public static JSONArray readJsonFile(String filePath) throws IOException {
         Path path = Paths.get(filePath);
 
@@ -24,7 +26,7 @@ public class JSONHelper {
         return new JSONArray(content);
     }
 
-    public static void writeJsonFile(String filePath, JSONArray jsonArray) throws Exception {
+    public static void writeJsonFile(String filePath, JSONArray jsonArray) throws IOException {
         Path path = Paths.get(filePath);
         Files.write(path, jsonArray.toString(4).getBytes());
     }

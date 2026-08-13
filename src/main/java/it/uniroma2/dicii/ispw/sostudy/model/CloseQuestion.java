@@ -17,10 +17,11 @@ public class CloseQuestion extends Question {
         super(header, maxScore);
         List<Choice> choicesCopy = new ArrayList<>();
         for (Choice choice : choices) {
-            choicesCopy.add(new Choice(choice.getContent()));
+            Choice newChoice = new Choice(choice.getContent());
+            choicesCopy.add(newChoice);
+            if(choice == solution) this.solution = newChoice;
         }
         this.choices = choicesCopy;
-        this.solution = solution;
     }
 
     public void addChoice(Choice choice){

@@ -1,5 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.controller;
 
+import it.uniroma2.dicii.ispw.sostudy.application.PasswdHelper;
 import it.uniroma2.dicii.ispw.sostudy.bean.ProfessorBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.SessionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.StudentBean;
@@ -17,7 +18,7 @@ import it.uniroma2.dicii.ispw.sostudy.model.Student;
 public class LoginController {
     public SessionBean authenticate(UserBean ub) throws InvalidCredentialException {
         String email = ub.getEmail();
-        String password = ub.getPassword();
+        String password = PasswdHelper.hashPassword(ub.getPassword());
         AuthenticationDAO dao = DAOFactory.getInstance().getAuthenticationDAO();
 
         if(password.equals(dao.getCredentials(email))) {

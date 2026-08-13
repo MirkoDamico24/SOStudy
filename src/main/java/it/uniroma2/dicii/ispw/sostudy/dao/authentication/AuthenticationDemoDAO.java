@@ -1,5 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.authentication;
 
+import it.uniroma2.dicii.ispw.sostudy.application.PasswdHelper;
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 
@@ -20,9 +21,9 @@ public class AuthenticationDemoDAO extends AuthenticationDAO {
             String emailStud = prop.getProperty("studentemail");
 
             if(email.equals(emailProf)) {
-                return prop.getProperty("profpasswd");
+                return PasswdHelper.hashPassword(prop.getProperty("profpasswd"));
             }
-            else if(email.equals(emailStud)) {return prop.getProperty("studentpasswd");}
+            else if(email.equals(emailStud)) {return PasswdHelper.hashPassword(prop.getProperty("studentpasswd"));}
 
             throw new DAOException("Invalid email address");
         }

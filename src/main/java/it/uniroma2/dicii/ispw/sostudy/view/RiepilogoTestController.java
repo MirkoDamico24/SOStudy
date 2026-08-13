@@ -206,7 +206,7 @@ public class RiepilogoTestController {
     void handleSavePublish(ActionEvent event) {
         CreateTestController createTestController = new CreateTestController();
         try {
-            createTestController.createTest(navigatorGUI.getContext().getTest(), navigatorGUI.getContext().getQuestions());
+            createTestController.createTest(navigatorGUI.getContext().getSession().getSessionID(), navigatorGUI.getContext().getTest(), navigatorGUI.getContext().getQuestions());
         }
         catch(ExsistingTestExcpetion e){
             showAlert("Titolo esistente", e.getMessage(), "Cambiare il nome del test!!!");

@@ -34,33 +34,33 @@ public class TestFSDAO extends TestDAO {
     private static final String KEY_ID = "id";
 
     @Override
-    public Test getTestByName(String testName) throws DAOException {
-        if (this.containsKey(testName)) {
-            return this.getFromCache(testName);
+    public Test getTestById(int testId) throws DAOException {
+        if (this.containsKey(testId)) {
+            return this.getFromCache(testId);
         }
 
         try {
             JSONArray jsonArray = JSONHelper.readJsonFile(FILE_PATH);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                if (jsonObject.getString(KEY_NAME).equals(testName)) {
-                    return this.buildTest(jsonObject, testName);
+                if (jsonObject.has(KEY_ID) && jsonObject.getInt(KEY_ID) == testId) {
+                    return this.buildTest(jsonObject, testId);
                 }
             }
         } catch (Exception e) {
-            throw new DAOException("File system error occurred while getting test by name");
+            throw new DAOException("File system error occurred while getting test by ID");
         }
         return null;
     }
 
-    public Test buildTest(JSONObject jsonObject, String testName) throws DAOException {
+    public Test buildTest(JSONObject jsonObject, int testId) throws DAOException {
         String name = jsonObject.getString(KEY_NAME);
         LocalDate dueDate = LocalDate.parse(jsonObject.getString(KEY_DUE_DATE));
         LocalTime dueTime = LocalTime.parse(jsonObject.getString(KEY_DUE_TIME));
         Duration duration = extractDuration(jsonObject);
 
         VirtualClass virtualClass = DAOFactory.getInstance().getVirtualClassDAO()
-                .getVirtualClassByName(jsonObject.getString(KEY_CLASS));
+                .getVirtualClassById(jsonObject.getInt(KEY_CLASS));
 
         List<Question> questions = extractQuestions(jsonObject.getJSONArray(KEY_QUESTIONS));
 
@@ -70,7 +70,7 @@ public class TestFSDAO extends TestDAO {
             attachTestAttempts(test, jsonObject.getJSONArray(KEY_ATTEMPTS));
         }
 
-        this.addToCache(testName, test);
+        this.addToCache(testId, test);
         return test;
     }
 
@@ -148,25 +148,6 @@ public class TestFSDAO extends TestDAO {
         test.setTests(testAttempts);
     }
 
-    @Override
-    public boolean testExists(String testName) throws DAOException {
-        if (this.containsKey(testName)) {
-            return true;
-        }
-
-        try {
-            JSONArray jsonArray = JSONHelper.readJsonFile(FILE_PATH);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                if (jsonObject.getString(KEY_NAME).equals(testName)) {
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            throw new DAOException("File system error occurred while checking if test exists");
-        }
-        return false;
-    }
 
     public JSONArray serializeQuestions(List<Question> questions) {
         JSONArray questionsArray = new JSONArray();
@@ -191,7 +172,7 @@ public class TestFSDAO extends TestDAO {
             JSONObject optionObject = new JSONObject();
             optionObject.put(KEY_CONTENT, choice.getContent());
 
-            if (solution != null && choice.equals(solution)) {
+            if (choice.equals(solution)) {
                 optionObject.put(KEY_IS_SOLUTION, true);
             }
             optionsArray.put(optionObject);
@@ -199,20 +180,34 @@ public class TestFSDAO extends TestDAO {
         return optionsArray;
     }
 
+    private int generateNextId(JSONArray jsonArray) {
+        int maxId = 0;
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            if (jsonObject.has(KEY_ID)) {
+                int currentId = jsonObject.getInt(KEY_ID);
+                if (currentId > maxId) {
+                    maxId = currentId;
+                }
+            }
+        }
+        return maxId + 1;
+    }
+
     @Override
     public void saveTest(Test test) throws DAOException {
         try {
-            JSONArray jsonArray = JSONHelper.readJsonFile(FILE_PATH);
+            JSONArray jsonArray;
+            try {
+                jsonArray = JSONHelper.readJsonFile(FILE_PATH);
+            } catch (IOException e) {
+                jsonArray = new JSONArray();
+            }
 
-            /*for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject currentObj = jsonArray.getJSONObject(i);
-                if (currentObj.has(KEY_NAME) && currentObj.getString(KEY_NAME).equals(test.getName())) {
-                    jsonArray.remove(i);
-                    break;
-                }
-            }*/
+            int newId = generateNextId(jsonArray);
 
             JSONObject jsonObject = new JSONObject();
+            jsonObject.put(KEY_ID, newId);
             jsonObject.put(KEY_NAME, test.getName());
             jsonObject.put(KEY_DUE_DATE, test.getDueDate().toString());
             jsonObject.put(KEY_DUE_TIME, test.getDueTime().toString());
@@ -221,7 +216,7 @@ public class TestFSDAO extends TestDAO {
                 jsonObject.put(KEY_DURATION, test.getDuration().toString());
             }
 
-            jsonObject.put(KEY_CLASS, test.getVirtualClass().getName());
+            jsonObject.put(KEY_CLASS, test.getVirtualClass().getClassId());
             jsonObject.put(KEY_QUESTIONS, serializeQuestions(test.getQuestions()));
 
             if (test.getTests() != null) {
@@ -231,7 +226,7 @@ public class TestFSDAO extends TestDAO {
             jsonArray.put(jsonObject);
             JSONHelper.writeJsonFile(FILE_PATH, jsonArray);
 
-            this.addToCache(test.getName(), test);
+            this.addToCache(newId, test);
 
         } catch (Exception e) {
             throw new DAOException("Error saving test");

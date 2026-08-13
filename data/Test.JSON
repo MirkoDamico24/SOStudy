@@ -1,37 +1,86 @@
 [
     {
-        "duration": "PT2000H",
-        "dueDate": "2026-08-21",
-        "name": "sdfasdf",
+        "duration": "PT20M",
+        "dueDate": "2026-08-22",
+        "name": "tg",
         "questions": [{
-            "header": "ghfjhgjhg",
-            "maxScore": 4
+            "options": [
+                {
+                    "isSolution": true,
+                    "content": "solution"
+                },
+                {"content": "ffff"}
+            ],
+            "header": "werer",
+            "maxScore": 10
         }],
-        "dueTime": "10:00",
-        "class": "ISPWvirtualClass"
+        "dueTime": "12:00",
+        "class": 1
     },
     {
-        "duration": "PT1H30M",
-        "dueDate": "2026-08-29",
-        "name": "sburrevole",
+        "duration": "PT30M",
+        "dueDate": "2026-08-21",
+        "name": "test sburrrrrevole",
         "questions": [
             {
                 "options": [
-                    {"content": "Maiale"},
-                    {"content": "Cane"},
-                    {"content": "Frocio"},
-                    {"content": "Bastardo"},
-                    {"content": "Testa di cazzo"}
+                    {"content": "bona"},
+                    {"content": "turbo fregna"},
+                    {
+                        "isSolution": true,
+                        "content": "bella"
+                    }
                 ],
-                "header": "Qual è il soprannome con cui è meglio conosciuto Dio?",
-                "maxScore": 10
+                "header": "Saide Sink è",
+                "maxScore": 9
             },
             {
-                "header": "Descrivere il controllo di congestion TCP",
+                "header": "Descrivere Zendaya in poche semplici parole",
                 "maxScore": 5
             }
         ],
-        "dueTime": "16:30",
-        "class": "ISPWvirtualClass"
+        "id": 1,
+        "dueTime": "12:00",
+        "class": 1
+    },
+    {
+        "duration": "PT30M",
+        "dueDate": "2026-08-29",
+        "name": "fggvb",
+        "questions": [{
+            "options": [
+                {
+                    "isSolution": true,
+                    "content": "vccv"
+                },
+                {"content": "bb"},
+                {"content": "gg"}
+            ],
+            "header": "df",
+            "maxScore": 10
+        }],
+        "id": 2,
+        "dueTime": "11:30",
+        "class": 1
+    },
+    {
+        "duration": "PT30M",
+        "dueDate": "2026-08-23",
+        "name": "bfg",
+        "questions": [{
+            "options": [
+                {
+                    "isSolution": true,
+                    "content": "soluzione"
+                },
+                {"content": "df"},
+                {"content": "df"}
+            ],
+            "header": "sdfgf",
+            "maxScore": 10
+        }],
+        "id": 3,
+        "dueTime": "11:30",
+        "class": 1
     }
 ]

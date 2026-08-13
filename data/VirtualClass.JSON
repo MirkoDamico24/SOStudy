@@ -1,6 +1,7 @@
 [
   {
     "name": "ISPWvirtualClass",
+    "classId": 1,
     "professor": "mario.rossi@gmail.com",
     "students": [
       {
@@ -9,7 +10,7 @@
     ],
     "tests": [
       {
-        "name": "testName"
+        "testId": 1
       }
     ]
   }

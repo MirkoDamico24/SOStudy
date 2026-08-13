@@ -5,10 +5,10 @@
     "surname": "Rossi",
     "classes": [
       {
-        "className": "ISPWvirtualclass"
+        "classID": 1
       },
       {
-        "className": "ISW2virtalclass"
+        "classID": 2
       }
     ]
   }
