@@ -59,8 +59,8 @@ public class TestDBDAO extends TestDAO {
         if(this.containsKey(testId)){
             return this.getFromCache(testId);
         }
-        String SQLQuery = "SELECT Test.name, dueDate, dueTime, duration, class, header, maxScore, type, Domanda.code FROM Test join Domanda on `Domanda`.`test` = `Test`.`code` join Class on Test.class = Class.code WHERE `Test`.`code` = ?";
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(SQLQuery)){
+        String sqlQuery = "SELECT Test.name, dueDate, dueTime, duration, class, header, maxScore, type, Domanda.code FROM Test join Domanda on `Domanda`.`test` = `Test`.`code` join Class on Test.class = Class.code WHERE `Test`.`code` = ?";
+        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
             ps.setInt(1, testId);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){

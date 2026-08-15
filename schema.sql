@@ -142,14 +142,14 @@ FLUSH PRIVILEGES;
 USE `SoStudyDB`;
 
 -- -----------------------------------------------------
--- 1. Inserimento Utenti
+-- 1. Inserimento Utenti (Email e ruoli allineati)
 -- -----------------------------------------------------
 INSERT INTO `Utenti` (`email`, `Password`, `Ruolo`) VALUES
 ('mario.rossi@gmail.com', '$2a$10$1ms55w0sVAfS7HR060REWe7Hv2do8sXtcSQ8F5.g5Sb0pHZj7/Gqy', 'PROFESSOR'),
-('giuseppe.bianchi@gmail.com', '$2a$10$ep5OKfsCfKU8Y5cF8dP4VOmcxD/MEV..1opKsCqgH1ZoneZ6yj9Mi', 'STUDENT'),
-('anna.neri@gmail.com', MD5('qwerty'), 'STUDENT'),
-('marco.verdi@gmail.com', MD5('qwerty'), 'STUDENT'),
-('giulia.gialli@gmail.com', MD5('qwerty'), 'STUDENT');
+('giuseppe.bianchi@gmail.com', '$2a$10$ep5OKfsCfKU8Y5cF8dP4VOmcxD/MEV..1opKsCqgH1ZoneZ6yj9Mi', 'PROFESSOR'),
+('a.neri@studenti.it', MD5('qwerty'), 'STUDENT'),
+('m.verdi@studenti.it', MD5('qwerty'), 'STUDENT'),
+('g.gialli@studenti.it', MD5('qwerty'), 'STUDENT');
 
 -- -----------------------------------------------------
 -- 2. Inserimento Professori
@@ -191,7 +191,6 @@ INSERT INTO `Test` (`name`, `dueDate`, `dueTime`, `duration`, `class`) VALUES
 
 -- -----------------------------------------------------
 -- 7. Inserimento Domande
--- (I codici generati dall'AUTO_INCREMENT saranno 1, 2 e 3)
 -- -----------------------------------------------------
 INSERT INTO `Domanda` (`header`, `maxScore`, `type`, `test`) VALUES
 ('Scrivi la query per selezionare tutti gli studenti.', 15, 'OPENQUESTION', 1),
@@ -200,7 +199,6 @@ INSERT INTO `Domanda` (`header`, `maxScore`, `type`, `test`) VALUES
 
 -- -----------------------------------------------------
 -- 8. Inserimento Opzioni Domande
--- (Ora include il campo booleano isSolution)
 -- -----------------------------------------------------
 INSERT INTO `OpzioniDomande` (`content`, `isSolution`, `question`) VALUES
 ('DROP TABLE', TRUE, 2),
@@ -212,7 +210,6 @@ INSERT INTO `OpzioniDomande` (`content`, `isSolution`, `question`) VALUES
 
 -- -----------------------------------------------------
 -- 9. Inserimento Tentativi
--- (Utilizza il nuovo valore corretto dell'ENUM: INCOMPLETE)
 -- -----------------------------------------------------
 INSERT INTO `Tentativo` (`grade`, `gradingStatus`, `handInTime`, `handInDate`, `test`, `student`) VALUES
 (28, 'FULLYGRADED', '11:45:00', '2023-11-15', 1, 'a.neri@studenti.it'),
@@ -220,9 +217,9 @@ INSERT INTO `Tentativo` (`grade`, `gradingStatus`, `handInTime`, `handInDate`, `
 (NULL, 'REVISIONING', '15:50:00', '2024-01-20', 2, 'a.neri@studenti.it');
 
 -- -----------------------------------------------------
--- 10. Inserimento Risposte
+-- 10. Inserimento Risposte (Aggiunto il campo 'question' obbligatorio)
 -- -----------------------------------------------------
-INSERT INTO `Risposte` (`textualContent`, `integerContent`, `attempt`) VALUES
-('SELECT * FROM Student;', NULL, 1),
-(NULL, 1, 1),
-(NULL, 4, 3);
+INSERT INTO `Risposte` (`textualContent`, `integerContent`, `score`, `attempt`, `question`) VALUES
+('SELECT * FROM Student;', NULL, 15, 1, 1),
+(NULL, 1, 5, 1, 2),
+(NULL, 4, NULL, 3, 3);

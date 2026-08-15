@@ -4,7 +4,6 @@ import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.CreateTestController;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
-import it.uniroma2.dicii.ispw.sostudy.exception.ExsistingTestExcpetion;
 import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
@@ -17,7 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import java.util.List;
 
-public class RiepilogoTestController {
+public class RiepilogoTestControllerGUI {
     @FXML private Label lblNomeTest;
     @FXML private Label lblClasse;
     @FXML private Label lblData;

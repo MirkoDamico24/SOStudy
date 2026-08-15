@@ -18,7 +18,6 @@ import it.uniroma2.dicii.ispw.sostudy.model.Student;
 public class LoginController {
     public SessionBean authenticate(UserBean ub) throws InvalidCredentialException {
         String email = ub.getEmail();
-        String password = PasswdHelper.hashPassword(ub.getPassword());
         AuthenticationDAO dao = DAOFactory.getInstance().getAuthenticationDAO();
 
         if(PasswdHelper.verifyPassword(ub.getPassword(), dao.getCredentials(email))) {

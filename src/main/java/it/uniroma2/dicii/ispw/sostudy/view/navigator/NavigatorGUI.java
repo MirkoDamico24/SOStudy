@@ -22,9 +22,9 @@ public class NavigatorGUI extends Navigator{
     private HomeControllerGUI home;
     private CreaTestDetailControllerGUI createTest;
     private VirtualClassesViewControllerGUI virtualClasses;
-    private CreaDomandaApertaController openQuestion;
-    private CreaDomandaMultiplaController closeQuestion;
-    private RiepilogoTestController testRecap;
+    private CreaDomandaApertaControllerGUI openQuestion;
+    private CreaDomandaMultiplaControllerGUI closeQuestion;
+    private RiepilogoTestControllerGUI testRecap;
 
     private static final String TITLEERROR = "Errore grafico";
     private static final String MESSAGE = "Risorse non disponibili";

@@ -1,7 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.authentication;
 
 import it.uniroma2.dicii.ispw.sostudy.application.JSONHelper;
-import it.uniroma2.dicii.ispw.sostudy.application.PasswdHelper;
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import org.json.JSONArray;

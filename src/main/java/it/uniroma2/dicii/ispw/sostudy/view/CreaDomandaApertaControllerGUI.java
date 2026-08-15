@@ -14,7 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 
-public class CreaDomandaApertaController {
+public class CreaDomandaApertaControllerGUI {
     @FXML private Button btnHome;
     @FXML private Button btnCreaTest;
     @FXML private Button btnClassiVirtuali;

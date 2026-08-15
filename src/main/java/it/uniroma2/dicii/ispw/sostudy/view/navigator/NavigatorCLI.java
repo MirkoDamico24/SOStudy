@@ -1,9 +1,9 @@
 package it.uniroma2.dicii.ispw.sostudy.view.navigator;
 
-import it.uniroma2.dicii.ispw.sostudy.view.CreaTestDetailControllerCLI;
-import it.uniroma2.dicii.ispw.sostudy.view.HomeControllerCLI;
-import it.uniroma2.dicii.ispw.sostudy.view.LoginControllerCLI;
-import it.uniroma2.dicii.ispw.sostudy.view.VirtualClassesViewControllerCLI;
+import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
+import it.uniroma2.dicii.ispw.sostudy.view.*;
+
+import java.util.Scanner;
 
 
 public class NavigatorCLI extends Navigator{
@@ -11,6 +11,9 @@ public class NavigatorCLI extends Navigator{
     private HomeControllerCLI home;
     private CreaTestDetailControllerCLI creaTest;
     private VirtualClassesViewControllerCLI virtualClasses;
+    private CreaDomandaApertaControllerCLI openQuestion;
+    private CreaDomandaMultiplaControllerCLI closeQuestion;
+    private RiepilogoTestControllerCLI recapView;
 
     @Override
     public void startup(){
@@ -55,16 +58,51 @@ public class NavigatorCLI extends Navigator{
 
     @Override
     public void createOpenQuestionView(){
-
+        if(this.openQuestion == null){
+            this.openQuestion = new CreaDomandaApertaControllerCLI();
+            this.openQuestion.setNavigator(this);
+        }
+        this.openQuestion.start();
     }
 
     @Override
     public void createCloseQuestionView(){
-
+        if(this.closeQuestion == null){
+            this.closeQuestion = new CreaDomandaMultiplaControllerCLI();
+            this.closeQuestion.setNavigator(this);
+        }
+        this.closeQuestion.start();
     }
 
     @Override
     public void createRecapView(){
+        if(this.recapView == null){
+            this.recapView = new RiepilogoTestControllerCLI();
+            this.recapView.setNavigator(this);
+        }
+        this.recapView.start();
+    }
 
+    public static QuestionType selectQuestionType() {
+        System.out.println("\nSeleziona la tipologia di domanda da aggiungere:");
+        System.out.println("[1] Domanda a risposta aperta");
+        System.out.println("[2] Domanda a risposta multipla");
+        System.out.print("\nScegli un'opzione: ");
+
+        Scanner scanner = new Scanner(System.in);
+        String choice = scanner.nextLine().trim();
+
+        switch (choice) {
+            case "1" -> {
+                return QuestionType.OPENQUESTION;
+            }
+            case "2" -> {
+                return QuestionType.CLOSEQUESTION;
+            }
+            default -> {
+                System.out.println("\n--> Operazione non consentita!");
+                return selectQuestionType();
+            }
+        }
     }
 }

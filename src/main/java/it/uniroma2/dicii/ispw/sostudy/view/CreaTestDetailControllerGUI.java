@@ -4,6 +4,7 @@ import it.uniroma2.dicii.ispw.sostudy.bean.ProfessorBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.VirtualClassBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.CreateTestController;
+import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
@@ -18,6 +19,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import javafx.scene.Parent;
 import java.time.LocalTime;
+import java.util.List;
 
 public class CreaTestDetailControllerGUI {
     @FXML private Button btnHome;
@@ -52,26 +54,32 @@ public class CreaTestDetailControllerGUI {
         return root;
     }
 
-    /**
-     * Questo metodo viene chiamato automaticamente da JavaFX dopo
-     * aver caricato il file FXML. Ideale per configurare i componenti.
-     */
     public void prepare() {
         setUsernameBundle();
 
-        // 1. Popola la ComboBox delle Classi (da sostituire con dati dal DB)
-        ObservableList<String> classi = FXCollections.observableArrayList(
-                "ISPWvirtualClass",
-                "Classe 2B - Matematica",
-                "Classe 3C - Sistemi"
-        );
-        classeComboBox.setItems(classi);
+        try {
+            CreateTestController createTestController = new CreateTestController();
+            String profEmail = navigatorGUI.getContext().getSession().getProfessor().getEmail();
+            List<VirtualClassBean> professorClass = createTestController.getProfessorClasses(profEmail);
+            ObservableList<String> classes = FXCollections.observableArrayList();
+            for (VirtualClassBean vClassBean : professorClass) {
+                classes.add(vClassBean.getClassName());
+            }
 
-        // 2. Popola la ComboBox degli Orari (Intervalli di 30 minuti)
+            classeComboBox.setItems(classes);
+
+        } catch (ControllerException e) {
+            showAlert("Errore di risorsa", e.getMessage(), "Riprovare");
+        }
+
         ObservableList<String> orari = FXCollections.observableArrayList(
+                "00:00", "00:30", "01:00", "01:30", "02:00", "02:30", "03:00", "03:30", "04:00",
+                "04:30", "05:00", "05:30", "06:00", "06:30", "07:00", "07:30",
                 "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
                 "11:00", "11:30", "12:00", "12:30", "14:00", "14:30",
-                "15:00", "15:30", "16:00", "16:30", "17:00"
+                "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00",
+                "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00",
+                "22:30",  "23:00", "23:30"
         );
         orarioComboBox.setItems(orari);
     }
@@ -120,12 +128,23 @@ public class CreaTestDetailControllerGUI {
 
     @FXML
     void handleNavHome(ActionEvent event) {
-
+        navigatorGUI.setPreviousView(Views.CREATETEST);
+        navigatorGUI.goToHomeView();
     }
 
     @FXML
     void handleNavClassiVirtuali(ActionEvent event) {
-        
+        navigatorGUI.setPreviousView(Views.CREATETEST);
+        navigatorGUI.goToClassesView();
+    }
+
+
+    private void showAlert(String title, String message, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(message);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
     
 }

@@ -1,6 +1,5 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.question;
 
-import it.uniroma2.dicii.ispw.sostudy.dao.choice.ChoiceDAO;
 import it.uniroma2.dicii.ispw.sostudy.model.Question;
 
 import java.util.List;

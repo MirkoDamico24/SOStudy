@@ -1,12 +1,8 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.student;
 
 import it.uniroma2.dicii.ispw.sostudy.application.JSONHelper;
-import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
-import it.uniroma2.dicii.ispw.sostudy.dao.virtualclass.VirtualClassDAO;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
-import it.uniroma2.dicii.ispw.sostudy.model.Professor;
 import it.uniroma2.dicii.ispw.sostudy.model.Student;
-import it.uniroma2.dicii.ispw.sostudy.model.VirtualClass;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
