@@ -18,7 +18,7 @@ public class VirtualClassDemoDAO extends VirtualClassDAO {
         }
 
         VirtualClass vcls = new VirtualClass("ISPWvirtualclass", id, new Professor("Mario", "Rossi", "mario.rossi@gmail.com"),
-                new Student(1234, "Gisueppe", "Bianchi", "giuseppe.bianchi@gmail.com"));
+                new Student("Gisueppe", "Bianchi", "giuseppe.bianchi@gmail.com"));
 
         this.addToCache(id, vcls);
         return vcls;
