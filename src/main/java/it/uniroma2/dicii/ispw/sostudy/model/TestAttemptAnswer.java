@@ -4,4 +4,5 @@ public interface TestAttemptAnswer {
     int getScore();
     TestAttemptAnswer copy();
     void setScore(int score);
+    Question getQuestion();
 }

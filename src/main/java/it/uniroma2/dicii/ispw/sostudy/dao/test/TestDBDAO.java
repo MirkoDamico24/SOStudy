@@ -19,12 +19,12 @@ public class TestDBDAO extends TestDAO {
     private List<Choice> getQuestionChoices(int questionCode) throws SQLException {
         List<Choice> choices = new ArrayList<>();
         Choice solution = null;
-        String SQLQuery = "SELECT content, isSolution FROM OpzioniDomande join Domanda on question = `Domanda`.code WHERE Domanda.code = ?";
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(SQLQuery)){
+        String sqlQuery = "SELECT code, content, isSolution FROM OpzioniDomande join Domanda on question = `Domanda`.code WHERE Domanda.code = ?";
+        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
             ps.setInt(1, questionCode);
             ResultSet rs2 = ps.executeQuery();
             while(rs2.next()){
-                Choice c = new Choice(rs2.getString("content"));
+                Choice c = new Choice(rs2.getInt("code"), rs2.getString("content"));
                 choices.add(c);
                 if(rs2.getBoolean("isSolution")){solution = c;}
             }
@@ -62,31 +62,27 @@ public class TestDBDAO extends TestDAO {
         String SQLQuery = "SELECT Test.name, dueDate, dueTime, duration, class, header, maxScore, type, Domanda.code FROM Test join Domanda on `Domanda`.`test` = `Test`.`code` join Class on Test.class = Class.code WHERE `Test`.`code` = ?";
         try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(SQLQuery)){
             ps.setInt(1, testId);
-            try(ResultSet rs = ps.executeQuery()){
-                if(rs.next()){
-                    String name = rs.getString("name");
-                    LocalDate dueDate = rs.getDate("dueDate").toLocalDate();
-                    LocalTime dueTime = rs.getTime("dueTime").toLocalTime();
-                    Duration duration = Duration.parse(rs.getString("duration"));
-                    VirtualClass virtualClass = DAOFactory.getInstance().getVirtualClassDAO().getVirtualClassById(rs.getInt("class"));
-                    List<Question> questions = getTestQuestions(rs);
-                    return new Test(name, dueDate, dueTime, duration, questions, virtualClass);
-                }
-            }
-            catch(SQLException e){
-                throw new DAOException("Query execution failed!!!");
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                String name = rs.getString("name");
+                LocalDate dueDate = rs.getDate("dueDate").toLocalDate();
+                LocalTime dueTime = rs.getTime("dueTime").toLocalTime();
+                Duration duration = Duration.parse(rs.getString("duration"));
+                VirtualClass virtualClass = DAOFactory.getInstance().getVirtualClassDAO().getVirtualClassById(rs.getInt("class"));
+                List<Question> questions = getTestQuestions(rs);
+                return new Test(name, dueDate, dueTime, duration, questions, virtualClass);
             }
         }
         catch(SQLException e){
-            throw new DAOException("Error while connecting to database!!!");
+            throw new DAOException("Error occurred while taking data from the database");
         }
         return null;
     }
 
     @Override
     public void saveTest(Test test) throws DAOException {
-        String SQLQuery = "INSERT INTO Test (name, dueDate, dueTime, duration, class) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(SQLQuery, Statement.RETURN_GENERATED_KEYS)) {
+        String sqlQuery = "INSERT INTO Test (name, dueDate, dueTime, duration, class) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, test.getName());
             ps.setDate(2, java.sql.Date.valueOf(test.getDueDate()));
             ps.setTime(3, java.sql.Time.valueOf(test.getDueTime()));
@@ -116,8 +112,8 @@ public class TestDBDAO extends TestDAO {
     }
 
     private void saveQuestion(Question q, int testId) throws SQLException {
-        String SQLQuery = "INSERT INTO Domanda (header, maxScore, type, test) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(SQLQuery, Statement.RETURN_GENERATED_KEYS)) {
+        String sqlQuery = "INSERT INTO Domanda (header, maxScore, type, test) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, q.getHeader());
             ps.setInt(2, q.getMaxScore());
             String type = (q instanceof OpenQuestion) ? QuestionType.OPENQUESTION.name() : QuestionType.CLOSEQUESTION.name();
@@ -126,12 +122,11 @@ public class TestDBDAO extends TestDAO {
             ps.executeUpdate();
 
             int questionId;
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) {
-                    questionId = rs.getInt(1);
-                } else {
-                    throw new SQLException("Query execution failed!!!");
-                }
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                questionId = rs.getInt(1);
+            } else {
+                throw new SQLException("Query execution failed!!!");
             }
 
             if (q instanceof CloseQuestion cq) {
@@ -141,13 +136,13 @@ public class TestDBDAO extends TestDAO {
     }
 
     private void saveChoices(List<Choice> choices, Choice solution, int questionId) throws SQLException {
-        String SQLQuery = "INSERT INTO OpzioniDomande (content, isSolution, question) VALUES (?, ?, ?)";
-        try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(SQLQuery)) {
+        String sqlQuery = "INSERT INTO OpzioniDomande (content, isSolution, question) VALUES (?, ?, ?)";
+        try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)) {
             if (choices != null) {
+                ps.setInt(3, questionId);
                 for (Choice c : choices) {
                     ps.setString(1, c.getContent());
                     ps.setBoolean(2, c == solution);
-                    ps.setInt(3, questionId);
                     ps.addBatch();
                 }
             }

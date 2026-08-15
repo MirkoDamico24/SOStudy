@@ -194,15 +194,20 @@ public class TestFSDAO extends TestDAO {
         return maxId + 1;
     }
 
+    private JSONArray getJSONArray(){
+        JSONArray jsonArray;
+        try {
+            jsonArray = JSONHelper.readJsonFile(FILE_PATH);
+        } catch (IOException e) {
+            jsonArray = new JSONArray();
+        }
+        return jsonArray;
+    }
+
     @Override
     public void saveTest(Test test) throws DAOException {
         try {
-            JSONArray jsonArray;
-            try {
-                jsonArray = JSONHelper.readJsonFile(FILE_PATH);
-            } catch (IOException e) {
-                jsonArray = new JSONArray();
-            }
+            JSONArray jsonArray = getJSONArray();
 
             int newId = generateNextId(jsonArray);
 

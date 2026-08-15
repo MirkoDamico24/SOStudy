@@ -2,7 +2,9 @@ package it.uniroma2.dicii.ispw.sostudy.dao.factory;
 
 import it.uniroma2.dicii.ispw.sostudy.dao.attempt.TestAttemptDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.authentication.AuthenticationDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.choice.ChoiceDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.professor.ProfessorDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.question.QuestionDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.student.StudentDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.test.TestDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.virtualclass.VirtualClassDAO;
@@ -43,4 +45,6 @@ public abstract class DAOFactory {
     public abstract VirtualClassDAO getVirtualClassDAO();
     public abstract TestDAO getTestDAO();
     public abstract TestAttemptDAO getTestAttemptDAO();
+    public abstract QuestionDAO getQuestionDAO();
+    public abstract ChoiceDAO getChoiceDAO();
 }

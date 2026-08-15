@@ -2,6 +2,7 @@ package it.uniroma2.dicii.ispw.sostudy.dao.attempt;
 
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.TestAttempt;
+import it.uniroma2.dicii.ispw.sostudy.model.TestAttemptAnswer;
 
 public class TestAttemptFSDAO extends TestAttemptDAO {
     @Override
@@ -15,7 +16,7 @@ public class TestAttemptFSDAO extends TestAttemptDAO {
     }
 
     @Override
-    public int assignId(TestAttempt testAttempt){
-        return 0;
+    public void addAnswerToAttempt(TestAttemptAnswer answer, int testID) throws DAOException{
+
     }
 }

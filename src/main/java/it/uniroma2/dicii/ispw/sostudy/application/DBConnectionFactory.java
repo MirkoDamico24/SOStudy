@@ -13,20 +13,21 @@ import java.util.Properties;
 public class DBConnectionFactory {
     private static Connection connection = null;
 
+    private DBConnectionFactory() {}
+
     public static Connection getConnection() throws DAOException {
         if(connection == null){
             try (InputStream input = new FileInputStream("src/main/resources/config.properties");) {
                 Properties prop = new Properties();
                 prop.load(input);
 
-                String conn_url = prop.getProperty("CONNECTION_URL");
+                String connUrl = prop.getProperty("CONNECTION_URL");
                 String uname = prop.getProperty("USER_DB");
                 String passwd = prop.getProperty("USER_PASSWD");
 
-                connection = DriverManager.getConnection(conn_url, uname, passwd);
+                connection = DriverManager.getConnection(connUrl, uname, passwd);
             }
             catch(IOException | SQLException e){
-                e.printStackTrace();
                 throw new DAOException("Unable to connect to database.");
             }
         }

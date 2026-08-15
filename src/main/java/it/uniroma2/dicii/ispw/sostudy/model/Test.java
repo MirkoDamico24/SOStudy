@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Test {
+    private int id;
     private String name;
     private LocalDate dueDate;
     private LocalTime dueTime;
@@ -62,7 +63,9 @@ public class Test {
     }
 
     public Question getNextQuestion(Question current) throws ModelException{
-        if(current == null) throw new ModelException("[Class: Test] There is no next QUESTION for a null object");
+        if(current == null) {
+            return this.questions.getFirst();   //returns the first question
+        }
 
         int currentPosition = this.questions.indexOf(current);
         if(currentPosition != -1 &&  currentPosition + 1 < this.questions.size())  return questions.get(currentPosition+1);
@@ -105,4 +108,6 @@ public class Test {
     public void setVirtualClass(VirtualClass virtualClass) {this.virtualClass = virtualClass;}
     public void setDueTime(LocalTime dueTime) {this.dueTime = dueTime;}
     public LocalTime getDueTime() {return this.dueTime;}
+    public void setId(Integer id) {this.id = id;}
+    public int getId() {return this.id;}
 }

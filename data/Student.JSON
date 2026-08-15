@@ -1,0 +1,15 @@
+[
+  {
+    "email": "giuseppe.bianchi@gmail.com",
+    "name": "Giuseppe",
+    "surname": "Bianchi",
+    "classes": [
+      {
+        "classID": 1
+      },
+      {
+        "classID": 2
+      }
+    ]
+  }
+]

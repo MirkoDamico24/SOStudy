@@ -208,9 +208,6 @@ public class RiepilogoTestController {
         try {
             createTestController.createTest(navigatorGUI.getContext().getSession().getSessionID(), navigatorGUI.getContext().getTest(), navigatorGUI.getContext().getQuestions());
         }
-        catch(ExsistingTestExcpetion e){
-            showAlert("Titolo esistente", e.getMessage(), "Cambiare il nome del test!!!");
-        }
         catch (ControllerException e) {
             showAlert("Errore di risorsa", e.getMessage(), "Riprovare");
         }

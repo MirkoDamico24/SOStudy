@@ -1,10 +1,14 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.factory;
 
 import it.uniroma2.dicii.ispw.sostudy.dao.attempt.TestAttemptDAO;
-import it.uniroma2.dicii.ispw.sostudy.dao.attempt.TestAttemptDBDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.attempt.TestAttemptDemoDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.authentication.AuthenticationDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.authentication.AuthenticationDemoDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.choice.ChoiceDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.choice.ChoiceDemoDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.professor.ProfessorDemoDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.question.QuestionDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.question.QuestionDemoDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.student.StudentDemoDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.test.TestDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.test.TestDemoDAO;
@@ -36,5 +40,11 @@ public class DemoDAOFactory extends DAOFactory {
     public TestDAO getTestDAO() {return new TestDemoDAO();}
 
     @Override
-    public TestAttemptDAO getTestAttemptDAO() {return new TestAttemptDBDAO();}
+    public TestAttemptDAO getTestAttemptDAO() {return new TestAttemptDemoDAO();}
+
+    @Override
+    public QuestionDAO getQuestionDAO() {return new QuestionDemoDAO();}
+
+    @Override
+    public ChoiceDAO getChoiceDAO() {return new ChoiceDemoDAO();}
 }

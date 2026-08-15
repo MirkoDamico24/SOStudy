@@ -14,40 +14,32 @@ public class AuthenticationDBDAO extends AuthenticationDAO {
 
     @Override
     public String getCredentials(String email) throws DAOException{
-        String SQLquery = "SELECT Password FROM Utenti WHERE email = ?";
-        try(PreparedStatement cs = getDBConnection().prepareStatement(SQLquery)){
+        String sqlQuery = "SELECT Password FROM Utenti WHERE email = ?";
+        try(PreparedStatement cs = getDBConnection().prepareStatement(sqlQuery)){
             cs.setString(1, email);
-            try(ResultSet rs = cs.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("Password");
-                }
-            }
-            catch (SQLException e){
-                throw new DAOException("The provided email does not exist.");
+            ResultSet rs = cs.executeQuery();
+            if (rs.next()) {
+                return rs.getString("Password");
             }
         }
         catch(SQLException e){
-            throw new DAOException("Connection error while getting credentials.");
+            throw new DAOException("Error occurred while taking data from the database");
         }
         return null;
     }
 
     @Override
     public UserRole getUserRole (String email) throws DAOException{
-        String SQLquery = "SELECT Ruolo FROM Utenti WHERE email = ?";
-        try(PreparedStatement cs = getDBConnection().prepareStatement(SQLquery)){
+        String sqlQuery = "SELECT Ruolo FROM Utenti WHERE email = ?";
+        try(PreparedStatement cs = getDBConnection().prepareStatement(sqlQuery)){
             cs.setString(1, email);
-            try(ResultSet rs = cs.executeQuery()) {
-                if (rs.next()) {
-                    return UserRole.valueOf(rs.getString("Ruolo"));
-                }
-            }
-            catch (SQLException e){
-                throw new DAOException("The provided email does not exist.");
+            ResultSet rs = cs.executeQuery();
+            if (rs.next()) {
+                return UserRole.valueOf(rs.getString("Ruolo"));
             }
         }
         catch(SQLException e){
-            throw new DAOException("Connection error while getting credentials.");
+            throw new DAOException("Error occurred while taking data from the database");
         }
         return null;
     }

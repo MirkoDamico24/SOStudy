@@ -21,7 +21,7 @@ public class LoginController {
         String password = PasswdHelper.hashPassword(ub.getPassword());
         AuthenticationDAO dao = DAOFactory.getInstance().getAuthenticationDAO();
 
-        if(password.equals(dao.getCredentials(email))) {
+        if(PasswdHelper.verifyPassword(ub.getPassword(), dao.getCredentials(email))) {
             if(dao.getUserRole(email) == UserRole.PROFESSOR) {
                 ProfessorDAO profDAO = DAOFactory.getInstance().getProfessorDAO();
                 Professor prof = profDAO.getProfessorByEmail(email);

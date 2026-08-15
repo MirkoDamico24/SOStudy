@@ -73,4 +73,5 @@ public class CloseQuestion extends Question {
     public Question copy() {
         return new CloseQuestion(this.getHeader(), this.getMaxScore(),  this.getChoices(), this.solution);
     }
+
 }

@@ -3,7 +3,6 @@ package it.uniroma2.dicii.ispw.sostudy.dao.test;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.Test;
 
-import java.util.Collection;
 import java.util.Collections;
 
 public class TestDemoDAO extends TestDAO {

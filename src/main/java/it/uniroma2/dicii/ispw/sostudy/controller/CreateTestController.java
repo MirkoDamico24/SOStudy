@@ -2,7 +2,6 @@ package it.uniroma2.dicii.ispw.sostudy.controller;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
-import it.uniroma2.dicii.ispw.sostudy.bean.VirtualClassBean;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.dao.test.TestDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.virtualclass.VirtualClassDAO;
@@ -36,7 +35,7 @@ public class CreateTestController {
         return null;
     }
 
-    public void createTest(int sessionID, TestBean test, List<QuestionBean> questions) throws ExsistingTestExcpetion, ControllerException{
+    public void createTest(int sessionID, TestBean test, List<QuestionBean> questions) throws ControllerException{
         TestDAO td = DAOFactory.getInstance().getTestDAO();
 
         VirtualClass cls = getClass(sessionID, test.getVirtualClass());

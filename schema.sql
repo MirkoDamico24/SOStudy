@@ -38,7 +38,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `SoStudyDB`.`ClassStudents` ;
 CREATE TABLE `SoStudyDB`.`ClassStudents` (
     `student` VARCHAR(45) NOT NULL,
-    `class` VARCHAR(60) NOT NULL,
+    `class` INT UNSIGNED NOT NULL,
     FOREIGN KEY (`student`) REFERENCES `SoStudyDB`.`Student` (`email`),
     FOREIGN KEY (`class`) REFERENCES `SoStudyDB`.`Class` (`code`)
 )
@@ -93,7 +93,7 @@ DROP TABLE IF EXISTS `SoStudyDB`.`Tentativo` ;
 CREATE TABLE `SoStudyDB`.`Tentativo` (
     `testID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `grade` INT UNSIGNED,
-    `gradingStatus` ENUM('FULLYGRADED', 'REVISIONING', 'INCOMPLETE'),
+    `gradingStatus` ENUM('FULLYGRADED', 'REVISIONING', 'INCOMPLETE') DEFAULT 'INCOMPLETE',
     `handInTime` TIME,
     `handInDate` DATE,
     `test` INT UNSIGNED NOT NULL,
@@ -114,17 +114,21 @@ DROP TABLE IF EXISTS `SoStudyDB`.`Rispsote` ;
 CREATE TABLE `SoStudyDB`.`Risposte` (
     `code` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `textualContent` VARCHAR(250),
-    `integerContent` INT,
+    `integerContent` INT UNSIGNED,
+    `score` INT UNSIGNED,
     `attempt` INT UNSIGNED NOT NULL,
+    `question` INT UNSIGNED NOT NULL,
     PRIMARY KEY (`code`),
-    FOREIGN KEY (`attempt`) REFERENCES `SoStudyDB`.`Tentativo` (`testID`)
+    FOREIGN KEY (`attempt`) REFERENCES `SoStudyDB`.`Tentativo` (`testID`),
+    FOREIGN KEY (`question`) REFERENCES `SoStudyDB`.`Domanda` (`code`),
+    FOREIGN KEY (`integerContent`) REFERENCES `SoStudyDB`.`OpzioniDomande` (`code`)
 )
 ENGINE = InnoDB;
 
 DROP TABLE IF EXISTS `SoStudyDB`.`Utenti` ;
 CREATE TABLE `SoStudyDB`.`Utenti` (
     `email` VARCHAR(45) NOT NULL,
-    `Password` CHAR(32) NOT NULL,
+    `Password` VARCHAR(60) NOT NULL,
     `Ruolo` ENUM('PROFESSOR', 'STUDENT') NOT NULL,
     PRIMARY KEY (`email`)
 )
@@ -141,8 +145,8 @@ USE `SoStudyDB`;
 -- 1. Inserimento Utenti
 -- -----------------------------------------------------
 INSERT INTO `Utenti` (`email`, `Password`, `Ruolo`) VALUES
-('mario.rossi@gmail.com', MD5('password123'), 'PROFESSOR'),
-('luigi.bianchi@gmail.com', MD5('password123'), 'PROFESSOR'),
+('mario.rossi@gmail.com', '$2a$10$1ms55w0sVAfS7HR060REWe7Hv2do8sXtcSQ8F5.g5Sb0pHZj7/Gqy', 'PROFESSOR'),
+('giuseppe.bianchi@gmail.com', '$2a$10$ep5OKfsCfKU8Y5cF8dP4VOmcxD/MEV..1opKsCqgH1ZoneZ6yj9Mi', 'STUDENT'),
 ('anna.neri@gmail.com', MD5('qwerty'), 'STUDENT'),
 ('marco.verdi@gmail.com', MD5('qwerty'), 'STUDENT'),
 ('giulia.gialli@gmail.com', MD5('qwerty'), 'STUDENT');
@@ -152,7 +156,7 @@ INSERT INTO `Utenti` (`email`, `Password`, `Ruolo`) VALUES
 -- -----------------------------------------------------
 INSERT INTO `Professor` (`email`, `name`, `surname`) VALUES
 ('mario.rossi@gmail.com', 'Mario', 'Rossi'),
-('l.bianchi@sostudy.it', 'Luigi', 'Bianchi');
+('giuseppe.bianchi@gmail.com', 'Giuseppe', 'Bianchi');
 
 -- -----------------------------------------------------
 -- 3. Inserimento Studenti
@@ -167,32 +171,32 @@ INSERT INTO `Student` (`email`, `name`, `surname`) VALUES
 -- -----------------------------------------------------
 INSERT INTO `Class` (`name`, `professor`) VALUES
 ('Basi di Dati', 'mario.rossi@gmail.com'),
-('Sistemi Operativi', 'l.bianchi@sostudy.it');
+('Sistemi Operativi', 'mario.rossi@gmail.com');
 
 -- -----------------------------------------------------
 -- 5. Inserimento Iscrizioni ClassStudents
 -- -----------------------------------------------------
 INSERT INTO `ClassStudents` (`student`, `class`) VALUES
-('a.neri@studenti.it', 'Basi di Dati'),
-('m.verdi@studenti.it', 'Basi di Dati'),
-('a.neri@studenti.it', 'Sistemi Operativi'),
-('g.gialli@studenti.it', 'Sistemi Operativi');
+('a.neri@studenti.it', 1),
+('m.verdi@studenti.it', 1),
+('a.neri@studenti.it', 2),
+('g.gialli@studenti.it', 2);
 
 -- -----------------------------------------------------
 -- 6. Inserimento Test
 -- -----------------------------------------------------
 INSERT INTO `Test` (`name`, `dueDate`, `dueTime`, `duration`, `class`) VALUES
-('Parziale SQL', '2023-11-15', '10:00:00', '02:00:00', 'Basi di Dati'),
-('Appello Gennaio SO', '2024-01-20', '14:30:00', '01:30:00', 'Sistemi Operativi');
+('Parziale SQL', '2023-11-15', '10:00:00', '02:00:00', 1),
+('Appello Gennaio SO', '2024-01-20', '14:30:00', '01:30:00', 2);
 
 -- -----------------------------------------------------
 -- 7. Inserimento Domande
 -- (I codici generati dall'AUTO_INCREMENT saranno 1, 2 e 3)
 -- -----------------------------------------------------
 INSERT INTO `Domanda` (`header`, `maxScore`, `type`, `test`) VALUES
-('Scrivi la query per selezionare tutti gli studenti.', 15, 'aperta', 1),
-('Qual è il comando corretto per eliminare una tabella in SQL?', 5, 'multipla', 1),
-('Quale tra questi è uno stato valido per un processo?', 10, 'multipla', 2);
+('Scrivi la query per selezionare tutti gli studenti.', 15, 'OPENQUESTION', 1),
+('Qual è il comando corretto per eliminare una tabella in SQL?', 5, 'CLOSEQUESTION', 1),
+('Quale tra questi è uno stato valido per un processo?', 10, 'CLOSEQUESTION', 2);
 
 -- -----------------------------------------------------
 -- 8. Inserimento Opzioni Domande

@@ -9,6 +9,6 @@ public class StudentDemoDAO extends StudentDAO {
         if(containsKey(email)) {
             return getFromCache(email);
         }
-        return new Student(1234, "Giuseppe", "Bianchi", "giuseppe.bianchi@gmail.com");
+        return new Student ("Giuseppe", "Bianchi", "giuseppe.bianchi@gmail.com");
     }
 }

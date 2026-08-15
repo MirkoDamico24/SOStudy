@@ -18,7 +18,7 @@ public class AuthenticationFSDAO extends AuthenticationDAO {
     public String getCredentials(String username) throws DAOException {
         try {
             JSONObject userObj = findUserByEmail(username);
-            return (userObj != null) ? PasswdHelper.hashPassword(userObj.getString("password")) : null;
+            return (userObj != null) ? userObj.getString("password") : null;
         } catch (Exception e) {
             throw new DAOException("Error reading credentials");
         }

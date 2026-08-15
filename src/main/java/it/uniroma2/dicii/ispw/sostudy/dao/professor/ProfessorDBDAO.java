@@ -15,19 +15,14 @@ public class ProfessorDBDAO extends ProfessorDAO {
             return this.getFromCache(email);
         }
 
-        String SQLQuery = "SELECT name, surname, email FROM Professor WHERE email = ?";
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(SQLQuery)){
+        String sqlQuery = "SELECT name, surname, email FROM Professor WHERE email = ?";
+        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
             ps.setString(1, email);
-            try(ResultSet rs = ps.executeQuery()){
-                if(rs.next()) return new Professor(rs.getString("name"), rs.getString("surname"), rs.getString("email"));
-            }
-            catch(SQLException e){
-                throw new DAOException("Provided email does not exist");
-            }
-
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) return new Professor(rs.getString("name"), rs.getString("surname"), rs.getString("email"));
         }
         catch(SQLException e){
-            throw new DAOException("Error occurred while connecting to the database");
+            throw new DAOException("Error occurred while taking data from the database");
         }
         return null;
     }

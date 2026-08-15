@@ -4,6 +4,8 @@ module it.uniroma2.dicii.ispw.sostudy {
     requires org.json;
     requires java.sql;
     requires org.mariadb.jdbc;
+    requires jbcrypt;
+    requires jdk.compiler;
 
     opens it.uniroma2.dicii.ispw.sostudy to javafx.fxml;
     exports it.uniroma2.dicii.ispw.sostudy.controller;

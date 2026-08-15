@@ -18,6 +18,12 @@ public class VirtualClass {
         this.students.add(student);
     }
 
+    public VirtualClass(String name,int classId, Professor prof) {
+        this.name = name;
+        this.classId = classId;
+        this.prof = prof;
+    }
+
     public VirtualClass(String name, int classId, Professor prof, List<Student> students) {
         this.name = name;
         this.classId = classId;
@@ -40,11 +46,26 @@ public class VirtualClass {
         this.assignedTests.add(test);
     }
 
+    public void setAssignedTests(List<Test> assignedTests) {
+        this.assignedTests = assignedTests;
+    }
+
     public List<Test> getAvailableTests() { return this.assignedTests; }
 
     public void deleteTest(Test test) { this.assignedTests.remove(test); }
 
-    public void addStudent(Student student) { this.students.add(student); }
+    public void addStudent(Student student) {
+        if(this.students == null) {
+            this.students = new ArrayList<>();
+        }
+        this.students.add(student);
+    }
+
+    public void setStudent(List<Student> student) {
+        this.students = student;
+    }
+
+    public List<Student> getStudents() { return this.students; }
 
     public void removeStudent(Student student) { this.students.remove(student); }
 

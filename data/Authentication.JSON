@@ -1,12 +1,12 @@
 [
   {
     "email": "mario.rossi@gmail.com",
-    "password": "mario.rossi",
+    "password": "$2a$10$1ms55w0sVAfS7HR060REWe7Hv2do8sXtcSQ8F5.g5Sb0pHZj7/Gqy",
     "role": "PROFESSOR"
   },
   {
     "email": "giuseppe.bianchi@gmail.com",
-    "password": "giuseppe.bianchi",
+    "password": "$2a$10$ep5OKfsCfKU8Y5cF8dP4VOmcxD/MEV..1opKsCqgH1ZoneZ6yj9Mi",
     "role": "STUDENT"
   }
 ]

@@ -1,34 +1,15 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.professor;
 
 import it.uniroma2.dicii.ispw.sostudy.application.JSONHelper;
-import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
-import it.uniroma2.dicii.ispw.sostudy.dao.virtualclass.VirtualClassDAO;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.Professor;
-import it.uniroma2.dicii.ispw.sostudy.model.VirtualClass;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class ProfessorFSDAO extends ProfessorDAO {
 
     private static final String FILE_PATH = "data/Professor.JSON";
-
-    public List<VirtualClass> getProfessorClasses(JSONArray jsonArray) throws DAOException {
-        List<VirtualClass> classes = new ArrayList<>();
-        VirtualClassDAO virtualClassDAO = DAOFactory.getInstance().getVirtualClassDAO();
-
-        for (int j = 0; j < jsonArray.length(); j++) {
-            JSONObject classObj = jsonArray.getJSONObject(j);
-            int classID = classObj.getInt("classID");
-            VirtualClass virtualClass = virtualClassDAO.getVirtualClassById(classID);
-            if (virtualClass != null) {
-                classes.add(virtualClass);
-            }
-        }
-        return classes;
-    }
 
     @Override
     public Professor getProfessorByEmail(String email) throws DAOException {
@@ -41,7 +22,7 @@ public class ProfessorFSDAO extends ProfessorDAO {
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                if (jsonObject.getString("email").equals(email)) {
+                if (jsonObject.has("email") && jsonObject.getString("email").equals(email)) {
                     return buildProfessorFromJson(jsonObject, email);
                 }
             }
@@ -59,5 +40,4 @@ public class ProfessorFSDAO extends ProfessorDAO {
         this.addToCache(email, professor);
         return professor;
     }
-
 }

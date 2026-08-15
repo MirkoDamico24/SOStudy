@@ -4,6 +4,7 @@ import it.uniroma2.dicii.ispw.sostudy.application.DBConnectionFactory;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.Professor;
+import it.uniroma2.dicii.ispw.sostudy.model.Student;
 import it.uniroma2.dicii.ispw.sostudy.model.Test;
 import it.uniroma2.dicii.ispw.sostudy.model.VirtualClass;
 
@@ -32,8 +33,7 @@ public class VirtualClassDBDAO extends VirtualClassDAO {
                     String professorEmail = rs.getString("professor");
 
                     Professor professor = DAOFactory.getInstance().getProfessorDAO().getProfessorByEmail(professorEmail);
-                    //TODO:VirtualClass virtualClass = new VirtualClass(name, id, professor);
-                    VirtualClass virtualClass = null;
+                    VirtualClass virtualClass = new VirtualClass(name, id, professor);
                     this.addToCache(id, virtualClass);
                     return virtualClass;
                 }
@@ -63,8 +63,7 @@ public class VirtualClassDBDAO extends VirtualClassDAO {
                         virtualClasses.add(this.getFromCache(classId));
                     } else {
                         String name = rs.getString("name");
-                        //TODO:VirtualClass virtualClass = new VirtualClass(name, classId, professor);
-                        VirtualClass virtualClass = null;
+                        VirtualClass virtualClass = new VirtualClass(name, classId, professor);
                         this.addToCache(classId, virtualClass);
                         virtualClasses.add(virtualClass);
                     }
@@ -78,7 +77,49 @@ public class VirtualClassDBDAO extends VirtualClassDAO {
     }
 
     @Override
-    public List<Test> getClassTests(int classId){
-        return null;
+    public void getClassTests(int classId) {
+        if (!this.containsKey(classId)) {
+            throw new DAOException("Virtual class not present in cache");
+        }
+
+        VirtualClass virtualClass = this.getFromCache(classId);
+        List<Test> tests = new ArrayList<>();
+
+        String sqlQuery = "SELECT code FROM Test WHERE classId = ?";
+        try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)) {
+            ps.setInt(1, classId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Test test = DAOFactory.getInstance().getTestDAO().getTestById(rs.getInt("code"));
+                tests.add(test);
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Database error occurred while retrieving tests by id");
+        }
+        virtualClass.setAssignedTests(tests);
+    }
+
+    @Override
+    public void getClassStudents(int classId){
+        if (!this.containsKey(classId)) {
+            throw new DAOException("Virtual class not present in cache");
+        }
+
+        VirtualClass virtualClass = this.getFromCache(classId);
+        List<Student> students = new ArrayList<>();
+
+        String sqlQuery = "SELECT email FROM ClassStudent join Student on student = email WHERE class = ?";
+        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
+            ps.setInt(1, classId);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Student student = DAOFactory.getInstance().getStudentDAO().getStudentByEmail(rs.getString("email"));
+                students.add(student);
+            }
+        }
+        catch (SQLException e){
+            throw new DAOException("Database error occurred while retrieving class' students");
+        }
+        virtualClass.setStudent(students);
     }
 }

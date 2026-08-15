@@ -2,7 +2,8 @@ package it.uniroma2.dicii.ispw.sostudy.model;
 
 import it.uniroma2.dicii.ispw.sostudy.exception.ModelException;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,14 +11,14 @@ public class TestAttempt{
     private int testId;
     private int grade;
     private TestGradingStatus testGradingStatus;
-    private LocalDateTime handInTime;
-    private LocalDateTime handInDate;
+    private LocalTime handInTime;
+    private LocalDate handInDate;
 
     private Test test;
     private List<TestAttemptAnswer> answers;
     private Student student;
 
-    public TestAttempt(Test test, List<TestAttemptAnswer> answers, Student student) {
+    public TestAttempt(Test test, List<TestAttemptAnswer> answers, Student student, int id, int grade, TestGradingStatus testGradingStatus, LocalTime handInTime, LocalDate handInDate) {
         this.test = test;
         List<TestAttemptAnswer> tmpAnswers = new ArrayList<>();
         for(TestAttemptAnswer a : answers){
@@ -25,10 +26,21 @@ public class TestAttempt{
         }
         this.answers = tmpAnswers;
         this.student = student;
+        this.testId = id;
+        this.grade = grade;
+        this.testGradingStatus = testGradingStatus;
+        this.handInTime = handInTime;
+        this.handInDate = handInDate;
     }
 
     public TestAttempt(Test test, Student student) {
         this.test = test;
+        this.student = student;
+    }
+
+    public TestAttempt(Test test, List<TestAttemptAnswer> answers, Student student) {
+        this.test = test;
+        this.answers = answers;
         this.student = student;
     }
 
@@ -65,10 +77,10 @@ public class TestAttempt{
     public int getGrade() { return grade; }
     public void setTestGradingStatus(TestGradingStatus testGradingStatus) { this.testGradingStatus = testGradingStatus; }
     public TestGradingStatus getTestGradingStatus() { return testGradingStatus; }
-    public void setHandInTime(LocalDateTime handInTime) { this.handInTime = handInTime; }
-    public LocalDateTime getHandInTime() { return this.handInTime; }
-    public void setHandInDate(LocalDateTime handInDate) { this.handInDate = handInDate; }
-    public LocalDateTime getHandInDate() { return this.handInDate; }
+    public void setHandInTime(LocalTime handInTime) { this.handInTime = handInTime; }
+    public LocalTime getHandInTime() { return this.handInTime; }
+    public void setHandInDate(LocalDate handInDate) { this.handInDate = handInDate; }
+    public LocalDate getHandInDate() { return this.handInDate; }
     public Test getTest() { return test; }
     public void setStudent(Student student) { this.student = student; }
     public void setTestId(int id) { this.testId = id; }

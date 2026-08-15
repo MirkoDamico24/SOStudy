@@ -21,8 +21,39 @@ public class VirtualClassFSDAO extends VirtualClassDAO {
     private static final String KEY_ASSIGNED_TESTS = "tests";
     private static final String KEY_EMAIL = "email";
 
-    private List<Student> getClassStudents(JSONArray studentsArray) throws DAOException {
+    @Override
+    public void getClassStudents(int classId) throws DAOException {
+        if (!this.containsKey(classId)) {
+            throw new DAOException("Virtual class not present in cache");
+        }
+
+        VirtualClass virtualClass = this.getFromCache(classId);
         List<Student> students = new ArrayList<>();
+
+        try {
+            JSONArray jsonArray = JSONHelper.readJsonFile(FILE_PATH);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                if (jsonObject.has(KEY_ID) && jsonObject.getInt(KEY_ID) == classId) {
+                    students = extractAssignedStudents(jsonObject);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            throw new DAOException("Error reading virtual class data by id for students");
+        }
+
+        virtualClass.setStudent(students);
+    }
+
+    private List<Student> extractAssignedStudents(JSONObject jsonObject) throws DAOException {
+        List<Student> students = new ArrayList<>();
+
+        if (!jsonObject.has(KEY_STUDENTS)) {
+            return students;
+        }
+
+        JSONArray studentsArray = jsonObject.getJSONArray(KEY_STUDENTS);
         for (int j = 0; j < studentsArray.length(); j++) {
             JSONObject studentObj = studentsArray.getJSONObject(j);
             Student student = DAOFactory.getInstance().getStudentDAO()
@@ -35,30 +66,44 @@ public class VirtualClassFSDAO extends VirtualClassDAO {
     }
 
     @Override
-    public List<Test> getClassTests(int classId) throws DAOException {
+    public void getClassTests(int classId) throws DAOException {
+        if (!this.containsKey(classId)) {
+            throw new DAOException("Virtual class not present in cache");
+        }
+
+        VirtualClass virtualClass = this.getFromCache(classId);
         List<Test> tests = new ArrayList<>();
         try {
             JSONArray jsonArray = JSONHelper.readJsonFile(FILE_PATH);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 if (jsonObject.has(KEY_ID) && jsonObject.getInt(KEY_ID) == classId) {
-                    if (jsonObject.has(KEY_ASSIGNED_TESTS)) {
-                        JSONArray testsArray = jsonObject.getJSONArray(KEY_ASSIGNED_TESTS);
-                        for (int j = 0; j < testsArray.length(); j++) {
-                            JSONObject testObj = testsArray.getJSONObject(j);
-                            Test test = DAOFactory.getInstance().getTestDAO()
-                                    .getTestById(testObj.getInt("testId"));
-                            if (test != null) {
-                                tests.add(test);
-                            }
-                        }
-                    }
-                    break;
+                    tests = extractAssignedTests(jsonObject);
                 }
             }
         } catch (Exception e) {
             throw new DAOException("Error reading virtual class data by id for tests");
         }
+
+        virtualClass.setAssignedTests(tests);
+    }
+
+    private List<Test> extractAssignedTests(JSONObject jsonObject) throws DAOException {
+        List<Test> tests = new ArrayList<>();
+
+        if (!jsonObject.has(KEY_ASSIGNED_TESTS)) {
+            return tests;
+        }
+
+        JSONArray testsArray = jsonObject.getJSONArray(KEY_ASSIGNED_TESTS);
+        for (int j = 0; j < testsArray.length(); j++) {
+            JSONObject testObj = testsArray.getJSONObject(j);
+            Test test = DAOFactory.getInstance().getTestDAO().getTestById(testObj.getInt("testId"));
+            if (test != null) {
+                tests.add(test);
+            }
+        }
+
         return tests;
     }
 
@@ -88,7 +133,7 @@ public class VirtualClassFSDAO extends VirtualClassDAO {
                 .getProfessorByEmail(jsonObject.getString(KEY_PROF));
 
         List<Student> students = jsonObject.has(KEY_STUDENTS)
-                ? getClassStudents(jsonObject.getJSONArray(KEY_STUDENTS)) : null;
+                ? extractAssignedStudents(jsonObject) : null;
 
         VirtualClass virtualClass = new VirtualClass(name, id, professor, students);
         this.addToCache(id, virtualClass);
@@ -116,7 +161,7 @@ public class VirtualClassFSDAO extends VirtualClassDAO {
         return classes;
     }
 
-    public int generateNextId() throws DAOException {
+    private int generateNextId() throws DAOException {
         int maxId = 0;
         try {
             JSONArray jsonArray = JSONHelper.readJsonFile(FILE_PATH);
