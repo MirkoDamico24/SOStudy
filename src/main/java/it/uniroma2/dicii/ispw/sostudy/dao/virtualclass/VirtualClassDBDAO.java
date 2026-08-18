@@ -24,6 +24,7 @@ public class VirtualClassDBDAO extends VirtualClassDAO {
 
         String sqlQuery = "SELECT code, name, professor FROM Class WHERE code = ?";
 
+
         try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)) {
             ps.setInt(1, id);
 
@@ -53,20 +54,19 @@ public class VirtualClassDBDAO extends VirtualClassDAO {
         try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)) {
             ps.setString(1, profEmail);
 
-            try (ResultSet rs = ps.executeQuery()) {
-                Professor professor = DAOFactory.getInstance().getProfessorDAO().getProfessorByEmail(profEmail);
+            ResultSet rs = ps.executeQuery();
+            Professor professor = DAOFactory.getInstance().getProfessorDAO().getProfessorByEmail(profEmail);
 
-                while (rs.next()) {
-                    int classId = rs.getInt("code");
+            while (rs.next()) {
+                int classId = rs.getInt("code");
 
-                    if (this.containsKey(classId)) {
-                        virtualClasses.add(this.getFromCache(classId));
-                    } else {
-                        String name = rs.getString("name");
-                        VirtualClass virtualClass = new VirtualClass(name, classId, professor);
-                        this.addToCache(classId, virtualClass);
-                        virtualClasses.add(virtualClass);
-                    }
+                if (this.containsKey(classId)) {
+                    virtualClasses.add(this.getFromCache(classId));
+                } else {
+                    String name = rs.getString("name");
+                    VirtualClass virtualClass = new VirtualClass(name, classId, professor);
+                    this.addToCache(classId, virtualClass);
+                    virtualClasses.add(virtualClass);
                 }
             }
         } catch (SQLException e) {
@@ -108,7 +108,7 @@ public class VirtualClassDBDAO extends VirtualClassDAO {
         VirtualClass virtualClass = this.getFromCache(classId);
         List<Student> students = new ArrayList<>();
 
-        String sqlQuery = "SELECT email FROM ClassStudent join Student on student = email WHERE class = ?";
+        String sqlQuery = "SELECT email FROM ClassStudents join Student on student = email WHERE class = ?";
         try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
             ps.setInt(1, classId);
             ResultSet rs = ps.executeQuery();

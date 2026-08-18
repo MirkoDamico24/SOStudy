@@ -4,11 +4,13 @@ import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.VirtualClassBean;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
+import it.uniroma2.dicii.ispw.sostudy.dao.message.MessageDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.test.TestDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.virtualclass.VirtualClassDAO;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.*;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
 public class CreateTestController {
     private DAOFactory factory = DAOFactory.getInstance();
     private VirtualClassDAO classDAO = factory.getVirtualClassDAO();
+    private MessageDAO messageDAO = factory.getMessageDAO();
 
     private VirtualClass getClass(int sessionID, String virtualClass) throws ControllerException {
         List<VirtualClass> vcls = null;
@@ -25,7 +28,6 @@ public class CreateTestController {
             vcls = classDAO.getClassesByProfessor(s.getCurrentProfessor().getEmail());
         }
         catch (DAOException e) {
-            e.printStackTrace();
             throw new ControllerException(e.getMessage());
         }
 
@@ -55,6 +57,14 @@ public class CreateTestController {
             throw new ControllerException("Errore durante il salvataggio del test", e);
         }
         cls.addTest(newTest);
+
+        NotificationController msgctrl = new NotificationController();
+        try {
+            msgctrl.sendNewTestNotification(cls, newTest);
+        }
+        catch(ControllerException e){
+            throw new ControllerException(e.getMessage());
+        }
     }
 
     private List<Question> getQuestions(List<QuestionBean> questions) {

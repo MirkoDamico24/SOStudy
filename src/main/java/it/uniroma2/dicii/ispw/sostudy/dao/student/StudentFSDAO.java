@@ -6,8 +6,6 @@ import it.uniroma2.dicii.ispw.sostudy.model.Student;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class StudentFSDAO extends StudentDAO {
     private static final String FILE_PATH = "data/Student.JSON";

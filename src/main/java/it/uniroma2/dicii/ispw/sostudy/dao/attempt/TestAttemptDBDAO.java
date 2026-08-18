@@ -4,7 +4,7 @@ import it.uniroma2.dicii.ispw.sostudy.application.DBConnectionFactory;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.*;
-import it.uniroma2.dicii.ispw.sostudy.model.answerfactory.AnswerFactory;
+import it.uniroma2.dicii.ispw.sostudy.eng.answerfactory.AnswerFactory;
 
 import java.sql.*;
 import java.time.LocalDate;

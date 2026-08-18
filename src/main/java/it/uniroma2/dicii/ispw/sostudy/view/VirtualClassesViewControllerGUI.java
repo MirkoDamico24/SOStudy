@@ -120,6 +120,6 @@ public class VirtualClassesViewControllerGUI {
 
     @FXML
     void handleCreaClasse(ActionEvent event) {
-
+        //not yet implemented, different use case
     }
 }

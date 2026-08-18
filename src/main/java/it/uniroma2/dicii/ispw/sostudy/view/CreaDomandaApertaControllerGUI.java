@@ -82,16 +82,19 @@ public class CreaDomandaApertaControllerGUI {
 
     @FXML
     void handleIndietro(ActionEvent event) {
-        // Logica per tornare alla schermata precedente
+        navigatorGUI.setPreviousView(Views.OPENQUESTIONVIEW);
+        navigatorGUI.goToRecapView();
     }
 
     @FXML
     void handleNavHome(ActionEvent event) {
-
+        navigatorGUI.setPreviousView(Views.OPENQUESTIONVIEW);
+        navigatorGUI.goToHomeView();
     }
 
     @FXML
     void handleNavClassiVirtuali(ActionEvent event) {
-
+        navigatorGUI.setPreviousView(Views.OPENQUESTIONVIEW);
+        navigatorGUI.goToClassesView();
     }
 }

@@ -1,6 +1,10 @@
 package it.uniroma2.dicii.ispw.sostudy.view.navigator;
 
+import it.uniroma2.dicii.ispw.sostudy.bean.ProfessorBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.SessionBean;
+import it.uniroma2.dicii.ispw.sostudy.bean.StudentBean;
+import it.uniroma2.dicii.ispw.sostudy.bean.UserBean;
+import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 
 public abstract class Navigator {
     private Views currentView;
@@ -101,6 +105,20 @@ public abstract class Navigator {
         nextView();
     }
 
+    public UserBean getCorrectUserBean(){
+        UserBean ub;
+        SessionBean currentSession = this.getContext().getSession();
+        UserRole currentRole = currentSession.getCurrentRole();
+        if(currentRole == UserRole.STUDENT) {
+            StudentBean sb = currentSession.getStudent();
+            ub = new UserBean(sb.getEmail(), null);
+        }
+        else{
+            ProfessorBean pr = currentSession.getProfessor();
+            ub = new UserBean(pr.getEmail(), null);
+        }
+        return ub;
+    }
 
     //Methods for student and professor
     public abstract void startup();

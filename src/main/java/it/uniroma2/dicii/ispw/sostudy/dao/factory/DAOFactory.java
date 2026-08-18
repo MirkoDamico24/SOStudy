@@ -3,6 +3,7 @@ package it.uniroma2.dicii.ispw.sostudy.dao.factory;
 import it.uniroma2.dicii.ispw.sostudy.dao.attempt.TestAttemptDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.authentication.AuthenticationDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.choice.ChoiceDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.message.MessageDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.professor.ProfessorDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.question.QuestionDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.student.StudentDAO;
@@ -26,8 +27,8 @@ public abstract class DAOFactory {
 
                 String persistency =  prop.getProperty("PERSISTENCY");
                 instance = switch (persistency){
-                    case "FS" -> new FSDAOFactory();
-                    case "demo" -> new DemoDAOFactory();
+                    case "FS" -> new DemoDAOFactory();
+                    case "demo" -> new FSDAOFactory();
                     default -> new DBDAOFactory();      //anyways create DBDAO
                 };
             }
@@ -47,4 +48,5 @@ public abstract class DAOFactory {
     public abstract TestAttemptDAO getTestAttemptDAO();
     public abstract QuestionDAO getQuestionDAO();
     public abstract ChoiceDAO getChoiceDAO();
+    public abstract MessageDAO getMessageDAO();
 }

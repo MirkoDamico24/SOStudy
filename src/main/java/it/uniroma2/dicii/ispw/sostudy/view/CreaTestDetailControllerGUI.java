@@ -60,6 +60,10 @@ public class CreaTestDetailControllerGUI {
         try {
             CreateTestController createTestController = new CreateTestController();
             String profEmail = navigatorGUI.getContext().getSession().getProfessor().getEmail();
+            if(profEmail == null){
+                throw new ControllerException("Email errata");
+            }
+
             List<VirtualClassBean> professorClass = createTestController.getProfessorClasses(profEmail);
             ObservableList<String> classes = FXCollections.observableArrayList();
             for (VirtualClassBean vClassBean : professorClass) {

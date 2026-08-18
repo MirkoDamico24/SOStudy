@@ -1,13 +1,22 @@
 package it.uniroma2.dicii.ispw.sostudy.view;
 
+import it.uniroma2.dicii.ispw.sostudy.bean.MessageBean;
+import it.uniroma2.dicii.ispw.sostudy.bean.UserBean;
+import it.uniroma2.dicii.ispw.sostudy.controller.NotificationController;
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
+import it.uniroma2.dicii.ispw.sostudy.eng.observer.MessageObserver;
+import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
+import it.uniroma2.dicii.ispw.sostudy.model.Message;
 import it.uniroma2.dicii.ispw.sostudy.model.SessionManager;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorCLI;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-public class HomeControllerCLI {
+public class HomeControllerCLI extends MessageObserver {
     private NavigatorCLI nav;
+    private NotificationController nctrl = new NotificationController();
 
     private final Scanner scanner = new Scanner(System.in);
 
@@ -45,17 +54,21 @@ public class HomeControllerCLI {
     }
 
     private void printNotifications() {
-        //List<String> comunicazioni = new ArrayList<>();
+        List<MessageBean> notifications = null;
 
-        if (nav.getContext().getSession().getCurrentRole() == UserRole.STUDENT) {
-            System.out.println("Implementa notifihce studente");
-        } else if (nav.getContext().getSession().getCurrentRole() == UserRole.PROFESSOR) {
-            System.out.println("Implementa notifihce professore");
+        UserBean ub = nav.getCorrectUserBean();
+
+        try {
+            notifications = nctrl.fetchUserNotifications(ub, nav.getContext().getSession());
+        }
+        catch(ControllerException e){
+            System.err.println("Errore durante il caricamento delle notifiche.");
+            return;
         }
 
-        /*for (int i = 0; i < comunicazioni.size(); i++) {
-            System.out.printf("%d. %s\n", (i + 1), comunicazioni.get(i));
-        }*/
+        for (int i = 0; i < notifications.size(); i++) {
+            System.out.printf("%d. %s\n", (i + 1), notifications.get(i).getMessage());
+        }
     }
 
     private void printMenu() {
@@ -76,16 +89,19 @@ public class HomeControllerCLI {
         return switch (input) {
             case "1" -> {
                 System.out.println("\n--> Navigazione verso 'Classi Virtuali' in corso...");
+                nctrl.detachFromObserved(this, nav.getSession());
                 nav.goToClassesView();
                 yield true;
             }
             case "2" -> {
                 System.out.println("\n--> Navigazione verso 'Crea test' in corso...");
+                nctrl.detachFromObserved(this, nav.getSession());
                 nav.goToCreateTestView();
                 yield true;
             }
             case "0" -> {
                 System.out.println("\n--> Logout in corso. Arrivederci, " + "Mario" + "!");
+                nctrl.detachFromObserved(this, nav.getSession());
                 SessionManager.getInstance().deleteSession(nav.getContext().getSession().getSessionID());
                 nav.goToLoginView();
                 yield false;
@@ -99,6 +115,7 @@ public class HomeControllerCLI {
 
     public void start() {
         boolean running = true;
+        nctrl.registerAsNotificationObserver(this, nav.getSession());
         while (running) {
             clearConsole();
             showHomeView();
@@ -111,5 +128,10 @@ public class HomeControllerCLI {
     private void clearConsole(){
         System.out.print("\033[H\033[2J");
         System.out.flush();
+    }
+
+    @Override
+    public void update(){
+        printNotifications();
     }
 }

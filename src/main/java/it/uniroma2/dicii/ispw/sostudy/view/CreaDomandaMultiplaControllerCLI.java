@@ -1,7 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.view;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
-import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorCLI;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 
@@ -42,6 +41,37 @@ public class CreaDomandaMultiplaControllerCLI {
         System.out.print("Testo della domanda (Inserire il testo della domanda): ");
         String questionText = scanner.nextLine().trim();
 
+        List<String> options = getOptions();
+        int solutionIndex = getSolutionIndex(options);
+        int score = getScore();
+
+        System.out.println("\nAzioni disponibili:");
+        System.out.println("[1] Salva domanda");
+        System.out.println("[0] Indietro");
+        System.out.print("\nScegli un'opzione: ");
+
+        String choice = scanner.nextLine().trim();
+
+        switch (choice) {
+            case "1" -> {
+                System.out.println("\n--> Salvataggio in corso...");
+                System.out.println("--> Domanda salvata con successo!");
+                saveQuestion(questionText, score, options, solutionIndex);
+                nav.setPreviousView(Views.CLOSEQUESTIONVIEW);
+                nav.goToRecapView();
+            }
+            case "0" -> {
+                System.out.println("\n--> Torno indietro...");
+                nav.goToHomeView();
+            }
+            default -> {
+                System.out.println("\n--> Operazione non consentita!");
+                start();
+            }
+        }
+    }
+
+    private List<String> getOptions() {
         List<String> options = new ArrayList<>();
         System.out.println("\n--- Inserimento Opzioni ---");
 
@@ -68,7 +98,10 @@ public class CreaDomandaMultiplaControllerCLI {
                 System.out.println("--> Scelta non valida, riprova.");
             }
         }
+        return options;
+    }
 
+    private int getSolutionIndex(List<String> options) {
         System.out.println("\n--- Selezione Soluzione ---");
         for (int i = 0; i < options.size(); i++) {
             System.out.printf("[%d] %s%n", i + 1, options.get(i));
@@ -91,7 +124,10 @@ public class CreaDomandaMultiplaControllerCLI {
                 System.out.println("--> Errore: Inserire un numero intero valido!");
             }
         }
+        return solutionIndex;
+    }
 
+    private int getScore() {
         int score = 0;
         boolean validScore = false;
         while (!validScore) {
@@ -104,31 +140,7 @@ public class CreaDomandaMultiplaControllerCLI {
                 System.out.println("\n--> Errore: Il punteggio deve essere un numero intero valido!\n");
             }
         }
-
-        System.out.println("\nAzioni disponibili:");
-        System.out.println("[1] Salva domanda");
-        System.out.println("[0] Indietro");
-        System.out.print("\nScegli un'opzione: ");
-
-        String choice = scanner.nextLine().trim();
-
-        switch (choice) {
-            case "1" -> {
-                System.out.println("\n--> Salvataggio in corso...");
-                System.out.println("--> Domanda salvata con successo!");
-                saveQuestion(questionText, score, options, solutionIndex);
-                nav.setPreviousView(Views.CLOSEQUESTIONVIEW);
-               nav.goToRecapView();
-            }
-            case "0" -> {
-                System.out.println("\n--> Torno indietro...");
-                nav.goToHomeView();
-            }
-            default -> {
-                System.out.println("\n--> Operazione non consentita!");
-                start();
-            }
-        }
+        return score;
     }
 
     private void saveQuestion(String questionText, int score, List<String> options, int solutionIndex) {
