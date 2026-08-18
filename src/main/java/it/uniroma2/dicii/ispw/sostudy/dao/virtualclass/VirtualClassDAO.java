@@ -10,5 +10,4 @@ public abstract class VirtualClassDAO extends CacheDAO<Integer, VirtualClass> {
     public abstract VirtualClass getVirtualClassById(int id) throws DAOException;
     public abstract void getClassTests(int classId) throws DAOException;
     public abstract List<VirtualClass> getClassesByProfessor(String profEmail) throws DAOException;
-    public abstract void getClassStudents(int classId) throws DAOException;
 }

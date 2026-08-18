@@ -6,7 +6,6 @@ import it.uniroma2.dicii.ispw.sostudy.controller.NotificationController;
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.eng.observer.MessageObserver;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
-import it.uniroma2.dicii.ispw.sostudy.model.Message;
 import it.uniroma2.dicii.ispw.sostudy.model.SessionManager;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorCLI;
 
@@ -17,6 +16,7 @@ import java.util.Scanner;
 public class HomeControllerCLI extends MessageObserver {
     private NavigatorCLI nav;
     private NotificationController nctrl = new NotificationController();
+    private List<MessageBean> notifications = new ArrayList<>();
 
     private final Scanner scanner = new Scanner(System.in);
 
@@ -37,6 +37,7 @@ public class HomeControllerCLI extends MessageObserver {
         System.out.println("                 Comunicazioni in arrivo                    ");
         System.out.println("------------------------------------------------------------");
 
+        populateNotifications();
         printNotifications();
 
         System.out.println("------------------------------------------------------------");
@@ -53,7 +54,7 @@ public class HomeControllerCLI extends MessageObserver {
         System.out.println();
     }
 
-    private void printNotifications() {
+    private void populateNotifications(){
         List<MessageBean> notifications = null;
 
         UserBean ub = nav.getCorrectUserBean();
@@ -62,12 +63,17 @@ public class HomeControllerCLI extends MessageObserver {
             notifications = nctrl.fetchUserNotifications(ub, nav.getContext().getSession());
         }
         catch(ControllerException e){
+            e.printStackTrace();
             System.err.println("Errore durante il caricamento delle notifiche.");
             return;
         }
 
+        this.notifications = notifications;
+    }
+
+    private void printNotifications() {
         for (int i = 0; i < notifications.size(); i++) {
-            System.out.printf("%d. %s\n", (i + 1), notifications.get(i).getMessage());
+            System.out.printf("%d. %s%n", (i + 1), this.notifications.get(i).getMessage());
         }
     }
 
@@ -132,6 +138,6 @@ public class HomeControllerCLI extends MessageObserver {
 
     @Override
     public void update(){
-        printNotifications();
+        populateNotifications();
     }
 }

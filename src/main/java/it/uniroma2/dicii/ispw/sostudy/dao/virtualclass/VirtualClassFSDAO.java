@@ -21,31 +21,6 @@ public class VirtualClassFSDAO extends VirtualClassDAO {
     private static final String KEY_ASSIGNED_TESTS = "tests";
     private static final String KEY_EMAIL = "email";
 
-    @Override
-    public void getClassStudents(int classId) throws DAOException {
-        if (!this.containsKey(classId)) {
-            throw new DAOException("Virtual class not present in cache");
-        }
-
-        VirtualClass virtualClass = this.getFromCache(classId);
-        List<Student> students = new ArrayList<>();
-
-        try {
-            JSONArray jsonArray = JSONHelper.readJsonFile(FILE_PATH);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                if (jsonObject.has(KEY_ID) && jsonObject.getInt(KEY_ID) == classId) {
-                    students = extractAssignedStudents(jsonObject);
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            throw new DAOException("Error reading virtual class data by id for students");
-        }
-
-        virtualClass.setStudent(students);
-    }
-
     private List<Student> extractAssignedStudents(JSONObject jsonObject) throws DAOException {
         List<Student> students = new ArrayList<>();
 
@@ -143,16 +118,18 @@ public class VirtualClassFSDAO extends VirtualClassDAO {
     @Override
     public List<VirtualClass> getClassesByProfessor(String profEmail) throws DAOException {
         List<VirtualClass> classes = new ArrayList<>();
+        VirtualClass virtualClass = null;
         try {
+
             JSONArray jsonArray = JSONHelper.readJsonFile(FILE_PATH);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 if (jsonObject.has(KEY_PROF) && jsonObject.getString(KEY_PROF).equals(profEmail)) {
                     int classId = jsonObject.getInt(KEY_ID);
-                    VirtualClass virtualClass = this.getVirtualClassById(classId);
-                    if (virtualClass != null) {
-                        classes.add(virtualClass);
-                    }
+                    if(!this.containsKey(classId)) virtualClass = buildVirtualClassFromJson(jsonObject, classId);
+                    else virtualClass = this.getFromCache(classId);
+
+                    if (virtualClass != null) classes.add(virtualClass);
                 }
             }
         } catch (IOException e) {

@@ -2,7 +2,6 @@ package it.uniroma2.dicii.ispw.sostudy.dao.message;
 
 import it.uniroma2.dicii.ispw.sostudy.application.DBConnectionFactory;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
-import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.Message;
 import it.uniroma2.dicii.ispw.sostudy.model.User;
@@ -35,15 +34,13 @@ public class MessageDBDAO extends MessageDAO {
     }
 
     @Override
-    public List<Message> getUserMessages(String userEmail) throws ControllerException{
+    public List<Message> getUserMessages(String userEmail) throws DAOException{
         List<Message> messages = null;
-
-
-
         String sqlQuery = """
                         SELECT message, sender
                         FROM Messaggi 
-                        WHERE recipient = ?""";
+                        WHERE recipient = ?
+                        ORDER BY messageid desc""";
 
         try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
             ps.setString(1, userEmail);
@@ -51,7 +48,7 @@ public class MessageDBDAO extends MessageDAO {
             messages = buildMessages(rs, userEmail);
         }
         catch(SQLException e){
-            throw new ControllerException("Errore nell'inserimento dei destinatari: " + e.getMessage());
+            throw new DAOException("Errore nell'inserimento dei destinatari: " + e.getMessage());
         }
 
         return messages;
@@ -66,16 +63,18 @@ public class MessageDBDAO extends MessageDAO {
             String message = rs.getString("message");
             String senderEmail = rs.getString("sender");
             if(senderEmail != null){
-                User sender = getUser(userEmail);
+                User sender = getUser(senderEmail);
                 msg = new Message(message, sender, recipient);
             }
             else msg = new Message(message, recipient);
             messages.add(msg);
         }
+
+        recipient.setMessages(messages);
         return messages;
     }
 
-    private User getUser(String userEmail) throws ControllerException{
+    private User getUser(String userEmail){
         User user = null;
         user = DAOFactory.getInstance().getStudentDAO().getStudentByEmail(userEmail);
         if(user == null){

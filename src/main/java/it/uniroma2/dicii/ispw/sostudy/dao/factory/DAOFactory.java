@@ -27,8 +27,8 @@ public abstract class DAOFactory {
 
                 String persistency =  prop.getProperty("PERSISTENCY");
                 instance = switch (persistency){
-                    case "FS" -> new DemoDAOFactory();
-                    case "demo" -> new FSDAOFactory();
+                    case "FS" -> new FSDAOFactory();
+                    case "demo" -> new DemoDAOFactory();
                     default -> new DBDAOFactory();      //anyways create DBDAO
                 };
             }

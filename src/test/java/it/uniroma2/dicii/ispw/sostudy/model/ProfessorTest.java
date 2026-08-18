@@ -1,8 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.model;
 
 import it.uniroma2.dicii.ispw.sostudy.eng.observer.MessageObserver;
-import it.uniroma2.dicii.ispw.sostudy.model.Student;
-import it.uniroma2.dicii.ispw.sostudy.model.User;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

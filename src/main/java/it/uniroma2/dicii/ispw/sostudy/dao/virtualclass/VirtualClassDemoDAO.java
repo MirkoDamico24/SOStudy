@@ -1,5 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.virtualclass;
 
+import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.Professor;
 import it.uniroma2.dicii.ispw.sostudy.model.Student;
@@ -10,6 +11,15 @@ import java.util.List;
 import java.util.Set;
 
 public class VirtualClassDemoDAO extends VirtualClassDAO {
+
+    private void populateClasses(){
+        Professor prof = DAOFactory.getInstance().getProfessorDAO().getProfessorByEmail("mario.rossi@gmail.com");
+        Student stud = DAOFactory.getInstance().getStudentDAO().getStudentByEmail("giuseppe.bianchi@gmail.com");
+
+        VirtualClass v1 = new VirtualClass("ISPWvirtualClass", 1, prof, stud);
+        this.addToCache(v1.getClassId(), v1);
+    }
+
     @Override
     public VirtualClass getVirtualClassById(int id) throws DAOException {
         if(containsKey(id)){
@@ -27,6 +37,11 @@ public class VirtualClassDemoDAO extends VirtualClassDAO {
     public List<VirtualClass> getClassesByProfessor(String profEmail){
         List<VirtualClass> vcls = new ArrayList<>();
         Set<Integer> classKeys = this.getKeys();        //classes exist only in RAM
+        if(classKeys == null || classKeys.isEmpty()){
+            populateClasses();
+            classKeys = this.getKeys();
+        }
+
         for(int classId : classKeys){
             VirtualClass virtualClass = this.getFromCache(classId);
             if(virtualClass.getProf().getEmail().equals(profEmail)){
@@ -41,8 +56,4 @@ public class VirtualClassDemoDAO extends VirtualClassDAO {
         //nothing to do: all tests already in RAM
     }
 
-    @Override
-    public void getClassStudents(int classId) {
-        //nothing to do: all students already in RAM
-    }
 }

@@ -146,4 +146,11 @@ public class CreaDomandaMultiplaControllerGUI {
         navigatorGUI.setPreviousView(Views.CLOSEQUESTIONVIEW);
         navigatorGUI.goToRecapView();
     }
+
+    @FXML
+    public void handleGoBack(ActionEvent event) {
+        if(navigatorGUI.getPreviousView() == Views.CREATETEST) return;
+        navigatorGUI.setPreviousView(Views.CLOSEQUESTIONVIEW);
+        navigatorGUI.goToRecapView();
+    }
 }

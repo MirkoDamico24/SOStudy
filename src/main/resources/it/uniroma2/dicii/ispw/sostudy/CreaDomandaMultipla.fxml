@@ -158,7 +158,7 @@
     </ScrollPane>
 
     <!-- ==================== TASTO INDIETRO ==================== -->
-    <Button fx:id="btnIndietro" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #1C77FF; -fx-background-radius: 50em; -fx-border-color: #000000; -fx-border-radius: 50em; -fx-border-width: 1.5; -fx-cursor: hand;" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="80.0">
+    <Button fx:id="btnIndietro" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" onAction="#handleGoBack" style="-fx-background-color: #1C77FF; -fx-background-radius: 50em; -fx-border-color: #000000; -fx-border-radius: 50em; -fx-border-width: 1.5; -fx-cursor: hand;" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="80.0">
         <graphic>
             <Label style="-fx-text-fill: #000000;" text="←">
                 <font>

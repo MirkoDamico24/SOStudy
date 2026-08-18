@@ -34,7 +34,8 @@ public class VirtualClassDBDAO extends VirtualClassDAO {
                     String professorEmail = rs.getString("professor");
 
                     Professor professor = DAOFactory.getInstance().getProfessorDAO().getProfessorByEmail(professorEmail);
-                    VirtualClass virtualClass = new VirtualClass(name, id, professor);
+                    List<Student> students = getClassStudents(id);
+                    VirtualClass virtualClass = new VirtualClass(name, id, professor, students);
                     this.addToCache(id, virtualClass);
                     return virtualClass;
                 }
@@ -64,7 +65,8 @@ public class VirtualClassDBDAO extends VirtualClassDAO {
                     virtualClasses.add(this.getFromCache(classId));
                 } else {
                     String name = rs.getString("name");
-                    VirtualClass virtualClass = new VirtualClass(name, classId, professor);
+                    List<Student>  students = getClassStudents(classId);
+                    VirtualClass virtualClass = new VirtualClass(name, classId, professor, students);
                     this.addToCache(classId, virtualClass);
                     virtualClasses.add(virtualClass);
                 }
@@ -99,13 +101,7 @@ public class VirtualClassDBDAO extends VirtualClassDAO {
         virtualClass.setAssignedTests(tests);
     }
 
-    @Override
-    public void getClassStudents(int classId){
-        if (!this.containsKey(classId)) {
-            throw new DAOException("Virtual class not present in cache");
-        }
-
-        VirtualClass virtualClass = this.getFromCache(classId);
+    private List<Student> getClassStudents(int classId){
         List<Student> students = new ArrayList<>();
 
         String sqlQuery = "SELECT email FROM ClassStudents join Student on student = email WHERE class = ?";
@@ -120,6 +116,6 @@ public class VirtualClassDBDAO extends VirtualClassDAO {
         catch (SQLException e){
             throw new DAOException("Database error occurred while retrieving class' students");
         }
-        virtualClass.setStudent(students);
+        return students;
     }
 }

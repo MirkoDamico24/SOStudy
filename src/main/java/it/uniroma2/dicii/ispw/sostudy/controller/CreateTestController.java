@@ -4,21 +4,19 @@ import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.VirtualClassBean;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
-import it.uniroma2.dicii.ispw.sostudy.dao.message.MessageDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.test.TestDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.virtualclass.VirtualClassDAO;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.*;
-import org.checkerframework.checker.units.qual.C;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CreateTestController {
     private DAOFactory factory = DAOFactory.getInstance();
     private VirtualClassDAO classDAO = factory.getVirtualClassDAO();
-    private MessageDAO messageDAO = factory.getMessageDAO();
 
     private VirtualClass getClass(int sessionID, String virtualClass) throws ControllerException {
         List<VirtualClass> vcls = null;
@@ -92,12 +90,25 @@ public class CreateTestController {
 
     public List<VirtualClassBean> getProfessorClasses(String profEmail) throws ControllerException {
         List<VirtualClassBean> classBean = new ArrayList<>();
+        List<VirtualClass> classes = null;
 
-        List<VirtualClass> classes = classDAO.getClassesByProfessor(profEmail);
+        try {
+            classes = classDAO.getClassesByProfessor(profEmail);
+        }
+        catch(DAOException e) {
+            throw new ControllerException(e.getMessage());
+        }
+
         for(VirtualClass vClass : classes){
             VirtualClassBean bean = new VirtualClassBean(vClass.getName());
             classBean.add(bean);
         }
         return classBean;
+    }
+
+    public void validateDueDate(TestBean test) throws ControllerException {
+        LocalDateTime toCheck = LocalDateTime.of(test.getDueDate(), test.getDueTime());
+        LocalDateTime now = LocalDateTime.now();
+        if(!toCheck.isAfter(now)) throw new  ControllerException("La data e l'ora di consegna devono essere successivi a quelli attuali");
     }
 }

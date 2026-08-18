@@ -5,7 +5,6 @@ import it.uniroma2.dicii.ispw.sostudy.bean.SessionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.UserBean;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.dao.message.MessageDAO;
-import it.uniroma2.dicii.ispw.sostudy.dao.virtualclass.VirtualClassDAO;
 import it.uniroma2.dicii.ispw.sostudy.eng.observer.MessageObserver;
 import it.uniroma2.dicii.ispw.sostudy.eng.observer.MessageSubject;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
@@ -18,16 +17,9 @@ import java.util.List;
 public class NotificationController {
     private DAOFactory factory = DAOFactory.getInstance();
     private MessageDAO messageDAO = factory.getMessageDAO();
-    private VirtualClassDAO classDAO = factory.getVirtualClassDAO();
 
     public void sendNewTestNotification(VirtualClass cls, Test newTest) throws ControllerException {
         String message = "Nuovo test assegnato: " + newTest.getVirtualClass().getName() + ", " + newTest.getName() + ", " + newTest.getDueDate();
-
-        try {
-            classDAO.getClassStudents(cls.getClassId());    //fetching class' students from persistency.
-        } catch (DAOException e) {
-            throw new ControllerException("Errore durante la prelevazione degli studenti della classe");
-        }
 
         /*
             This can be optimized by implementing broadcast msgs,
@@ -53,7 +45,6 @@ public class NotificationController {
             fetched = messageDAO.getUserMessages(ub.getEmail());
             if(userRole == UserRole.PROFESSOR) user = DAOFactory.getInstance().getProfessorDAO().getProfessorByEmail(ub.getEmail());
             else user = DAOFactory.getInstance().getStudentDAO().getStudentByEmail(ub.getEmail());
-            user.addMessage(fetched);
         } catch (DAOException e) {
             throw new ControllerException("Errore durante il caricamento dei messaggi.");
         }

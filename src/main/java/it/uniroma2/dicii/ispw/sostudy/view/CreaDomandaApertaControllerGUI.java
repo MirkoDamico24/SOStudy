@@ -82,6 +82,7 @@ public class CreaDomandaApertaControllerGUI {
 
     @FXML
     void handleIndietro(ActionEvent event) {
+        if(navigatorGUI.getPreviousView() == Views.CREATETEST) return;
         navigatorGUI.setPreviousView(Views.OPENQUESTIONVIEW);
         navigatorGUI.goToRecapView();
     }

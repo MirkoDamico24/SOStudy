@@ -40,14 +40,14 @@ public class User extends MessageSubject {
         this.notifyObservers();
     }
 
-    public void addMessage(List<Message> msg) {
+    public void setMessages(List<Message> msg) {
         this.messages = msg;
-        this.notifyObservers();
     }
 
     public String getName() { return this.name; }
     public String getSurname() { return this.surname; }
     public String getEmail() { return this.email; }
     public List<VirtualClass> getClasses() { return this.classes; }
+    public List<Message> getMessages() { return this.messages; }
 
 }

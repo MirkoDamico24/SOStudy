@@ -1,7 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.view;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.VirtualClassBean;
-//import it.uniroma2.dicii.ispw.sostudy.controller.ManageVirtualClassesController;
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorCLI;
 

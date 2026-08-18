@@ -41,6 +41,7 @@ public class CreaTestDetailControllerGUI {
 
     private Parent root;
     private NavigatorGUI navigatorGUI;
+    private CreateTestController createTestController = new CreateTestController();
 
     public void setNavigatorGUI(NavigatorGUI navigatorGUI) {
         this.navigatorGUI = navigatorGUI;
@@ -55,15 +56,11 @@ public class CreaTestDetailControllerGUI {
     }
 
     public void prepare() {
+        clear();
         setUsernameBundle();
 
         try {
-            CreateTestController createTestController = new CreateTestController();
-            String profEmail = navigatorGUI.getContext().getSession().getProfessor().getEmail();
-            if(profEmail == null){
-                throw new ControllerException("Email errata");
-            }
-
+            String profEmail = getCurrentProfEmail();
             List<VirtualClassBean> professorClass = createTestController.getProfessorClasses(profEmail);
             ObservableList<String> classes = FXCollections.observableArrayList();
             for (VirtualClassBean vClassBean : professorClass) {
@@ -88,6 +85,26 @@ public class CreaTestDetailControllerGUI {
         orarioComboBox.setItems(orari);
     }
 
+    private void clear() {
+        nomeTestField.clear();
+        durataField.clear();
+        classeComboBox.getSelectionModel().clearSelection();
+        classeComboBox.setValue(null);
+        orarioComboBox.getSelectionModel().clearSelection();
+        orarioComboBox.setValue(null);
+        dataConsegnaPicker.getEditor().clear();
+    }
+
+    private String getCurrentProfEmail(){
+        if(navigatorGUI.getContext().getSession().getProfessor() == null) {
+            throw new ControllerException("L'utente corrente non è un professore. Funzionalità disattivata.");
+        }
+        String profEmail = navigatorGUI.getContext().getSession().getProfessor().getEmail();
+        if(profEmail == null){
+            throw new ControllerException("Email errata");
+        }
+        return profEmail;
+    }
 
     public void setUsernameBundle() {
         String nameToPrint = "Unavailable";
@@ -111,6 +128,14 @@ public class CreaTestDetailControllerGUI {
         long durationLong = Long.parseLong(duration);
         Duration finalDuration = Duration.ofMinutes(durationLong);
         TestBean test = new TestBean(testName, dueDate, LocalTime.parse(time), finalDuration, virtualClass);
+
+        try {
+            createTestController.validateDueDate(test);
+        }
+        catch (ControllerException e) {
+            showAlert("Errore di inserimento", e.getMessage(), "Riprova");
+            return;
+        }
 
         navigatorGUI.getContext().setTest(test);
 

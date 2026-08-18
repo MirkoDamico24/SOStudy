@@ -17,7 +17,8 @@ public class TestDemoDAO extends TestDAO {
 
     @Override
     public void saveTest(Test test) throws DAOException {
-        int id = Collections.max(this.getKeys());
+        int id = 1;
+        if(!this.getKeys().isEmpty()) id = Collections.max(this.getKeys());
         addToCache(id, test);
     }
 }

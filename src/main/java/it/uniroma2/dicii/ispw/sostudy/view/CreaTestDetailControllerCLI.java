@@ -18,6 +18,7 @@ import java.util.Scanner;
 public class CreaTestDetailControllerCLI {
     private NavigatorCLI nav;
     private final Scanner scanner = new Scanner(System.in);
+    private CreateTestController createTestController = new CreateTestController();
 
     public void start() {
         clearConsole();
@@ -49,7 +50,6 @@ public class CreaTestDetailControllerCLI {
     private List<String> loadAvailableClasses() {
         List<String> classes = new ArrayList<>();
         try {
-            CreateTestController createTestController = new CreateTestController();
             String profEmail = nav.getContext().getSession().getProfessor().getEmail();
             List<VirtualClassBean> professorClasses = createTestController.getProfessorClasses(profEmail);
             for (VirtualClassBean vClassBean : professorClasses) {
@@ -93,7 +93,7 @@ public class CreaTestDetailControllerCLI {
             case "1" -> {
                 System.out.println("\n--> Salvataggio in corso...");
                 System.out.println("--> Test salvato con successo!");
-                saveTest(testName, virtualClass, deliveryDate, deliveryTime, duration);
+                if(!saveTest(testName, virtualClass, deliveryDate, deliveryTime, duration)) nav.goToCreateTestView();
                 QuestionType qt = NavigatorCLI.selectQuestionType();
                 nav.setPreviousView(Views.CREATETEST);
                 if(qt == QuestionType.OPENQUESTION) nav.goToOpenQuestionView();
@@ -111,14 +111,24 @@ public class CreaTestDetailControllerCLI {
         }
     }
 
-    private void saveTest(String testName, String virtualClass, String deliveryDate, String deliveryTime, String duration) {
+    private boolean saveTest(String testName, String virtualClass, String deliveryDate, String deliveryTime, String duration) {
         LocalDate date = LocalDate.parse(deliveryDate);
         LocalTime dueTime = LocalTime.parse(deliveryTime);
         long durationLong = Long.parseLong(duration);
         Duration finalDuration = Duration.ofMinutes(durationLong);
 
         TestBean test = new TestBean(testName, date, dueTime, finalDuration, virtualClass);
+
+        try{
+            createTestController.validateDueDate(test);
+        }
+        catch (ControllerException e) {
+            System.err.println(e.getMessage() + ". Riprovare.");
+            return false;
+        }
+
         nav.getContext().setTest(test);
+        return true;
     }
 
 

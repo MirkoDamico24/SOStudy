@@ -2,7 +2,6 @@ package it.uniroma2.dicii.ispw.sostudy.view;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.*;
 import it.uniroma2.dicii.ispw.sostudy.controller.NotificationController;
-import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.eng.observer.MessageObserver;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.model.SessionManager;
@@ -135,9 +134,9 @@ public class HomeControllerGUI extends MessageObserver {
 
         final List<MessageBean> finalMessages = (messages == null) ? new ArrayList<>() : messages;
 
-        Platform.runLater(() -> {
-            populateNotificationSection(finalMessages);
-        });
+        Platform.runLater(() ->
+            populateNotificationSection(finalMessages)
+        );
     }
 
     private void showAlert(String title, String message, String content) {
