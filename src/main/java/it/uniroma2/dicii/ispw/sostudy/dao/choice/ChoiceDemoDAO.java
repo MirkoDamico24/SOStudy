@@ -1,5 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.choice;
 
+import it.uniroma2.dicii.ispw.sostudy.eng.functional.ChoiceDTO;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.Choice;
 
@@ -12,12 +13,12 @@ public class ChoiceDemoDAO extends ChoiceDAO{
     }
 
     @Override
-    public List<Choice> getChoicesByQuestionId(int questionID) throws DAOException{
+    public ChoiceDTO getChoicesByQuestionId(int questionID) throws DAOException{
         return null;
     }
 
     @Override
-    public Choice getQuestionSolution(int questionID) throws DAOException{
-        return null;
+    public void saveChoices(List<ChoiceDTO> choices) throws DAOException{
+
     }
 }

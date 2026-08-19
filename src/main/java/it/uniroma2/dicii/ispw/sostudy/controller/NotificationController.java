@@ -38,13 +38,9 @@ public class NotificationController {
 
     public List<MessageBean> fetchUserNotifications(UserBean ub, SessionBean session) throws ControllerException {
         List<Message> fetched = null;
-        User user = null;
-        UserRole userRole = session.getCurrentRole();
 
         try {
             fetched = messageDAO.getUserMessages(ub.getEmail());
-            if(userRole == UserRole.PROFESSOR) user = DAOFactory.getInstance().getProfessorDAO().getProfessorByEmail(ub.getEmail());
-            else user = DAOFactory.getInstance().getStudentDAO().getStudentByEmail(ub.getEmail());
         } catch (DAOException e) {
             throw new ControllerException("Errore durante il caricamento dei messaggi.");
         }

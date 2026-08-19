@@ -55,7 +55,6 @@ public class HomeControllerCLI extends MessageObserver {
     }
 
     private void populateNotifications(){
-        List<MessageBean> notifications = null;
 
         UserBean ub = nav.getCorrectUserBean();
 
@@ -63,12 +62,9 @@ public class HomeControllerCLI extends MessageObserver {
             notifications = nctrl.fetchUserNotifications(ub, nav.getContext().getSession());
         }
         catch(ControllerException e){
-            e.printStackTrace();
             System.err.println("Errore durante il caricamento delle notifiche.");
             return;
         }
-
-        this.notifications = notifications;
     }
 
     private void printNotifications() {

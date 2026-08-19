@@ -8,4 +8,5 @@ import java.util.List;
 public abstract class QuestionDAO extends CacheDAO<Integer, Question> {
     public abstract Question getQuestionById(int questionID);
     public abstract List<Question> getQuestionsByTestId(int testID);
+    public abstract void saveTestQuestion(int testID, List<Question> question);
 }

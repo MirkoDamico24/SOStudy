@@ -11,6 +11,7 @@ import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,7 +109,7 @@ public class CreateTestController {
 
     public void validateDueDate(TestBean test) throws ControllerException {
         LocalDateTime toCheck = LocalDateTime.of(test.getDueDate(), test.getDueTime());
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
         if(!toCheck.isAfter(now)) throw new  ControllerException("La data e l'ora di consegna devono essere successivi a quelli attuali");
     }
 }

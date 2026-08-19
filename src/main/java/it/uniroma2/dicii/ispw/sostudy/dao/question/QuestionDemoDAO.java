@@ -15,4 +15,9 @@ public class QuestionDemoDAO extends QuestionDAO {
     public List<Question> getQuestionsByTestId(int testID){
         return null;
     }
+
+    @Override
+    public void saveTestQuestion(int testID, List<Question> question){
+
+    }
 }
