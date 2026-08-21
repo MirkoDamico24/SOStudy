@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class UserObserverTest {
 
     // 1. Il finto observer
-    class FintaSchermataNotifiche extends MessageObserver {
+    class FintaSchermataNotifiche implements MessageObserver {
         boolean notificaRicevuta = false;
 
         @Override
