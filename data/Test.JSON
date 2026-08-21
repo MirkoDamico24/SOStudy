@@ -1,118 +1,27 @@
-[
-    {
-        "duration": "PT20M",
-        "dueDate": "2026-08-22",
-        "name": "tg",
-        "questions": [{
+[{
+    "duration": "PT40M",
+    "dueDate": "2026-08-31",
+    "name": "test di prova",
+    "questions": [
+        {
+            "header": "Qual è l'algoritmo di scheduling di CPU più usato degli ultimi 30 anni?",
+            "maxScore": 9
+        },
+        {
             "options": [
+                {"content": "malloc"},
+                {"content": "calloc"},
                 {
                     "isSolution": true,
-                    "content": "solution"
+                    "content": "mmap"
                 },
-                {"content": "ffff"}
+                {"content": "nmap"}
             ],
-            "header": "werer",
+            "header": "Qual è la system call che consente di allocare memoria dinamicamente ad un processo?",
             "maxScore": 10
-        }],
-        "dueTime": "12:00",
-        "class": 1
-    },
-    {
-        "duration": "PT30M",
-        "dueDate": "2026-08-21",
-        "name": "test sburrrrrevole",
-        "questions": [
-            {
-                "options": [
-                    {"content": "bona"},
-                    {"content": "turbo fregna"},
-                    {
-                        "isSolution": true,
-                        "content": "bella"
-                    }
-                ],
-                "header": "Saide Sink è",
-                "maxScore": 9
-            },
-            {
-                "header": "Descrivere Zendaya in poche semplici parole",
-                "maxScore": 5
-            }
-        ],
-        "id": 1,
-        "dueTime": "12:00",
-        "class": 1
-    },
-    {
-        "duration": "PT30M",
-        "dueDate": "2026-08-29",
-        "name": "fggvb",
-        "questions": [{
-            "options": [
-                {
-                    "isSolution": true,
-                    "content": "vccv"
-                },
-                {"content": "bb"},
-                {"content": "gg"}
-            ],
-            "header": "df",
-            "maxScore": 10
-        }],
-        "id": 2,
-        "dueTime": "11:30",
-        "class": 1
-    },
-    {
-        "duration": "PT30M",
-        "dueDate": "2026-08-23",
-        "name": "bfg",
-        "questions": [{
-            "options": [
-                {
-                    "isSolution": true,
-                    "content": "soluzione"
-                },
-                {"content": "df"},
-                {"content": "df"}
-            ],
-            "header": "sdfgf",
-            "maxScore": 10
-        }],
-        "id": 3,
-        "dueTime": "11:30",
-        "class": 1
-    },
-    {
-        "duration": "PT30M",
-        "dueDate": "2026-08-23",
-        "name": "dfdf",
-        "questions": [{
-            "options": [
-                {
-                    "isSolution": true,
-                    "content": "dfff"
-                },
-                {"content": "gg"},
-                {"content": "bb"}
-            ],
-            "header": "dfdf",
-            "maxScore": 10
-        }],
-        "id": 4,
-        "dueTime": "11:30",
-        "class": 1
-    },
-    {
-        "duration": "PT30M",
-        "dueDate": "2026-08-30",
-        "name": "test prova FS",
-        "questions": [{
-            "header": "there's a heaven above you, babe",
-            "maxScore": 23
-        }],
-        "id": 5,
-        "dueTime": "17:00",
-        "class": 1
-    }
-]
+        }
+    ],
+    "id": 1,
+    "dueTime": "14:00",
+    "class": 1
+}]

@@ -31,7 +31,7 @@ public class QuestionDemoDAO extends QuestionDAO {
     }
 
     @Override
-    public int getQuestionId(Question question, int testID){
+    public Integer getQuestionId(Question question, int testID){
         //TODO: implement
         return 0;
     }

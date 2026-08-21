@@ -16,8 +16,8 @@ public class LoginControllerGUI extends BaseControllerGUI {
     @FXML private PasswordField passwordField;
     @FXML private Button loginButton;
 
-    private static final String title = "Errore";
-    private static final String header = "Credenziali non valide";
+    private static final String TITLE = "Errore";
+    private static final String HEADER = "Credenziali non valide";
 
     @FXML
     void handleLoginAction(ActionEvent event) {
@@ -26,7 +26,7 @@ public class LoginControllerGUI extends BaseControllerGUI {
         String password = passwordField.getText();
 
         if (email.isEmpty() || password.isEmpty()) {
-            super.showAlert(title, header, "Entrambi i campi devono essere riempiti");
+            super.showAlert(TITLE, HEADER, "Entrambi i campi devono essere riempiti");
             return;
         }
 
@@ -36,7 +36,7 @@ public class LoginControllerGUI extends BaseControllerGUI {
         try {
             currentSession = lc.authenticate(ub);
         } catch(InvalidCredentialException e) {
-            super.showAlert(title, header, "Email o password errati");
+            super.showAlert(TITLE, HEADER, "Email o password errati");
             return;
         }
 

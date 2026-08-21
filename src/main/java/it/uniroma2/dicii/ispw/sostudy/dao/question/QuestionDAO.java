@@ -11,5 +11,5 @@ public abstract class QuestionDAO extends CacheDAO<Integer, Question> {
     public abstract List<Question> getQuestionsByTestId(int testID);
     public abstract void saveTestQuestion(int testID, List<Question> question);
     public abstract Map<Integer, List<Question>> getQuestionsByTestIds(List<Integer> testIDs);
-    public abstract int getQuestionId(Question question, int testID);
+    public abstract Integer getQuestionId(Question question, int testID);
 }

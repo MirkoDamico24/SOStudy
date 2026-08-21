@@ -1,4 +1,10 @@
-[{
-    "recipient": "giuseppe.bianchi@gmail.com",
-    "content": "Nuovo test assegnato: ISPWvirtualClass, edfg, 2026-09-01"
-}]
+[
+    {
+        "recipient": "giuseppe.bianchi@gmail.com",
+        "content": "Nuovo test assegnato: ISPWvirtualClass, edfg, 2026-09-01"
+    },
+    {
+        "recipient": "giuseppe.bianchi@gmail.com",
+        "content": "Nuovo test assegnato: ISPWvirtualClass, test di prova, 2026-08-31"
+    }
+]

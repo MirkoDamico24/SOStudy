@@ -104,7 +104,7 @@ public class VirtualClassDBDAO extends VirtualClassDAO {
     }
 
     @Override
-    public List<VirtualClass> getClassesByStudent(String studentEmail) throws DAOException {
+    public List<VirtualClass> getClassesByStudent(String studentEmail) throws DAOException {       
         List<VirtualClass> virtualClasses = new ArrayList<>();
         String sqlQuery = "SELECT class FROM ClassStudents WHERE student = ?";
 
