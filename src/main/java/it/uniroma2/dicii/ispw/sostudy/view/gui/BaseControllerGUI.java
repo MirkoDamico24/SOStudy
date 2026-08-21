@@ -32,9 +32,9 @@ public abstract class BaseControllerGUI {
         alert.setContentText(content);
         alert.showAndWait();
     }
-    
+
     protected String getFormattedUsername() {
-        if (navigatorGUI == null || navigatorGUI.getContext() == null || navigatorGUI.getContext().getSession() == null) {
+        if (navigatorGUI.getContext().getSession() == null) {
             return "Unavailable";
         }
 

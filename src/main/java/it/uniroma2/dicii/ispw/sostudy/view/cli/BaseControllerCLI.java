@@ -19,7 +19,7 @@ public abstract class BaseControllerCLI {
     }
 
     protected String getFormattedUsername() {
-        if (nav == null || nav.getContext() == null || nav.getContext().getSession() == null) return "";
+        if (nav.getContext().getSession() == null) return "";
 
         UserRole role = nav.getContext().getSession().getCurrentRole();
         if (role == UserRole.PROFESSOR) {
@@ -27,6 +27,13 @@ public abstract class BaseControllerCLI {
         } else {
             return nav.getContext().getSession().getStudent().getName() + " " + nav.getContext().getSession().getStudent().getSurname();
         }
+    }
+
+    protected UserRole getCurrentUserRole() {
+        if (nav.getContext().getSession() == null) {
+            return null;
+        }
+        return nav.getContext().getSession().getCurrentRole();
     }
 
     protected void printStandardHeader(String sectionName) {
@@ -37,7 +44,7 @@ public abstract class BaseControllerCLI {
 
     protected void printNavBar() {
         System.out.print("[NavBar]: Home | Classi Virtuali");
-        if (nav != null && nav.getContext().getSession().getCurrentRole() == UserRole.PROFESSOR) {
+        if (this.getCurrentUserRole() == UserRole.PROFESSOR) {
             System.out.print(" | Crea test");
         }
         System.out.println("\n                                   ---------");

@@ -16,8 +16,8 @@ public class LoginControllerGUI extends BaseControllerGUI {
     @FXML private PasswordField passwordField;
     @FXML private Button loginButton;
 
-    private final String title = "Errore";
-    private final String header = "Credenziali non valide";
+    private static final String title = "Errore";
+    private static final String header = "Credenziali non valide";
 
     @FXML
     void handleLoginAction(ActionEvent event) {
