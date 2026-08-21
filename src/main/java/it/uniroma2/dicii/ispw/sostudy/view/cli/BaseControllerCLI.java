@@ -19,8 +19,6 @@ public abstract class BaseControllerCLI {
     }
 
     protected String getFormattedUsername() {
-        if (nav.getContext().getSession() == null) return "";
-
         UserRole role = nav.getContext().getSession().getCurrentRole();
         if (role == UserRole.PROFESSOR) {
             return nav.getContext().getSession().getProfessor().getName() + " " + nav.getContext().getSession().getProfessor().getSurname();
@@ -30,9 +28,6 @@ public abstract class BaseControllerCLI {
     }
 
     protected UserRole getCurrentUserRole() {
-        if (nav.getContext().getSession() == null) {
-            return null;
-        }
         return nav.getContext().getSession().getCurrentRole();
     }
 

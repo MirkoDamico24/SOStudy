@@ -34,14 +34,11 @@ public abstract class BaseControllerGUI {
     }
 
     protected String getFormattedUsername() {
-        if (navigatorGUI.getContext().getSession() == null) {
-            return "Unavailable";
-        }
 
         UserRole role = navigatorGUI.getContext().getSession().getCurrentRole();
-        if (role == UserRole.PROFESSOR && navigatorGUI.getContext().getSession().getProfessor() != null) {
+        if (role == UserRole.PROFESSOR) {
             return navigatorGUI.getContext().getSession().getProfessor().getName() + " " + navigatorGUI.getContext().getSession().getProfessor().getSurname();
-        } else if (role == UserRole.STUDENT && navigatorGUI.getContext().getSession().getStudent() != null) {
+        } else if (role == UserRole.STUDENT) {
             return navigatorGUI.getContext().getSession().getStudent().getName() + " " + navigatorGUI.getContext().getSession().getStudent().getSurname();
         }
 
