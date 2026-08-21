@@ -1,4 +1,4 @@
-package it.uniroma2.dicii.ispw.sostudy.view;
+package it.uniroma2.dicii.ispw.sostudy.view.gui;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
@@ -11,42 +11,21 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import java.util.List;
 
-public class RiepilogoTestControllerGUI {
+public class RiepilogoTestControllerGUI extends BaseControllerGUI {
     @FXML private Label lblNomeTest;
     @FXML private Label lblClasse;
     @FXML private Label lblData;
     @FXML private Label lblOra;
     @FXML private Label lblDurata;
 
-    // --- Box Centrale ---
     @FXML private Label lblTotaleDomande;
     @FXML private Label lblPunteggioTotale;
     @FXML private VBox listaDomandeVBox;
     @FXML private Label profNameLabel;
-
-    private NavigatorGUI navigatorGUI;
-    private Parent view;
-
-    public void setNavigatorGUI(NavigatorGUI navigatorGUI) {
-        this.navigatorGUI = navigatorGUI;
-    }
-
-    public void setView(Parent view) {
-        this.view = view;
-    }
-
-    public NavigatorGUI getNavigatorGUI() {
-        return navigatorGUI;
-    }
-
-    public Parent getView() {
-        return view;
-    }
 
     public void prepare() {
         setUsernameBundle();
@@ -67,8 +46,7 @@ public class RiepilogoTestControllerGUI {
     }
 
     public void setUsernameBundle() {
-        String username = navigatorGUI.getContext().getSession().getProfessor().getName() + " " + navigatorGUI.getContext().getSession().getProfessor().getSurname();
-        profNameLabel.setText(username);
+        profNameLabel.setText(getFormattedUsername());
     }
 
     public void setTestDetails(String name, String virtualClass, String date, String time, String duration) {
@@ -176,14 +154,6 @@ public class RiepilogoTestControllerGUI {
 
         lblTotaleDomande.setText("Totale domande aggiunte: " + totalQuestions);
         lblPunteggioTotale.setText("Punteggio totale test: " + totalScore);
-    }
-
-    private void showAlert(String title, String message, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(message);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 
     @FXML

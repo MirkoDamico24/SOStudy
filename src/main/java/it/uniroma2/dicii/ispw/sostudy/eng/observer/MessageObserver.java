@@ -1,5 +1,5 @@
 package it.uniroma2.dicii.ispw.sostudy.eng.observer;
 
-public abstract class MessageObserver {
+public interface MessageObserver {
     public abstract void update();
 }

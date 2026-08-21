@@ -1,16 +1,13 @@
-package it.uniroma2.dicii.ispw.sostudy.view;
+package it.uniroma2.dicii.ispw.sostudy.view.cli;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.SessionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.UserBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.LoginController;
 import it.uniroma2.dicii.ispw.sostudy.exception.InvalidCredentialException;
-import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorCLI;
 
 import java.io.Console;
-import java.util.Scanner;
 
-public class LoginControllerCLI {
-    private NavigatorCLI nav;
+public class LoginControllerCLI extends BaseControllerCLI {
 
     private void showBanner() {
         System.out.println("========================================");
@@ -23,9 +20,9 @@ public class LoginControllerCLI {
         LoginController login = new LoginController();
         clearConsole();
         showBanner();
-        Scanner scanner = new Scanner(System.in);
-        String email = "";
-        String password = "";
+
+        String email;
+        String password;
 
         System.out.print("Email: ");
         email = scanner.nextLine().trim();
@@ -42,22 +39,13 @@ public class LoginControllerCLI {
         UserBean ub = new UserBean(email, password);
         SessionBean currentSession = null;
 
-        try{
+        try {
             currentSession = login.authenticate(ub);
-        }
-        catch(InvalidCredentialException e){
+        } catch(InvalidCredentialException e) {
             System.out.println("Email o password errate");
         }
 
         nav.setSession(currentSession);
         nav.goToHomeView();
-
-    }
-
-    public void setNavigator(NavigatorCLI nav) { this.nav = nav; }
-
-    private void clearConsole(){
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
     }
 }

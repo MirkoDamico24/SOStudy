@@ -1,18 +1,15 @@
-package it.uniroma2.dicii.ispw.sostudy.view;
+package it.uniroma2.dicii.ispw.sostudy.view.gui;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.*;
 import it.uniroma2.dicii.ispw.sostudy.controller.NotificationController;
 import it.uniroma2.dicii.ispw.sostudy.eng.observer.MessageObserver;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.model.SessionManager;
-import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -22,7 +19,7 @@ import javafx.scene.text.Font;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeControllerGUI extends MessageObserver {
+public class HomeControllerGUI extends BaseControllerGUI implements MessageObserver {
 
     @FXML
     private Button btnHome;
@@ -40,8 +37,6 @@ public class HomeControllerGUI extends MessageObserver {
     @FXML
     private VBox listaComunicazioni;
 
-    private NavigatorGUI navigatorGUI;
-    private Parent view;
     private NotificationController nctrl = new NotificationController();
 
     public void prepare(boolean isProfessor){
@@ -60,15 +55,9 @@ public class HomeControllerGUI extends MessageObserver {
             btnCreaTest.setManaged(false);
         }
     }
-    
-    public void setUsernameBundle(boolean isProfessor) {
-        String username;
-        if (isProfessor) {
-            username = navigatorGUI.getContext().getSession().getProfessor().getName() + " " + navigatorGUI.getContext().getSession().getProfessor().getSurname();
-        }
-        else username = navigatorGUI.getContext().getSession().getStudent().getName() + " " + navigatorGUI.getContext().getSession().getStudent().getSurname();
 
-        userNameLabel.setText(username);
+    public void setUsernameBundle(boolean isProfessor) {
+        userNameLabel.setText(getFormattedUsername());
     }
 
     public void populateNotificationSection(List<MessageBean> msg) {
@@ -112,11 +101,6 @@ public class HomeControllerGUI extends MessageObserver {
         navigatorGUI.goToLoginView();
     }
 
-    public void setNavigatorGUI(NavigatorGUI navigatorGUI) { this.navigatorGUI = navigatorGUI; }
-    public void setView(Parent view) { this.view = view; }
-    public NavigatorGUI getNavigatorGUI() { return this.navigatorGUI; }
-    public Parent getView() { return this.view; }
-
     @Override
     public void update() {
         UserBean ub = navigatorGUI.getCorrectUserBean();
@@ -135,15 +119,7 @@ public class HomeControllerGUI extends MessageObserver {
         final List<MessageBean> finalMessages = (messages == null) ? new ArrayList<>() : messages;
 
         Platform.runLater(() ->
-            populateNotificationSection(finalMessages)
+                populateNotificationSection(finalMessages)
         );
-    }
-
-    private void showAlert(String title, String message, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(message);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 }

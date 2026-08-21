@@ -1,4 +1,4 @@
-package it.uniroma2.dicii.ispw.sostudy.view;
+package it.uniroma2.dicii.ispw.sostudy.view.cli;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.VirtualClassBean;
@@ -13,38 +13,26 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-public class CreaTestDetailControllerCLI {
-    private NavigatorCLI nav;
-    private final Scanner scanner = new Scanner(System.in);
+public class CreaTestDetailControllerCLI extends BaseControllerCLI {
+
     private CreateTestController createTestController = new CreateTestController();
 
     public void start() {
-        clearConsole();
+        super.clearConsole();
         showView();
         manageInput();
     }
 
     private void showView() {
-        String username = nav.getContext().getSession().getProfessor().getName() + " " + nav.getContext().getSession().getProfessor().getSurname();
-
-        System.out.println("\n============================================================");
-        System.out.printf("  SoStudy | CREA TEST | %s%n", username);
-        System.out.println("============================================================");
-
-        printNavBar();
+        super.printStandardHeader("CREA TEST");
+        super.printNavBar();
 
         System.out.println("\n------------------------------------------------------------");
         System.out.println("                     Dettagli del test                      ");
         System.out.println("------------------------------------------------------------");
         System.out.println("Informazioni del test");
         System.out.println("------------------------------------------------------------\n");
-    }
-
-    private void printNavBar() {
-        System.out.println("[NavBar]: Home | Classi Virtuali | Crea test");
-        System.out.println("                                   ---------");
     }
 
     private List<String> loadAvailableClasses() {
@@ -130,15 +118,4 @@ public class CreaTestDetailControllerCLI {
         nav.getContext().setTest(test);
         return true;
     }
-
-
-    public void setNavigator(NavigatorCLI nav) {
-        this.nav = nav;
-    }
-
-    private void clearConsole(){
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
-
 }

@@ -1,40 +1,26 @@
-package it.uniroma2.dicii.ispw.sostudy.view;
+package it.uniroma2.dicii.ispw.sostudy.view.cli;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
-import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorCLI;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-public class CreaDomandaMultiplaControllerCLI {
-    private NavigatorCLI nav;
-    private final Scanner scanner = new Scanner(System.in);
+public class CreaDomandaMultiplaControllerCLI extends BaseControllerCLI {
 
     public void start() {
-        clearConsole();
+        super.clearConsole();
         showView();
         manageInput();
     }
 
     private void showView() {
-        String username = nav.getContext().getSession().getProfessor().getName() + " " + nav.getContext().getSession().getProfessor().getSurname();
-
-        System.out.println("\n============================================================");
-        System.out.printf("  SoStudy | CREA TEST | %s%n", username);
-        System.out.println("============================================================");
-
-        printNavBar();
+        super.printStandardHeader("CREA TEST");
+        super.printNavBar();
 
         System.out.println("\n------------------------------------------------------------");
         System.out.println("                Domanda a risposta multipla                 ");
         System.out.println("------------------------------------------------------------\n");
-    }
-
-    private void printNavBar() {
-        System.out.println("[NavBar]: Home | Classi Virtuali | Crea test");
-        System.out.println("                                   ---------");
     }
 
     private void manageInput() {
@@ -110,50 +96,33 @@ public class CreaDomandaMultiplaControllerCLI {
         int solutionIndex = -1;
         boolean validSolution = false;
         while (!validSolution) {
-            System.out.print("Quale opzione è la soluzione corretta? (Inserire il numero corrispondente): ");
-            String solInput = scanner.nextLine().trim();
-            try {
-                int num = Integer.parseInt(solInput);
-                if (num >= 1 && num <= options.size()) {
-                    solutionIndex = num - 1;
-                    validSolution = true;
-                } else {
-                    System.out.println("--> Numero non valido, deve essere compreso tra 1 e " + options.size());
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("--> Errore: Inserire un numero intero valido!");
+
+            int num = InputReaderCLI.readInteger(
+                    "Quale opzione è la soluzione corretta? (Inserire il numero corrispondente): ",
+                    "--> Errore: Inserire un numero intero valido!",
+                    scanner
+            );
+
+            if (num >= 1 && num <= options.size()) {
+                solutionIndex = num - 1;
+                validSolution = true;
+            } else {
+                System.out.println("--> Numero non valido, deve essere compreso tra 1 e " + options.size());
             }
         }
         return solutionIndex;
     }
 
     private int getScore() {
-        int score = 0;
-        boolean validScore = false;
-        while (!validScore) {
-            System.out.print("\nPunteggio (Inserire un numero intero per il punteggio massimo): ");
-            String scoreInput = scanner.nextLine().trim();
-            try {
-                score = Integer.parseInt(scoreInput);
-                validScore = true;
-            } catch (NumberFormatException e) {
-                System.out.println("\n--> Errore: Il punteggio deve essere un numero intero valido!\n");
-            }
-        }
-        return score;
+        return InputReaderCLI.readInteger(
+                "\nPunteggio (Inserire un numero intero per il punteggio massimo): ",
+                "\n--> Errore: Il punteggio deve essere un numero intero valido!\n",
+                scanner
+        );
     }
 
     private void saveQuestion(String questionText, int score, List<String> options, int solutionIndex) {
         QuestionBean qb = new QuestionBean(questionText, score, options, solutionIndex);
         nav.getContext().setQuestions(qb);
-    }
-
-    public void setNavigator(NavigatorCLI nav) {
-        this.nav = nav;
-    }
-
-    private void clearConsole(){
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
     }
 }

@@ -1,7 +1,6 @@
-package it.uniroma2.dicii.ispw.sostudy.view;
+package it.uniroma2.dicii.ispw.sostudy.view.gui;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
-import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,7 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -24,7 +22,7 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreaDomandaMultiplaControllerGUI {
+public class CreaDomandaMultiplaControllerGUI extends BaseControllerGUI {
     @FXML private Label profNameLabel;
 
     @FXML private TextArea testoDomandaArea;
@@ -35,25 +33,6 @@ public class CreaDomandaMultiplaControllerGUI {
     private ToggleGroup solutionToggleGroup;
 
     private int opzioniCount = 0;
-
-    private NavigatorGUI navigatorGUI;
-    private Parent view;
-
-    public void setNavigatorGUI(NavigatorGUI navigatorGUI) {
-        this.navigatorGUI = navigatorGUI;
-    }
-
-    public void setView(Parent view) {
-        this.view = view;
-    }
-
-    public NavigatorGUI getNavigatorGUI() {
-        return navigatorGUI;
-    }
-
-    public Parent getView() {
-        return view;
-    }
 
     public void prepare() {
         testoDomandaArea.clear();
@@ -74,8 +53,7 @@ public class CreaDomandaMultiplaControllerGUI {
     }
 
     public void setUsernameBundle() {
-        String username = navigatorGUI.getContext().getSession().getProfessor().getName() + " " + navigatorGUI.getContext().getSession().getProfessor().getSurname();
-        profNameLabel.setText(username);
+        profNameLabel.setText(getFormattedUsername());
     }
 
     @FXML

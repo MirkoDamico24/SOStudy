@@ -1,4 +1,4 @@
-package it.uniroma2.dicii.ispw.sostudy.view;
+package it.uniroma2.dicii.ispw.sostudy.view.cli;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
@@ -9,26 +9,18 @@ import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorCLI;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 
 import java.util.List;
-import java.util.Scanner;
 
-public class RiepilogoTestControllerCLI {
-    private NavigatorCLI nav;
-    private final Scanner scanner = new Scanner(System.in);
+public class RiepilogoTestControllerCLI extends BaseControllerCLI {
 
     public void start() {
-        clearConsole();
+        super.clearConsole();
         showView();
         manageInput();
     }
 
     private void showView() {
-        String username = nav.getContext().getSession().getProfessor().getName() + " " + nav.getContext().getSession().getProfessor().getSurname();
-
-        System.out.println("\n============================================================");
-        System.out.printf("  SoStudy | CREA TEST | %s%n", username);
-        System.out.println("============================================================");
-
-        printNavBar();
+        super.printStandardHeader("CREA TEST");
+        super.printNavBar();
 
         System.out.println("\n------------------------------------------------------------");
         System.out.println("                       Riepilogo test                       ");
@@ -36,11 +28,6 @@ public class RiepilogoTestControllerCLI {
 
         printTestDetails();
         printQuestions();
-    }
-
-    private void printNavBar() {
-        System.out.println("[NavBar]: Home | Classi Virtuali | Crea test");
-        System.out.println("                                   ---------");
     }
 
     private void printTestDetails() {
@@ -61,6 +48,10 @@ public class RiepilogoTestControllerCLI {
         int totalScore = 0;
         int totalQuestions = (questions != null) ? questions.size() : 0;
 
+        System.out.println("------------------------------------------------------------");
+        System.out.println("Totale domande aggiunte: " + totalQuestions + "           Punteggio totale test: " + totalScore);
+        System.out.println("------------------------------------------------------------");
+
         if (questions == null || questions.isEmpty()) {
             System.out.println("Nessuna domanda aggiunta al test.");
         } else {
@@ -79,9 +70,6 @@ public class RiepilogoTestControllerCLI {
             }
         }
 
-        System.out.println("------------------------------------------------------------");
-        System.out.println("Totale domande aggiunte: " + totalQuestions + "           Punteggio totale test: " + totalScore);
-        System.out.println("------------------------------------------------------------");
     }
 
     private void manageInput() {
@@ -205,14 +193,5 @@ public class RiepilogoTestControllerCLI {
     private void promptContinue() {
         System.out.print("Premi INVIO per continuare...");
         scanner.nextLine();
-    }
-
-    public void setNavigator(NavigatorCLI nav) {
-        this.nav = nav;
-    }
-
-    private void clearConsole(){
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
     }
 }

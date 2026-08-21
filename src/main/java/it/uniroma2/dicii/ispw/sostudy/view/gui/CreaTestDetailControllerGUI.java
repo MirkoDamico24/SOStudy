@@ -1,6 +1,5 @@
-package it.uniroma2.dicii.ispw.sostudy.view;
+package it.uniroma2.dicii.ispw.sostudy.view.gui;
 
-import it.uniroma2.dicii.ispw.sostudy.bean.ProfessorBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.VirtualClassBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.CreateTestController;
@@ -17,21 +16,18 @@ import javafx.scene.image.ImageView;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import javafx.scene.Parent;
 import java.time.LocalTime;
 import java.util.List;
 
-public class CreaTestDetailControllerGUI {
+public class CreaTestDetailControllerGUI extends BaseControllerGUI {
     @FXML private Button btnHome;
     @FXML private Button btnCreaTest;
     @FXML private Button btnClassiVirtuali;
     @FXML private Button btnNotifiche;
 
-    // --- Profilo Dinamico ---
     @FXML private Label profNameLabel;
     @FXML private ImageView profAvatar;
 
-    // --- Elementi del Form ---
     @FXML private TextField nomeTestField;
     @FXML private ComboBox<String> classeComboBox;
     @FXML private DatePicker dataConsegnaPicker;
@@ -39,21 +35,7 @@ public class CreaTestDetailControllerGUI {
     @FXML private TextField durataField;
     @FXML private Button btnSalva;
 
-    private Parent root;
-    private NavigatorGUI navigatorGUI;
     private CreateTestController createTestController = new CreateTestController();
-
-    public void setNavigatorGUI(NavigatorGUI navigatorGUI) {
-        this.navigatorGUI = navigatorGUI;
-    }
-
-    public void setView(Parent root) {
-        this.root = root;
-    }
-
-    public Parent getView() {
-        return root;
-    }
 
     public void prepare() {
         clear();
@@ -107,15 +89,8 @@ public class CreaTestDetailControllerGUI {
     }
 
     public void setUsernameBundle() {
-        String nameToPrint = "Unavailable";
-        ProfessorBean pb = navigatorGUI.getContext().getSession().getProfessor();
-        if(pb != null) {
-            nameToPrint = pb.getName() + pb.getSurname();
-        }
-        profNameLabel.setText(nameToPrint);
+        profNameLabel.setText(getFormattedUsername());
     }
-
-    // --- Azioni dei Bottoni ---
 
     @FXML
     void handleSaveTest(ActionEvent event) {
@@ -166,14 +141,4 @@ public class CreaTestDetailControllerGUI {
         navigatorGUI.setPreviousView(Views.CREATETEST);
         navigatorGUI.goToClassesView();
     }
-
-
-    private void showAlert(String title, String message, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(message);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-    
 }

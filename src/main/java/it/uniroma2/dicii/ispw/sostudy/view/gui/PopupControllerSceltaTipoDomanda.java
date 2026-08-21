@@ -1,4 +1,4 @@
-package it.uniroma2.dicii.ispw.sostudy.view;
+package it.uniroma2.dicii.ispw.sostudy.view.gui;
 
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import javafx.event.ActionEvent;

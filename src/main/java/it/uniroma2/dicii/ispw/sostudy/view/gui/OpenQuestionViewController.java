@@ -1,4 +1,4 @@
-package it.uniroma2.dicii.ispw.sostudy.view;
+package it.uniroma2.dicii.ispw.sostudy.view.gui;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;

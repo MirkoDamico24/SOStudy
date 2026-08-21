@@ -1,4 +1,4 @@
-package it.uniroma2.dicii.ispw.sostudy.view;
+package it.uniroma2.dicii.ispw.sostudy.view.cli;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.MessageBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.UserBean;
@@ -11,27 +11,15 @@ import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorCLI;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-public class HomeControllerCLI extends MessageObserver {
-    private NavigatorCLI nav;
+public class HomeControllerCLI extends BaseControllerCLI implements MessageObserver {
+
     private NotificationController nctrl = new NotificationController();
     private List<MessageBean> notifications = new ArrayList<>();
 
-    private final Scanner scanner = new Scanner(System.in);
-
     private void showHomeView() {
-        String username;
-        if(nav.getContext().getSession().getCurrentRole() == UserRole.PROFESSOR){
-            username = nav.getContext().getSession().getProfessor().getName() + " " +  nav.getContext().getSession().getProfessor().getSurname();
-        }
-        else username = nav.getContext().getSession().getStudent().getName() + " " +  nav.getContext().getSession().getStudent().getSurname();
-
-        System.out.println("\n============================================================");
-        System.out.printf("  SoStudy | HOME | %s%n", username);
-        System.out.println("============================================================");
-
-        printNavBar();
+        super.printStandardHeader("HOME");
+        super.printNavBar();
 
         System.out.println("\n------------------------------------------------------------");
         System.out.println("                 Comunicazioni in arrivo                    ");
@@ -44,18 +32,7 @@ public class HomeControllerCLI extends MessageObserver {
         printMenu();
     }
 
-    private void printNavBar() {
-        System.out.print("[NavBar]: Home | Classi Virtuali");
-        if (nav.getContext().getSession().getCurrentRole() == UserRole.PROFESSOR) {
-            System.out.print(" | Crea test");
-        }
-        System.out.print("\n");
-        System.out.print("          ----");
-        System.out.println();
-    }
-
     private void populateNotifications(){
-
         UserBean ub = nav.getCorrectUserBean();
 
         try {
@@ -118,17 +95,10 @@ public class HomeControllerCLI extends MessageObserver {
         boolean running = true;
         nctrl.registerAsNotificationObserver(this, nav.getSession());
         while (running) {
-            clearConsole();
+            super.clearConsole();
             showHomeView();
             running = manageInput();
         }
-    }
-
-    public void setNavigator(NavigatorCLI nav) { this.nav = nav;}
-
-    private void clearConsole(){
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
     }
 
     @Override

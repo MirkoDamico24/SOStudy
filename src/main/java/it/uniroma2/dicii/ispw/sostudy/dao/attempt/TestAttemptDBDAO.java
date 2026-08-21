@@ -122,13 +122,7 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
                 }
 
                 ps.setString(1, textToInsert);
-
-                if (choiceToInsert != null) {
-                    ps.setInt(2, choiceToInsert);
-                } else {
-                    ps.setNull(2, java.sql.Types.INTEGER);
-                }
-
+                ps.setObject(2, choiceToInsert, java.sql.Types.INTEGER);
                 ps.setInt(3, answer.getScore());
                 ps.setInt(5, questionID);
 

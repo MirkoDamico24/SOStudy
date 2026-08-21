@@ -1,7 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.test;
 
 import it.uniroma2.dicii.ispw.sostudy.application.JSONHelper;
-import it.uniroma2.dicii.ispw.sostudy.dao.attempt.TestAttemptDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.exception.ModelException;

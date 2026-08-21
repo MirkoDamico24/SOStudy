@@ -1,7 +1,7 @@
 package it.uniroma2.dicii.ispw.sostudy.view.navigator;
 
 import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
-import it.uniroma2.dicii.ispw.sostudy.view.*;
+import it.uniroma2.dicii.ispw.sostudy.view.cli.*;
 
 import java.util.Scanner;
 
