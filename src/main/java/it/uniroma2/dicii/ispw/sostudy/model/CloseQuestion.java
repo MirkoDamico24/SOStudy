@@ -58,14 +58,12 @@ public class CloseQuestion extends Question {
     public List<Choice> getChoices() { return this.choices; }
 
     @Override
-    public void evaluate(TestAttemptAnswer answer) throws ModelException {
-        if(!(answer instanceof CloseAnswer)) throw new ModelException("[Class: CloseQuestion] The provided answer is not a CloseAnswer");
+    public void evaluate(Answer<?> answer) throws ModelException {
+        Object content = answer.getContent();
+        if(!(content instanceof Choice)) throw new ModelException("[Class: CloseQuestion] The provided answer is not a suitable for a CloseQuestion.");
 
-        Choice answerContent = ((CloseAnswer) answer).getContent();
-        int assignedScore = 0;
-
-        if(answerContent.equals(this.solution)) assignedScore = this.getMaxScore();
-
+        Choice answerContent = ((Choice) content);
+        int assignedScore = answerContent.equals(this.solution) ? this.getMaxScore() : 0;
         answer.setScore(assignedScore);
     }
 

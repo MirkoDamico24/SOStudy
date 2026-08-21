@@ -10,14 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Test {
-    private int id;
     private String name;
     private LocalDate dueDate;
     private LocalTime dueTime;
     private Duration duration;
 
     private List<Question> questions = new ArrayList<>();
-    private List<TestAttempt> tests;
+    private List<TestAttempt> tests = null;
     private VirtualClass virtualClass;
 
     public Test(String name, LocalDate dueDate, LocalTime dueTime, Duration duration, Question question, VirtualClass virtualClass) {
@@ -75,8 +74,8 @@ public class Test {
     public void gradeTest(TestAttempt test) throws ModelException{
         if(!this.tests.contains(test)) throw new ModelException("[Class: Test] Cannot evaluate an attempt that is not relative to this test");
 
-        List<TestAttemptAnswer> testAnswers = test.getAnswers();
-        for(TestAttemptAnswer a : testAnswers){
+        List<Answer<?>> testAnswers = test.getAnswers();
+        for(Answer<?> a : testAnswers){
             int index = testAnswers.indexOf(a);
             Question q = this.questions.get(index);
 
@@ -103,11 +102,11 @@ public class Test {
     public void setDueDate(LocalDate dueDate) {this.dueDate = dueDate;}
     public void setDuration(Duration duration) {this.duration = duration;}
     public List<TestAttempt> getTests() { return tests; }
-    public void setTests(List<TestAttempt> tests) { this.tests = tests; }
+    public void setTests(List<TestAttempt> tests) {
+        if(this.tests == null) this.tests = tests;
+    }
     public VirtualClass getVirtualClass() {return this.virtualClass;}
     public void setVirtualClass(VirtualClass virtualClass) {this.virtualClass = virtualClass;}
     public void setDueTime(LocalTime dueTime) {this.dueTime = dueTime;}
     public LocalTime getDueTime() {return this.dueTime;}
-    public void setId(Integer id) {this.id = id;}
-    public int getId() {return this.id;}
 }

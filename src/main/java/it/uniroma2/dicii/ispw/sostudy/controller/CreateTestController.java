@@ -6,6 +6,7 @@ import it.uniroma2.dicii.ispw.sostudy.bean.VirtualClassBean;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.dao.test.TestDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.virtualclass.VirtualClassDAO;
+import it.uniroma2.dicii.ispw.sostudy.eng.functional.QuestionMapper;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.*;
@@ -68,22 +69,8 @@ public class CreateTestController {
 
     private List<Question> getQuestions(List<QuestionBean> questions) {
         List<Question> questionList = new ArrayList<>();
-        Question tempQuestion;
         for(QuestionBean question : questions){
-            if(question.getOptions() == null || question.getOptions().isEmpty()){
-                tempQuestion = new OpenQuestion(question.getHeader(), question.getMaxScore());
-            }
-            else{
-                List<Choice> choices = new ArrayList<>();
-                for(String option : question.getOptions()) {
-                    Choice choice = new Choice(option);
-                    choices.add(choice);
-                }
-                Choice solution = choices.get(question.getSolution());
-                tempQuestion = new CloseQuestion(question.getHeader(), question.getMaxScore(), choices, solution);
-
-            }
-            questionList.add(tempQuestion);
+            questionList.add(QuestionMapper.beanToQuestion(question));
         }
         return questionList;
     }

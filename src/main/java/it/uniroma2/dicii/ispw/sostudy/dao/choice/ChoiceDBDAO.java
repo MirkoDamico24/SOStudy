@@ -14,10 +14,6 @@ import java.util.List;
 public class ChoiceDBDAO extends ChoiceDAO {
     @Override
     public Choice getChoiceById(int id) throws DAOException{
-        if(this.containsKey(id)){
-            return this.getFromCache(id);
-        }
-
         Choice choice = null;
         String sqlQuery = "SELECT content FROM OpzioniDomande WHERE code = ?";
         try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery))
@@ -25,13 +21,12 @@ public class ChoiceDBDAO extends ChoiceDAO {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                choice = new Choice(id, rs.getString("content"));
+                choice = new Choice(rs.getString("content"));
             }
         }
         catch(SQLException e){
             throw new DAOException("Error occurred while fetching choice from database.");
         }
-        this.addToCache(id, choice);
         return choice;
     }
 
@@ -40,15 +35,14 @@ public class ChoiceDBDAO extends ChoiceDAO {
         ChoiceDTO choices = null;
         List<Choice> choicesList = new ArrayList<>();
         Choice solution = null;
-        String sqlQuery = "SELECT code, content, isSolution FROM OpzioniDomande WHERE question = ?";
+        String sqlQuery = "SELECT content, isSolution FROM OpzioniDomande WHERE question = ?";
 
         try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery))
         {
             ps.setInt(1, questionID);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                int choiceID = rs.getInt("code");
-                Choice choice = new Choice(choiceID, rs.getString("content"));
+                Choice choice = new Choice(rs.getString("content"));
                 choicesList.add(choice);
                 if(rs.getBoolean("isSolution")) solution = choice;
             }
@@ -65,11 +59,11 @@ public class ChoiceDBDAO extends ChoiceDAO {
         String sqlQuery = "INSERT INTO OpzioniDomande(content, isSolution, question) VALUES (?, ?, ?)";
         try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
             for(ChoiceDTO dto : choices){
+                ps.setInt(3, dto.questionID());
                 for(Choice c : dto.options()){
                     ps.setString(1, c.getContent());
                     if(c == dto.solution()) ps.setBoolean(2, true);
                     else ps.setBoolean(2, false);
-                    ps.setInt(3, dto.questionID());
                     ps.addBatch();
                 }
             }
@@ -78,5 +72,27 @@ public class ChoiceDBDAO extends ChoiceDAO {
         catch(SQLException e){
             throw new DAOException("Error occurred while saving choices on database.");
         }
+    }
+
+    @Override
+    public int getChoiceId(Choice choice, int questionId) throws DAOException{
+        int choiceId = 0;
+        String sqlQuery = "SELECT code FROM OpzioniDomande WHERE content = ? AND question = ?";
+
+        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
+            ps.setString(1, choice.getContent());
+            ps.setInt(2, questionId);
+            ps.executeQuery();
+
+            ResultSet rs = ps.getResultSet();
+            if(rs.next()){
+                choiceId = rs.getInt("code");
+            }
+        }
+        catch(SQLException e){
+            throw new DAOException("Error occurred while fetching choice from database.");
+        }
+
+        return choiceId;
     }
 }

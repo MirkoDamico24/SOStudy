@@ -1,10 +1,12 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.attempt;
 
 import it.uniroma2.dicii.ispw.sostudy.application.DBConnectionFactory;
+import it.uniroma2.dicii.ispw.sostudy.dao.choice.ChoiceDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
+import it.uniroma2.dicii.ispw.sostudy.dao.question.QuestionDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.test.TestDAO;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.*;
-import it.uniroma2.dicii.ispw.sostudy.eng.answerfactory.AnswerFactory;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -13,88 +15,138 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestAttemptDBDAO extends TestAttemptDAO{
-    private List<TestAttemptAnswer> getAttemptAnswers(ResultSet rs) throws SQLException {
-        List<TestAttemptAnswer> answers = new ArrayList<>();
-        do{
-            Choice choice = null;
-            String textualContent = rs.getString("textualContent");
-            int integerContent = rs.getInt("integerContent");
-            if(!rs.wasNull()) choice =  DAOFactory.getInstance().getChoiceDAO().getChoiceById(integerContent);
-            int score = rs.getInt("score");
-            int questionID = rs.getInt("question");
-            Question question = DAOFactory.getInstance().getQuestionDAO().getQuestionById(questionID);
-            TestAttemptAnswer answer = AnswerFactory.createAnswer(score, textualContent, choice, question);
-            answers.add(answer);
-        }while(rs.next());
-        return answers;
+   private DAOFactory factory = DAOFactory.getInstance();
+   private QuestionDAO questionDAO = factory.getQuestionDAO();
+   private ChoiceDAO choiceDAO = factory.getChoiceDAO();
+   private TestDAO testDAO = factory.getTestDAO();
+
+    private Answer<?> buildAnswer(ResultSet rs) throws SQLException {
+        int score = rs.getInt("score");
+        Question question = questionDAO.getQuestionById(rs.getInt("question"));
+        int integerContent = rs.getInt("integerContent");
+
+        if (!rs.wasNull()) {
+            Choice choice = choiceDAO.getChoiceById(integerContent);
+            return new Answer<>(score, choice, question);
+        } else {
+            return new Answer<>(score, rs.getString("textualContent"), question);
+        }
     }
+
 
     @Override
-    public TestAttempt getTestAttemptById(int id) throws DAOException {
-        if(this.containsKey(id)){
-            return this.getFromCache(id);
+    public List<TestAttempt> getTestAttempt(int testId) throws DAOException {
+        List<TestAttempt> attempts = new ArrayList<>();
+        if(this.loadedAttempts.contains(testId)){
+            /*
+                if the id is in the Set, then the test has already tried to load its attempts,
+                but it hasn't any. We're sure about that, cause the request to DAO is executed
+                only if test.getTests() = null
+             */
+            return attempts;
         }
 
-        TestAttempt attempt = null;
-        String sqlQuery = "SELECT textualContent, integerContent, score, testID, question, grade, gradingStatus, handInTime, handInDate, test, student FROM Risposte join Tentativo on attempt = testID WHERE testID = ?";
+        String sqlQuery = """
+                            SELECT testID, textualContent, integerContent, score, testID, question, grade, gradingStatus, handInTime, handInDate, test, student 
+                            FROM Risposte join Tentativo on attempt = testID 
+                            WHERE test = ?
+                            ORDER BY testID""";
+
+        Test test = testDAO.getTestById(testId);
+
         try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
-            ps.setInt(1, id);
+            ps.setInt(1, testId);
+
             ResultSet rs = ps.executeQuery();
-            if(rs.next()){
+            int currentAttemptId = -1;
+            List<Answer<?>> currentAnswers = null;
+            Student currentStudent = null;
+            int grade = 0;
+            TestGradingStatus gradingStatus = null;
+            LocalTime handInTime = null;
+            LocalDate handInDate = null;
+
+            while (rs.next()) {
                 int attemptId = rs.getInt("testID");
-                int grade = rs.getInt("grade");
-                TestGradingStatus gradingStatus = TestGradingStatus.valueOf(rs.getString("gradingStatus"));
-                LocalTime handInTime = LocalTime.parse(rs.getString("handInTime"));
-                LocalDate handInDate = LocalDate.parse(rs.getString("handInDate"));
-                Test test = DAOFactory.getInstance().getTestDAO().getTestById(rs.getInt("test"));
-
-                DAOFactory.getInstance().getQuestionDAO().getQuestionsByTestId(rs.getInt("test"));   //Question cache prefill
-
-                Student student = DAOFactory.getInstance().getStudentDAO().getStudentByEmail(rs.getString("student"));
-                List<TestAttemptAnswer> answers = getAttemptAnswers(rs);
-                attempt = new TestAttempt(test, answers, student, attemptId, grade, gradingStatus, handInTime, handInDate);
+                if (attemptId != currentAttemptId) {
+                    if (currentAttemptId != -1) {
+                        attempts.add(new TestAttempt(test, currentAnswers, currentStudent,
+                                 grade, gradingStatus, handInTime, handInDate));
+                    }
+                    currentAttemptId = attemptId;
+                    currentAnswers = new ArrayList<>();
+                    currentStudent = factory.getStudentDAO().getStudentByEmail(rs.getString("student"));
+                    grade = rs.getInt("grade");
+                    gradingStatus = TestGradingStatus.valueOf(rs.getString("gradingStatus"));
+                    handInTime = LocalTime.parse(rs.getString("handInTime"));
+                    handInDate = LocalDate.parse(rs.getString("handInDate"));
+                }
+                currentAnswers.add(buildAnswer(rs));
+            }
+            if (currentAttemptId != -1) {
+                attempts.add(new TestAttempt(test, currentAnswers, currentStudent,
+                                             grade, gradingStatus, handInTime, handInDate));
             }
         }
-        catch(SQLException e){
-            throw new DAOException("Error occurred while fetching attempt data from database.");
+        catch (SQLException e) {
+        throw new DAOException("Error occurred while fetching test attempts. " + e.getMessage());
         }
-        this.addToCache(id, attempt);
-        return attempt;
+
+        test.setTests(attempts);
+        loadedAttempts.add(testId);
+        return attempts;
     }
 
-    private void saveAnswers(int attemptID, List<TestAttemptAnswer> answers){
-        /* TODO: implement saveAnswer eliminating the id from model
-        String sqlQuery = "INSERT INTO Risposte VALUES (?, ?, ?, ?)";
-        for(TestAttemptAnswer answer: answers){
-            try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery))
-            {
-                    if(answer instanceof CloseAnswer closeAnswer){
-                        ps.setInt(1, closeAnswer.getContent().getChoiceID());
-                    }
-                    else{
-                        OpenAnswer op = (OpenAnswer) answer;
-                        ps.setString(1, op.getContent());
-                    }
-                    ps.setInt(3, answer.getScore());
-                    ps.setInt(4, attemptID);
-                    ps.setInt(5, answer.getQuestion().getId());
+
+    private void saveAnswers(int attemptID, List<Answer<?>> answers, Test test){
+        int questionID = 0;
+        String sqlQuery = "INSERT INTO Risposte (`textualContent`, `integerContent`, `score`, `attempt`, `question`) VALUES (?, ?, ?, ?, ?)";
+
+        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery))
+        {
+            Object content = null;
+            for(Answer<?> answer : answers){
+                questionID = questionDAO.getQuestionId(answer.getQuestion(),
+                        testDAO.getTestId(test.getName(), test.getVirtualClass().getName()
+                        ));
+
+                content = answer.getContent();
+                if(content instanceof Choice selected){
+                    int choiceID = choiceDAO.getChoiceId(selected, questionID);
+                    ps.setString(1, null);
+                    ps.setInt(2, choiceID);
+                }
+                else if(content instanceof String stringContent){
+                    ps.setString(1, stringContent);
+                    ps.setInt(2, 0);
+                }
+
+                ps.setInt(3, answer.getScore());
+                ps.setInt(4, attemptID);
+                ps.setInt(5, questionID);
+
+                ps.addBatch();
             }
-            catch(SQLException e){
-                throw new DAOException("Error occurred while saving attempt answers to database.");
-            }
-        }*/
+            ps.executeBatch();
+        }
+        catch(SQLException | DAOException e){
+            throw new DAOException("Error occurred while saving attempt answers to database. " + e.getMessage());
+        }
     }
 
     @Override
     public void saveTestAttempt(TestAttempt testAttempt) {
-        /*TODO: implement this method removing id from model
         String sqlQuery = "INSERT INTO Tentativo VALUES (?, ?, ?, ?, ?, ?)";
+
         try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
             ps.setInt(1, testAttempt.getGrade());
             ps.setString(2, testAttempt.getTestGradingStatus().toString());
             ps.setTime(3, Time.valueOf(testAttempt.getHandInTime()));
             ps.setDate(4, Date.valueOf(testAttempt.getHandInDate()));
-            ps.setInt(5, testAttempt.getTest().getId());
+
+            int testId = testDAO.getTestId(testAttempt.getTest().getName(), testAttempt.getTest().getVirtualClass().getName());
+            ps.setInt(5, testId);
+
             ps.setString(6, testAttempt.getStudent().getEmail());
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
@@ -102,22 +154,10 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
             if(rs.next()){
                 attemptId =  rs.getInt(1);
             }
-            saveAnswers(attemptId, testAttempt.getAnswers());
+            saveAnswers(attemptId, testAttempt.getAnswers(), testAttempt.getTest());
         }
-        catch(SQLException e){
-            throw new DAOException("Error occurred while saving attempt data to database.");
+        catch(SQLException | DAOException e){
+            throw new DAOException("Error occurred while saving attempt data to database. " + e.getMessage());
         }
-        */
-    }
-
-    @Override
-    public void addAnswerToAttempt(TestAttemptAnswer answer, int testID){
-       /* TODO: implement this method removing id from model
-        if(!this.containsKey(testID)) throw new DAOException("Attempt with id " + testID + " cannot be updated, since it is not been loaded from database.");
-
-        List<TestAttemptAnswer> tmpList = new ArrayList<>();
-        tmpList.add(answer);
-        saveAnswers(testID, tmpList);
-        */
     }
 }

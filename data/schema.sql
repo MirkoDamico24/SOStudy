@@ -73,7 +73,8 @@ PRIMARY KEY (`code`),
 FOREIGN KEY (`class`)
 REFERENCES `SoStudyDB`.`Class` (`code`)
 ON DELETE NO ACTION
-ON UPDATE CASCADE
+ON UPDATE CASCADE,
+CONSTRAINT second_id UNIQUE (`name`, `class`)
 )
 ENGINE = InnoDB;
 
@@ -102,7 +103,8 @@ PRIMARY KEY (`code`),
 FOREIGN KEY (`question`)
 REFERENCES `SoStudyDB`.`Domanda` (`code`)
 ON DELETE CASCADE
-ON UPDATE CASCADE
+ON UPDATE CASCADE,
+CONSTRAINT uq_content_question UNIQUE (`content`, `question`)
 )
 ENGINE = InnoDB;
 
@@ -123,7 +125,8 @@ ON UPDATE CASCADE,
 FOREIGN KEY (`student`)
 REFERENCES `SoStudyDB`.`Student`(`email`)
 ON DELETE CASCADE
-ON UPDATE CASCADE
+ON UPDATE CASCADE,
+CONSTRAINT uq_test_student UNIQUE (`test`, `student`)
 )
 ENGINE = InnoDB;
 
@@ -207,8 +210,8 @@ INSERT INTO `ClassStudents` (`student`, `class`) VALUES
 -- 6. Inserimento Test
 -- -----------------------------------------------------
 INSERT INTO `Test` (`name`, `dueDate`, `dueTime`, `duration`, `class`) VALUES
-('Parziale SQL', '2023-11-15', '10:00:00', '02:00:00', 1),
-('Appello Gennaio SO', '2024-01-20', '14:30:00', '01:30:00', 2);
+('Parziale SQL', '2023-11-15', '10:00:00', 'PT2H', 1),
+('Appello Gennaio SO', '2024-01-20', '14:30:00', 'PT1H30M', 2);
 
 -- -----------------------------------------------------
 -- 7. Inserimento Domande
@@ -233,7 +236,7 @@ INSERT INTO `OpzioniDomande` (`content`, `isSolution`, `question`) VALUES
 -- 9. Inserimento Tentativi
 -- -----------------------------------------------------
 INSERT INTO `Tentativo` (`grade`, `gradingStatus`, `handInTime`, `handInDate`, `test`, `student`) VALUES
-(28, 'FULLYGRADED', '11:45:00', '2023-11-15', 1, 'a.neri@studenti.it'),
+(20, 'FULLYGRADED', '11:45:00', '2023-11-15', 1, 'a.neri@studenti.it'),
 (NULL, 'INCOMPLETE', NULL, NULL, 1, 'm.verdi@studenti.it'),
 (NULL, 'REVISIONING', '15:50:00', '2024-01-20', 2, 'a.neri@studenti.it');
 
@@ -251,6 +254,6 @@ INSERT INTO `Risposte` (`textualContent`, `integerContent`, `score`, `attempt`, 
 INSERT INTO `Messaggi` (`message`, `sender`, `recipient`) VALUES
 ('Nuovo test pubblicato: Parziale SQL', 'mario.rossi@gmail.com', 'a.neri@studenti.it'),
 ('Nuovo test pubblicato: Parziale SQL', 'mario.rossi@gmail.com', 'm.verdi@studenti.it'),
-('Ricordate l appello di domani', 'mario.rossi@gmail.com', 'g.gialli@studenti.it'),
+('Ricordate l''appello di domani', 'mario.rossi@gmail.com', 'g.gialli@studenti.it'),
 ('Richiesta chiarimento su Parziale SQL', 'a.neri@studenti.it', 'mario.rossi@gmail.com'),
-('Il suo test e stato corretto', 'giuseppe.bianchi@gmail.com', 'a.neri@studenti.it');
+('Il suo test è stato corretto', 'mario.rossi@gmail.com', 'a.neri@studenti.it');

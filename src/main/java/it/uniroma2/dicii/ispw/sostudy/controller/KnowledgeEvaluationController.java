@@ -1,6 +1,7 @@
 package it.uniroma2.dicii.ispw.sostudy.controller;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
+import it.uniroma2.dicii.ispw.sostudy.bean.SessionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.VirtualClassBean;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
@@ -17,19 +18,32 @@ public class KnowledgeEvaluationController {
     private DAOFactory factory = DAOFactory.getInstance();
     private VirtualClassDAO classDAO = factory.getVirtualClassDAO();
 
-    /*public List<QuestionBean> loadRequiredTest(TestBean testBean, VirtualClassBean virtualClassBean) {
-        VirtualClass vcls = null;
+    public List<QuestionBean> loadRequiredTest(SessionBean session, TestBean testBean, VirtualClassBean virtualClassBean) {
+        List<VirtualClass> vcls = null;
+        VirtualClass selectedClass = null;
         Test toTake = null;
+
+        Session currentSession = SessionManager.getInstance().getSession(session.getSessionID());
+
         try {
-            //TODO: carica anche test classe insieme al caricamento della classe stessa
-            vcls = classDAO.getVirtualClass(virtualClassBean.getClassName(), virtualClassBean.getProfessor().getEmail());
+            switch(currentSession.getRole()){
+                case PROFESSOR -> vcls = classDAO.getClassesByProfessor(currentSession.getCurrentProfessor().getEmail());
+                case STUDENT -> vcls = classDAO.getClassesByStudent(currentSession.getCurrentStudent().getEmail());
+            }
         }
         catch(DAOException e){
-            throw new ControllerException("La classe indicata non esiste nel sistema");
+            throw new ControllerException("Errore durante la ricerca della classe");
+        }
+
+        for(VirtualClass virtualClass : vcls){
+            if(virtualClass.getName().equals(virtualClassBean.getClassName())){
+                selectedClass = virtualClass;
+                break;
+            }
         }
 
         //extract test from class' test list
-        for(Test test : vcls.getAvailableTests()){
+        for(Test test : selectedClass.getAvailableTests()){
             if(test.getName().equals(testBean.getName())){
                 toTake = test;
                 break;
@@ -37,7 +51,7 @@ public class KnowledgeEvaluationController {
         }
 
         return questionToBean(toTake.getQuestions());
-    }*/
+    }
 
     private List<QuestionBean> questionToBean(List<Question> questions){
         List<QuestionBean> questionBeans = new ArrayList<>();

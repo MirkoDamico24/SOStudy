@@ -2,21 +2,16 @@ package it.uniroma2.dicii.ispw.sostudy.dao.attempt;
 
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.TestAttempt;
-import it.uniroma2.dicii.ispw.sostudy.model.TestAttemptAnswer;
+
+import java.util.List;
 
 public class TestAttemptFSDAO extends TestAttemptDAO {
     @Override
-    public TestAttempt getTestAttemptById(int testID) throws DAOException {
-        return null;
-    }
-
-    @Override
     public void saveTestAttempt(TestAttempt testAttempt) throws DAOException{
-
+        //yet to implement
     }
-
-    @Override
-    public void addAnswerToAttempt(TestAttemptAnswer answer, int testID) throws DAOException{
-
+    public List<TestAttempt> getTestAttempt(int testId) throws DAOException{
+        //yet to implement
+        return null;
     }
 }

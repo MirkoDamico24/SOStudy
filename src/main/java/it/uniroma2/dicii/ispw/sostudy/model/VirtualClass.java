@@ -5,35 +5,30 @@ import java.util.List;
 
 public class VirtualClass {
     private String name;
-    private int classId;
     private Professor prof;
     private List<Student> students;
     private List<Test> assignedTests;
 
-    public VirtualClass(String name,int classId, Professor prof, Student student) {
+    public VirtualClass(String name, Professor prof, Student student) {
         this.name = name;
-        this.classId = classId;
         this.prof = prof;
         this.students = new ArrayList<>();
         this.students.add(student);
     }
 
-    public VirtualClass(String name,int classId, Professor prof) {
+    public VirtualClass(String name, Professor prof) {
         this.name = name;
-        this.classId = classId;
         this.prof = prof;
     }
 
-    public VirtualClass(String name, int classId, Professor prof, List<Student> students) {
+    public VirtualClass(String name, Professor prof, List<Student> students) {
         this.name = name;
-        this.classId = classId;
         this.prof = prof;
         this.students = students;
     }
 
-    public VirtualClass(String name,int classId, Professor prof, List<Student> students, List<Test> assignedTests) {
+    public VirtualClass(String name, Professor prof, List<Student> students, List<Test> assignedTests) {
         this.name = name;
-        this.classId = classId;
         this.prof = prof;
         this.students = students;
         this.assignedTests = assignedTests;
@@ -73,7 +68,4 @@ public class VirtualClass {
 
     public String getName() { return this.name; }
 
-    public int getClassId() { return this.classId; }
-
-    public void setClassId(int classId) { this.classId = classId; }
 }

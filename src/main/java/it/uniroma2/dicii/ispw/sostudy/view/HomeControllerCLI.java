@@ -63,7 +63,6 @@ public class HomeControllerCLI extends MessageObserver {
         }
         catch(ControllerException e){
             System.err.println("Errore durante il caricamento delle notifiche.");
-            return;
         }
     }
 

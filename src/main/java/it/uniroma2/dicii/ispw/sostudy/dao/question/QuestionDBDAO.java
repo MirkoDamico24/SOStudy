@@ -14,8 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class QuestionDBDAO extends QuestionDAO {
     private record CloseIndexes (QuestionDTO q, int index) {}
@@ -23,16 +22,20 @@ public class QuestionDBDAO extends QuestionDAO {
     private Question buildQuestion(int id, String header, int maxScore, QuestionType type)
     {
         QuestionDTO question = null;
-        if(type == QuestionType.OPENQUESTION){
-            question = new QuestionDTO(header, maxScore, QuestionType.OPENQUESTION, null, null);
+        switch (type) {
+            case QuestionType.OPENQUESTION:
+                question = new QuestionDTO(header, maxScore, QuestionType.OPENQUESTION, null, null);
+                break;
+
+            case QuestionType.CLOSEQUESTION:
+                ChoiceDAO choiceDAO = DAOFactory.getInstance().getChoiceDAO();
+                ChoiceDTO choices = choiceDAO.getChoicesByQuestionId(id);
+                question = new QuestionDTO(header, maxScore, QuestionType.CLOSEQUESTION, choices.options(), choices.solution());
+                break;
+
+            default: throw new DAOException("Invalid question type!!!");
         }
-        else if(type == QuestionType.CLOSEQUESTION){
-            ChoiceDAO choiceDAO = DAOFactory.getInstance().getChoiceDAO();
-            ChoiceDTO choices = choiceDAO.getChoicesByQuestionId(id);
-            question = new QuestionDTO(header, maxScore, QuestionType.CLOSEQUESTION, choices.options(), choices.solution());
-        }
-        else throw new DAOException("Invalid question type!!!");
-        return QuestionMapper.DTOToQuestion(question);
+        return QuestionMapper.dtoToQuestion(question);
     }
 
     @Override
@@ -92,6 +95,7 @@ public class QuestionDBDAO extends QuestionDAO {
 
         String sqlQuery = "INSERT INTO Domanda (header, maxScore, type, test) VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(4, testID);
             for(Question q : questions){
                 QuestionDTO dto = QuestionMapper.questionToDTO(q);
 
@@ -101,7 +105,6 @@ public class QuestionDBDAO extends QuestionDAO {
                 ps.setString(3, dto.type().name());
                 if(dto.type() == QuestionType.CLOSEQUESTION){ completeSaving.add(new CloseIndexes(dto, questions.indexOf(q)));}
 
-                ps.setInt(4, testID);
                 ps.addBatch();
             }
 
@@ -134,5 +137,67 @@ public class QuestionDBDAO extends QuestionDAO {
         catch(DAOException e){
             throw new DAOException("Error occurred while saving question data to database.");
         }
+    }
+
+    @Override
+    public Map<Integer, List<Question>> getQuestionsByTestIds(List<Integer> testIDs) {
+        Map<Integer, List<Question>> questionsByTest = new HashMap<>();
+
+        if (testIDs == null || testIDs.isEmpty()) {
+            return questionsByTest;
+        }
+
+        String placeholders = String.join(",", Collections.nCopies(testIDs.size(), "?"));
+
+        String sqlQuery = "SELECT code, header, maxScore, type, test FROM Domanda WHERE test IN (" + placeholders + ")";
+
+        try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)) {
+            for (int i = 0; i < testIDs.size(); i++) {
+                ps.setInt(i + 1, testIDs.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int questionID = rs.getInt("code");
+                int testID = rs.getInt("test");
+
+                Question question;
+                if (this.containsKey(questionID)) {
+                    question = this.getFromCache(questionID);
+                } else {
+                    QuestionType type = QuestionType.valueOf(rs.getString("type"));
+                    question = buildQuestion(questionID, rs.getString("header"), rs.getInt("maxScore"), type);
+                    this.addToCache(questionID, question);
+                }
+
+                questionsByTest.computeIfAbsent(testID, k -> new ArrayList<>()).add(question);
+            }
+        } catch (SQLException | DAOException e) {
+            throw new DAOException("Error occurred while fetching questions for multiple tests. " + e.getMessage());
+        }
+
+        return questionsByTest;
+    }
+
+    @Override
+    public int getQuestionId(Question question, int testID){
+        int questionID = 0;
+        String sqlQuery = "SELECET code FROM Domanda WHERE header = ? and test = ?";
+
+        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
+            ps.setString(1, question.getHeader());
+            ps.setInt(2, testID);
+            ps.executeQuery();
+
+            ResultSet rs = ps.getResultSet();
+            if(rs.next()){
+                questionID = rs.getInt("code");
+            }
+        }
+        catch(SQLException | DAOException e){
+            throw new DAOException("Error occurred while getting question id from database. " + e.getMessage());
+        }
+
+        return questionID;
     }
 }

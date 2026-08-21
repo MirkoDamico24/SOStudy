@@ -16,8 +16,8 @@ public class VirtualClassDemoDAO extends VirtualClassDAO {
         Professor prof = DAOFactory.getInstance().getProfessorDAO().getProfessorByEmail("mario.rossi@gmail.com");
         Student stud = DAOFactory.getInstance().getStudentDAO().getStudentByEmail("giuseppe.bianchi@gmail.com");
 
-        VirtualClass v1 = new VirtualClass("ISPWvirtualClass", 1, prof, stud);
-        this.addToCache(v1.getClassId(), v1);
+        VirtualClass v1 = new VirtualClass("ISPWvirtualClass", prof, stud);
+        this.addToCache(1, v1);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class VirtualClassDemoDAO extends VirtualClassDAO {
             return getFromCache(id);
         }
 
-        VirtualClass vcls = new VirtualClass("ISPWvirtualclass", id, new Professor("Mario", "Rossi", "mario.rossi@gmail.com"),
+        VirtualClass vcls = new VirtualClass("ISPWvirtualclass", new Professor("Mario", "Rossi", "mario.rossi@gmail.com"),
                 new Student("Gisueppe", "Bianchi", "giuseppe.bianchi@gmail.com"));
 
         this.addToCache(id, vcls);
@@ -52,8 +52,14 @@ public class VirtualClassDemoDAO extends VirtualClassDAO {
     }
 
     @Override
-    public void getClassTests(int classId){
-        //nothing to do: all tests already in RAM
+    public int getClassID(String className, String profEmail) throws DAOException{
+        //TODO: implement
+        return 0;
     }
 
+    @Override
+    public List<VirtualClass> getClassesByStudent(String studentEmail) throws DAOException{
+        //TODO: implement
+        return null;
+    }
 }

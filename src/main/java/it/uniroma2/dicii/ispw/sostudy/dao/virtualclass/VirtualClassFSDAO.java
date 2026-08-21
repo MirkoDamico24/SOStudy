@@ -40,7 +40,6 @@ public class VirtualClassFSDAO extends VirtualClassDAO {
         return students;
     }
 
-    @Override
     public void getClassTests(int classId) throws DAOException {
         if (!this.containsKey(classId)) {
             throw new DAOException("Virtual class not present in cache");
@@ -110,7 +109,7 @@ public class VirtualClassFSDAO extends VirtualClassDAO {
         List<Student> students = jsonObject.has(KEY_STUDENTS)
                 ? extractAssignedStudents(jsonObject) : null;
 
-        VirtualClass virtualClass = new VirtualClass(name, id, professor, students);
+        VirtualClass virtualClass = new VirtualClass(name, professor, students);
         this.addToCache(id, virtualClass);
         return virtualClass;
     }
@@ -155,5 +154,17 @@ public class VirtualClassFSDAO extends VirtualClassDAO {
             return 1;
         }
         return maxId + 1;
+    }
+
+    @Override
+    public int getClassID(String className, String profEmail) throws DAOException{
+        //TODO: implement
+        return 0;
+    }
+
+    @Override
+    public List<VirtualClass> getClassesByStudent(String studentEmail) throws DAOException{
+        //TODO: implement
+        return null;
     }
 }

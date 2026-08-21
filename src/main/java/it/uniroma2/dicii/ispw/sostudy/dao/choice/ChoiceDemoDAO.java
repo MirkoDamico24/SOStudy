@@ -21,4 +21,10 @@ public class ChoiceDemoDAO extends ChoiceDAO{
     public void saveChoices(List<ChoiceDTO> choices) throws DAOException{
 
     }
+
+    @Override
+    public int getChoiceId(Choice choice, int questionId) throws DAOException{
+        //TODO: implement
+        return 0;
+    }
 }

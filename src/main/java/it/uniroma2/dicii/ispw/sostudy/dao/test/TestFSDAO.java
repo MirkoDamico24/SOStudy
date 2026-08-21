@@ -134,7 +134,7 @@ public class TestFSDAO extends TestDAO {
     }
 
     private void attachTestAttempts(Test test, JSONArray attemptsArray) throws DAOException {
-        TestAttemptDAO testAttemptDAO = DAOFactory.getInstance().getTestAttemptDAO();
+        /*TestAttemptDAO testAttemptDAO = DAOFactory.getInstance().getTestAttemptDAO();
         List<TestAttempt> testAttempts = new ArrayList<>();
 
         for (int i = 0; i < attemptsArray.length(); i++) {
@@ -145,7 +145,7 @@ public class TestFSDAO extends TestDAO {
                 testAttempts.add(attempt);
             }
         }
-        test.setTests(testAttempts);
+        test.setTests(testAttempts);*/
     }
 
 
@@ -206,7 +206,7 @@ public class TestFSDAO extends TestDAO {
 
     @Override
     public void saveTest(Test test) throws DAOException {
-        try {
+        /*try {
             JSONArray jsonArray = getJSONArray();
 
             int newId = generateNextId(jsonArray);
@@ -235,11 +235,11 @@ public class TestFSDAO extends TestDAO {
 
         } catch (Exception e) {
             throw new DAOException("Error saving test");
-        }
+        }*/
     }
 
     private JSONArray saveAndSerializeTestAttempts(List<TestAttempt> attempts) throws DAOException {
-        TestAttemptDAO testAttemptDAO = DAOFactory.getInstance().getTestAttemptDAO();
+        /*TestAttemptDAO testAttemptDAO = DAOFactory.getInstance().getTestAttemptDAO();
         JSONArray testAttemptsArray = new JSONArray();
 
         for (TestAttempt attempt : attempts) {
@@ -248,6 +248,19 @@ public class TestFSDAO extends TestDAO {
             attemptObj.put(KEY_ID, attempt.getTestId());
             testAttemptsArray.put(attemptObj);
         }
-        return testAttemptsArray;
+        return testAttemptsArray;*/
+        return null;
+    }
+
+    @Override
+    public int getTestId(String testName, String className) throws DAOException{
+        //TODO: implement
+        return 0;
+    }
+
+    @Override
+    public List<Test> getTestByClassId(int classId, VirtualClass virtualClass) throws DAOException{
+        //TODO: implement
+        return null;
     }
 }

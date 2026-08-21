@@ -8,25 +8,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestAttempt{
-    private int testId;
     private int grade;
     private TestGradingStatus testGradingStatus;
     private LocalTime handInTime;
     private LocalDate handInDate;
 
     private Test test;
-    private List<TestAttemptAnswer> answers;
+    private List<Answer<?>> answers;
     private Student student;
 
-    public TestAttempt(Test test, List<TestAttemptAnswer> answers, Student student, int id, int grade, TestGradingStatus testGradingStatus, LocalTime handInTime, LocalDate handInDate) {
+    public TestAttempt(Test test, List<Answer<?>> answers, Student student, int grade, TestGradingStatus testGradingStatus, LocalTime handInTime, LocalDate handInDate) {
         this.test = test;
-        List<TestAttemptAnswer> tmpAnswers = new ArrayList<>();
-        for(TestAttemptAnswer a : answers){
+        List<Answer<?>> tmpAnswers = new ArrayList<>();
+        for(Answer<?> a : answers){
             tmpAnswers.add(a.copy());
         }
         this.answers = tmpAnswers;
         this.student = student;
-        this.testId = id;
         this.grade = grade;
         this.testGradingStatus = testGradingStatus;
         this.handInTime = handInTime;
@@ -38,21 +36,21 @@ public class TestAttempt{
         this.student = student;
     }
 
-    public TestAttempt(Test test, List<TestAttemptAnswer> answers, Student student) {
+    public TestAttempt(Test test, List<Answer<?>> answers, Student student) {
         this.test = test;
         this.answers = answers;
         this.student = student;
     }
 
-    public void addAnswer(TestAttemptAnswer a){
+    public void addAnswer(Answer<?> a){
         if(this.answers == null) {
             this.answers = new ArrayList<>();
         }
-        TestAttemptAnswer tmpAnswer = a.copy();
+        Answer<?> tmpAnswer = a.copy();
         this.answers.add(tmpAnswer);
     }
 
-    public TestAttemptAnswer getNextAnswer(TestAttemptAnswer a) throws ModelException{
+    public Answer<?> getNextAnswer(Answer<?> a) throws ModelException{
          if( a == null ) throw new ModelException("[Class: TestAttempt] There is no next ANSWER for a null object");
 
         int currentPosition;
@@ -65,14 +63,14 @@ public class TestAttempt{
     public void computeGrade(){
         int totalScore = 0;
 
-        for(TestAttemptAnswer a : this.answers){
+        for(Answer<?> a : this.answers){
             totalScore += a.getScore();
         }
 
         this.grade = totalScore;
     }
 
-    public List<TestAttemptAnswer> getAnswers() { return answers; }
+    public List<Answer<?>> getAnswers() { return answers; }
     public Student getStudent() { return student; }
     public int getGrade() { return grade; }
     public void setTestGradingStatus(TestGradingStatus testGradingStatus) { this.testGradingStatus = testGradingStatus; }
@@ -83,6 +81,4 @@ public class TestAttempt{
     public LocalDate getHandInDate() { return this.handInDate; }
     public Test getTest() { return test; }
     public void setStudent(Student student) { this.student = student; }
-    public void setTestId(int id) { this.testId = id; }
-    public int getTestId() { return testId; }
 }

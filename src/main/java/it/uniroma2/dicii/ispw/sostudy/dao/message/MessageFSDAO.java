@@ -16,6 +16,8 @@ import java.util.List;
 public class MessageFSDAO extends MessageDAO {
 
     private static final String FILE_PATH = "data/Message.JSON";
+    private static final String SENDER = "sender";
+    private static final String RECEIVER = "recipient";
 
     @Override
     public void save(List<Message> message) throws DAOException {
@@ -26,9 +28,9 @@ public class MessageFSDAO extends MessageDAO {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("content", m.getMessage());
                 if (m.getSender() != null) {
-                    jsonObject.put("sender", m.getSender().getEmail());
+                    jsonObject.put(SENDER, m.getSender().getEmail());
                 }
-                jsonObject.put("recipient", m.getRecipient().getEmail());
+                jsonObject.put(RECEIVER, m.getRecipient().getEmail());
                 jsonArray.put(jsonObject);
             }
 
@@ -49,12 +51,12 @@ public class MessageFSDAO extends MessageDAO {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                if (jsonObject.has("recipient") && jsonObject.getString("recipient").equals(userEmail)) {
+                if (jsonObject.has(RECEIVER) && jsonObject.getString(RECEIVER).equals(userEmail)) {
                     String content = jsonObject.getString("content");
                     Message msg;
 
-                    if (jsonObject.has("sender") && !jsonObject.isNull("sender")) {
-                        String senderEmail = jsonObject.getString("sender");
+                    if (jsonObject.has(SENDER) && !jsonObject.isNull(SENDER)) {
+                        String senderEmail = jsonObject.getString(SENDER);
                         User sender = getUser(senderEmail);
                         msg = new Message(content, sender, recipient);
                     } else {
