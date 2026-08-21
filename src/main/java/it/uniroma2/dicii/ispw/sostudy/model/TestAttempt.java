@@ -50,7 +50,7 @@ public class TestAttempt{
         this.answers.add(tmpAnswer);
     }
 
-    public Answer<?> getNextAnswer(Answer<?> a) throws ModelException{
+    public Answer getNextAnswer(Answer<?> a) throws ModelException{
          if( a == null ) throw new ModelException("[Class: TestAttempt] There is no next ANSWER for a null object");
 
         int currentPosition;

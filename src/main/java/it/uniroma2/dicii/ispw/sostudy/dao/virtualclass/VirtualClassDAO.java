@@ -4,7 +4,6 @@ import it.uniroma2.dicii.ispw.sostudy.dao.CacheDAO;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.Professor;
 import it.uniroma2.dicii.ispw.sostudy.model.Student;
-import it.uniroma2.dicii.ispw.sostudy.model.Test;
 import it.uniroma2.dicii.ispw.sostudy.model.VirtualClass;
 
 import java.util.List;

@@ -60,6 +60,6 @@ public class VirtualClassDemoDAO extends VirtualClassDAO {
     @Override
     public List<VirtualClass> getClassesByStudent(String studentEmail) throws DAOException{
         //TODO: implement
-        return null;
+        return new ArrayList<>();
     }
 }

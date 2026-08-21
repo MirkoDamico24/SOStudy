@@ -62,8 +62,7 @@ public class ChoiceDBDAO extends ChoiceDAO {
                 ps.setInt(3, dto.questionID());
                 for(Choice c : dto.options()){
                     ps.setString(1, c.getContent());
-                    if(c == dto.solution()) ps.setBoolean(2, true);
-                    else ps.setBoolean(2, false);
+                    ps.setBoolean(2, c.equals(dto.solution()));
                     ps.addBatch();
                 }
             }

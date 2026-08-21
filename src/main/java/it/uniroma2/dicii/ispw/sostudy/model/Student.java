@@ -1,7 +1,5 @@
 package it.uniroma2.dicii.ispw.sostudy.model;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class Student extends User {
     //private List<TestAttempt> takenTests;

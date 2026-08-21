@@ -105,24 +105,31 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
         try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery))
         {
             Object content = null;
+            ps.setInt(4, attemptID);
             for(Answer<?> answer : answers){
                 questionID = questionDAO.getQuestionId(answer.getQuestion(),
-                        testDAO.getTestId(test.getName(), test.getVirtualClass().getName()
-                        ));
+                        testDAO.getTestId(test.getName(), test.getVirtualClass().getName()));
 
                 content = answer.getContent();
-                if(content instanceof Choice selected){
-                    int choiceID = choiceDAO.getChoiceId(selected, questionID);
-                    ps.setString(1, null);
-                    ps.setInt(2, choiceID);
+
+                String textToInsert = null;
+                Integer choiceToInsert = null;
+
+                if (content instanceof Choice selected) {
+                    choiceToInsert = choiceDAO.getChoiceId(selected, questionID);
+                } else if (content instanceof String stringContent) {
+                    textToInsert = stringContent;
                 }
-                else if(content instanceof String stringContent){
-                    ps.setString(1, stringContent);
-                    ps.setInt(2, 0);
+
+                ps.setString(1, textToInsert);
+
+                if (choiceToInsert != null) {
+                    ps.setInt(2, choiceToInsert);
+                } else {
+                    ps.setNull(2, java.sql.Types.INTEGER);
                 }
 
                 ps.setInt(3, answer.getScore());
-                ps.setInt(4, attemptID);
                 ps.setInt(5, questionID);
 
                 ps.addBatch();

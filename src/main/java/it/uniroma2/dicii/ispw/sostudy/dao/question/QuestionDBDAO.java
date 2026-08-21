@@ -18,6 +18,8 @@ import java.util.*;
 
 public class QuestionDBDAO extends QuestionDAO {
     private record CloseIndexes (QuestionDTO q, int index) {}
+    private static final String HEADER = "header";
+    private static final String SCORE = "maxScore";
 
     private Question buildQuestion(int id, String header, int maxScore, QuestionType type)
     {
@@ -52,7 +54,7 @@ public class QuestionDBDAO extends QuestionDAO {
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 QuestionType type = QuestionType.valueOf(rs.getString("type"));
-                toRet = buildQuestion(id, rs.getString("header"), rs.getInt("maxScore"), type);
+                toRet = buildQuestion(id, rs.getString(HEADER), rs.getInt(SCORE), type);
             }
         }
         catch(SQLException | DAOException e){
@@ -77,7 +79,7 @@ public class QuestionDBDAO extends QuestionDAO {
                     questions.add(this.getFromCache(questionID));
                     continue;
                 }
-                Question question = buildQuestion(questionID, rs.getString("header"), rs.getInt("maxScore"), QuestionType.valueOf(rs.getString("type")));
+                Question question = buildQuestion(questionID, rs.getString(HEADER), rs.getInt(SCORE), QuestionType.valueOf(rs.getString("type")));
                 this.addToCache(questionID, question);
                 questions.add(question);
 
@@ -166,7 +168,7 @@ public class QuestionDBDAO extends QuestionDAO {
                     question = this.getFromCache(questionID);
                 } else {
                     QuestionType type = QuestionType.valueOf(rs.getString("type"));
-                    question = buildQuestion(questionID, rs.getString("header"), rs.getInt("maxScore"), type);
+                    question = buildQuestion(questionID, rs.getString(HEADER), rs.getInt(SCORE), type);
                     this.addToCache(questionID, question);
                 }
 

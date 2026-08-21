@@ -32,7 +32,7 @@ public class QuestionMapper {
     }
 
     public static QuestionBean questionToBean(Question question) {
-        QuestionBean questionBean = switch (question) {
+        return switch (question) {
             case OpenQuestion open -> new QuestionBean(open.getHeader(), open.getMaxScore());
 
             case CloseQuestion close -> {
@@ -45,8 +45,6 @@ public class QuestionMapper {
 
             default -> throw new IllegalArgumentException("Invalid question type");
         };
-
-        return questionBean;
     }
 
     public static Question beanToQuestion(QuestionBean question) {

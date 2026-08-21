@@ -29,6 +29,7 @@ public class KnowledgeEvaluationController {
             switch(currentSession.getRole()){
                 case PROFESSOR -> vcls = classDAO.getClassesByProfessor(currentSession.getCurrentProfessor().getEmail());
                 case STUDENT -> vcls = classDAO.getClassesByStudent(currentSession.getCurrentStudent().getEmail());
+                default -> throw new ControllerException("Invalid session role");
             }
         }
         catch(DAOException e){

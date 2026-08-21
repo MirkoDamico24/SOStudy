@@ -1,8 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.attempt;
 
-import it.uniroma2.dicii.ispw.sostudy.dao.CacheDAO;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
-import it.uniroma2.dicii.ispw.sostudy.model.Test;
 import it.uniroma2.dicii.ispw.sostudy.model.TestAttempt;
 
 import java.util.HashSet;
