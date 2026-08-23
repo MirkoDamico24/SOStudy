@@ -1,12 +1,16 @@
 package it.uniroma2.dicii.ispw.sostudy.bean;
 
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
+import it.uniroma2.dicii.ispw.sostudy.eng.timer.TestTimerService;
 
 public class SessionBean {
     private StudentBean student;
     private ProfessorBean professor;
     private final int sessionID;
     private UserRole currentRole;
+    private VirtualClassBean currentClass;
+    private TestBean test;
+    private TestTimerService timer;
 
     public SessionBean(StudentBean student, int id) {
         this.student = student;
@@ -40,4 +44,27 @@ public class SessionBean {
         this.currentRole = currentRole;
     }
 
+    public VirtualClassBean getCurrentClass() {
+        return currentClass;
+    }
+
+    public void setCurrentClass(VirtualClassBean currentClass) {
+        this.currentClass = currentClass;
+    }
+
+    public TestBean getTest() {
+        return test;
+    }
+
+    public void setTest(TestBean test) {
+        this.test = test;
+    }
+
+    public TestTimerService getTimer() {
+        return timer;
+    }
+
+    public void setTimer(TestTimerService timer) {
+        this.timer = timer;
+    }
 }

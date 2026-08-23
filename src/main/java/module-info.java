@@ -8,6 +8,7 @@ module it.uniroma2.dicii.ispw.sostudy {
     requires jdk.compiler;
     requires org.checkerframework.checker.qual;
     requires com.sun.jna.platform;
+    requires java.desktop;
 
     opens it.uniroma2.dicii.ispw.sostudy to javafx.fxml;
     exports it.uniroma2.dicii.ispw.sostudy.controller;

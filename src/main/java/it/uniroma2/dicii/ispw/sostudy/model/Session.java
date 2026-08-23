@@ -8,6 +8,8 @@ public class Session {
     private UserRole role;
     private VirtualClass currentClass;
     private int sessionID;
+    private Test currentTest;
+    private TestAttempt currentAttempt;
 
     public Session(int sessionID, Student currentStudent) {
         this.sessionID = sessionID;
@@ -59,5 +61,21 @@ public class Session {
 
     public VirtualClass getCurrentClass() {
         return currentClass;
+    }
+
+    public void setCurrentTest(Test currentTest) {
+        this.currentTest = currentTest;
+    }
+
+    public Test getCurrentTest() {
+        return currentTest;
+    }
+
+    public void setCurrentAttempt(TestAttempt currentAttempt) {
+        this.currentAttempt = currentAttempt;
+    }
+
+    public TestAttempt getCurrentAttempt() {
+        return currentAttempt;
     }
 }

@@ -19,4 +19,8 @@ public class OpenQuestion extends Question{
         return new OpenQuestion(this.getHeader(), this.getMaxScore());
     }
 
+    @Override
+    public Answer<String> createAnswer(String textualContent, Integer integerContent) {
+        return new Answer<>(textualContent, this);
+    }
 }

@@ -56,8 +56,12 @@ DROP TABLE IF EXISTS `SoStudyDB`.`ClassStudents` ;
 CREATE TABLE `SoStudyDB`.`ClassStudents` (
 `student` VARCHAR(45) NOT NULL,
 `class` INT UNSIGNED NOT NULL,
-FOREIGN KEY (`student`) REFERENCES `SoStudyDB`.`Student` (`email`),
+FOREIGN KEY (`student`) REFERENCES `SoStudyDB`.`Student` (`email`)
+ON DELETE CASCADE
+ON UPDATE CASCADE,
 FOREIGN KEY (`class`) REFERENCES `SoStudyDB`.`Class` (`code`)
+ON DELETE CASCADE
+ON UPDATE CASCADE
 )
 ENGINE = InnoDB;
 
@@ -133,15 +137,21 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `SoStudyDB`.`Risposte` ;
 CREATE TABLE `SoStudyDB`.`Risposte` (
 `code` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-`textualContent` VARCHAR(250),
+`textualContent` TEXT,
 `integerContent` INT UNSIGNED,
 `score` INT UNSIGNED,
 `attempt` INT UNSIGNED NOT NULL,
 `question` INT UNSIGNED NOT NULL,
 PRIMARY KEY (`code`),
-FOREIGN KEY (`attempt`) REFERENCES `SoStudyDB`.`Tentativo` (`testID`),
-FOREIGN KEY (`question`) REFERENCES `SoStudyDB`.`Domanda` (`code`),
+FOREIGN KEY (`attempt`) REFERENCES `SoStudyDB`.`Tentativo` (`testID`)
+ON DELETE CASCADE
+ON UPDATE CASCADE,
+FOREIGN KEY (`question`) REFERENCES `SoStudyDB`.`Domanda` (`code`)
+ON DELETE CASCADE
+ON UPDATE CASCADE,
 FOREIGN KEY (`integerContent`) REFERENCES `SoStudyDB`.`OpzioniDomande` (`code`)
+ON DELETE CASCADE
+ON UPDATE CASCADE
 )
 ENGINE = InnoDB;
 
@@ -152,8 +162,12 @@ CREATE TABLE `SoStudyDB`.`Messaggi` (
 `sender` VARCHAR(45),
 `recipient` VARCHAR(45) NOT NULL,
 PRIMARY KEY (`messageid`),
-FOREIGN KEY (`sender`) REFERENCES `SoStudyDB`.`Utenti` (`email`),
+FOREIGN KEY (`sender`) REFERENCES `SoStudyDB`.`Utenti` (`email`)
+ON DELETE CASCADE
+ON UPDATE CASCADE,
 FOREIGN KEY (`recipient`) REFERENCES `SoStudyDB`.`Utenti` (`email`)
+ON DELETE CASCADE
+ON UPDATE CASCADE
 )
 ENGINE = InnoDB;
 

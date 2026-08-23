@@ -54,10 +54,9 @@ public abstract class Navigator {
             case OPENQUESTIONVIEW -> createOpenQuestionView();
             case CLOSEQUESTIONVIEW -> createCloseQuestionView();
             case RECAP -> createRecapView();
-            /*  YET TO IMPLEMENT
-                case OPENANSWERVIEW ->  createOpenAnswerView();
-                case CLOSEANSWERVIEW ->  createCloseAnswerView();
-            */
+            case INSIDECLASSVIEW -> createInsideClassView();
+            case OPENANSWERVIEW ->  createOpenAnswerView();
+            case CLOSEANSWERVIEW ->  createCloseAnswerView();
         }
     }
 
@@ -73,6 +72,11 @@ public abstract class Navigator {
 
     public void goToClassesView(){
         setCurrentView(Views.CLASSVIEW);
+        nextView();
+    }
+
+    public void goToInsideClassView(){
+        setCurrentView(Views.INSIDECLASSVIEW);
         nextView();
     }
 
@@ -126,16 +130,14 @@ public abstract class Navigator {
     public abstract void createHomeView();
     public abstract void creatTestView();
     public abstract void createClassesView();
+    public abstract void createInsideClassView();
 
     //professor only
     public abstract void createOpenQuestionView();
     public abstract void createCloseQuestionView();
     public abstract void createRecapView();
 
-    /*  YET TO IMPLEMENT
-
-        //student only
-        public abstract void createOpenAnswerView();
-        public abstract void createCloseAnswerView();
-   */
+    //student only
+    public abstract void createOpenAnswerView();
+    public abstract void createCloseAnswerView();
 }

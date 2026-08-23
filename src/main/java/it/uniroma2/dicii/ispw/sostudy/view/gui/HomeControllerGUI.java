@@ -41,11 +41,11 @@ public class HomeControllerGUI extends BaseControllerGUI implements MessageObser
 
     public void prepare(boolean isProfessor){
         configureViewByRole(isProfessor);
-        setUsernameBundle(isProfessor);
+        setUsernameBundle();
 
         nctrl.registerAsNotificationObserver(this, navigatorGUI.getSession());
 
-        List<MessageBean> messages = nctrl.fetchUserNotifications(navigatorGUI.getCorrectUserBean(), navigatorGUI.getSession());
+        List<MessageBean> messages = nctrl.fetchUserNotifications(navigatorGUI.getCorrectUserBean());
         populateNotificationSection(messages);
     }
 
@@ -54,9 +54,13 @@ public class HomeControllerGUI extends BaseControllerGUI implements MessageObser
             btnCreaTest.setVisible(false);
             btnCreaTest.setManaged(false);
         }
+        else{
+            btnCreaTest.setVisible(true);
+            btnCreaTest.setManaged(true);
+        }
     }
 
-    public void setUsernameBundle(boolean isProfessor) {
+    public void setUsernameBundle() {
         userNameLabel.setText(getFormattedUsername());
     }
 
@@ -107,7 +111,7 @@ public class HomeControllerGUI extends BaseControllerGUI implements MessageObser
 
         List<MessageBean> messages = null;
         try {
-            messages = nctrl.fetchUserNotifications(ub, navigatorGUI.getSession());
+            messages = nctrl.fetchUserNotifications(ub);
         }
         catch(ControllerException e) {
             Platform.runLater(() ->

@@ -25,6 +25,9 @@ public class NavigatorGUI extends Navigator{
     private CreaDomandaApertaControllerGUI openQuestion;
     private CreaDomandaMultiplaControllerGUI closeQuestion;
     private RiepilogoTestControllerGUI testRecap;
+    private InsideClassViewControllerGUI insideClassView;
+    private CloseQuestionViewController closeQuestionView;
+    private OpenQuestionViewController openQuestionView;
 
     private static final String TITLEERROR = "Errore grafico";
     private static final String MESSAGE = "Risorse non disponibili";
@@ -168,6 +171,24 @@ public class NavigatorGUI extends Navigator{
     }
 
     @Override
+    public void createInsideClassView(){
+        try{
+            if(this.insideClassView == null) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/it/uniroma2/dicii/ispw/sostudy/InsideClassView.fxml"));
+                Parent root = fxmlLoader.load();
+                this.insideClassView = fxmlLoader.getController();
+                this.insideClassView.setView(root);
+                this.insideClassView.setNavigatorGUI(this);
+            }
+            this.insideClassView.prepare();
+            buildView(this.insideClassView.getView());
+        }
+        catch(IOException e) {
+            showAlert(TITLEERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione dell'interno della virtual class.");
+        }
+    }
+
+    @Override
     public void createOpenQuestionView(){
         try{
             if(this.openQuestion == null) {
@@ -215,6 +236,42 @@ public class NavigatorGUI extends Navigator{
             }
             this.testRecap.prepare();
             buildView(this.testRecap.getView());
+        }
+        catch(IOException e) {
+            showAlert(TITLEERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della test recap view");
+        }
+    }
+
+    @Override
+    public void createOpenAnswerView(){
+        try{
+            if(this.openQuestionView == null) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/it/uniroma2/dicii/ispw/sostudy/OpenQuestionView.fxml"));
+                Parent root = fxmlLoader.load();
+                this.openQuestionView = fxmlLoader.getController();
+                this.openQuestionView.setView(root);
+                this.openQuestionView.setNavigatorGUI(this);
+            }
+            this.openQuestionView.prepare();
+            buildView(this.openQuestionView.getView());
+        }
+        catch(IOException e) {
+            showAlert(TITLEERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della open Answer view");
+        }
+    }
+
+    @Override
+    public void createCloseAnswerView(){
+        try{
+            if(this.closeQuestionView == null) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/it/uniroma2/dicii/ispw/sostudy/CloseQuestionView.fxml"));
+                Parent root = fxmlLoader.load();
+                this.closeQuestionView = fxmlLoader.getController();
+                this.closeQuestionView.setView(root);
+                this.closeQuestionView.setNavigatorGUI(this);
+            }
+            this.closeQuestionView.prepare();
+            buildView(this.closeQuestionView.getView());
         }
         catch(IOException e) {
             showAlert(TITLEERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della test recap view");

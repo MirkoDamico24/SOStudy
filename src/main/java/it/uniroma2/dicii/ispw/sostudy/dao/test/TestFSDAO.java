@@ -177,7 +177,7 @@ public class TestFSDAO extends TestDAO {
     }
 
     @Override
-    public int getTestId(String testName, String className) throws DAOException {
+    public int getTestId(String testName, int classId) throws DAOException {
         try {
             JSONArray jsonArray = JSONHelper.readJsonFile(FILE_PATH);
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -187,10 +187,9 @@ public class TestFSDAO extends TestDAO {
                     continue;
                 }
 
-                int classId = jsonObject.getInt(KEY_CLASS);
                 VirtualClass virtualClass = DAOFactory.getInstance().getVirtualClassDAO().getVirtualClassById(classId);
 
-                if (virtualClass != null && virtualClass.getName().equals(className)) {
+                if (virtualClass != null && virtualClass.getName().equals(classId)) {
                     return jsonObject.getInt(KEY_ID);
                 }
             }

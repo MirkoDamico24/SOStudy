@@ -1,7 +1,9 @@
 package it.uniroma2.dicii.ispw.sostudy.view.gui;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.VirtualClassBean;
+import it.uniroma2.dicii.ispw.sostudy.controller.KnowledgeEvaluationController;
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
+import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,8 +18,10 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
+import java.util.List;
 
-public class VirtualClassesViewControllerGUI {
+
+public class VirtualClassesViewControllerGUI extends BaseControllerGUI{
     @FXML private Button btnCreaClasse;
     @FXML private Button btnNotifiche;
 
@@ -31,35 +35,21 @@ public class VirtualClassesViewControllerGUI {
     // --- Contenitore Classi ---
     @FXML private FlowPane classiFlowPane;
 
-    private NavigatorGUI navigatorGUI;
-    private Parent root;
-
-    public void setNavigatorGUI(NavigatorGUI navigatorGUI) {
-        this.navigatorGUI = navigatorGUI;
-    }
-
-    public void setView(Parent root) {
-        this.root = root;
-    }
-
-    public Parent getView(){
-        return root;
-    }
-
-
     public void prepare() {
         configureViewByRole(navigatorGUI.getContext().getSession().getCurrentRole() == UserRole.PROFESSOR);
+        setUsernameBundle();
 
-        /*// 2. Creiamo una lista fittizia di classi
-        List<VirtualClassBean> mieClassi = Arrays.asList(
-                new ClasseMock("C1", "Informatica - 5A", "Prof. Mario Rossi", null),
-                new ClasseMock("C2", "Matematica - 3B", "Prof. Luigi Verdi", null),
-                new ClasseMock("C3", "Sistemi e Reti - 5A", "Prof. Mario Rossi", null),
-                new ClasseMock("C4", "Informatica - 4A", "Prof. Mario Rossi", null)
-        );
+        KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
+        List<VirtualClassBean> classes = null;
 
-        // 3. Popoliamo la schermata
-        popolaClassi(mieClassi);*/
+        try{
+            classes = ctrl.getUserClasses(navigatorGUI.getSession());
+        }
+        catch(ControllerException e){
+            this.showAlert("Errore.", e.getMessage(), "Riprovare");
+        }
+
+        populateClasses(classes);
     }
 
 
@@ -71,16 +61,20 @@ public class VirtualClassesViewControllerGUI {
         }
     }
 
+    public void setUsernameBundle() {
+        profNameLabel.setText(getFormattedUsername());
+    }
 
-    /*public void popolaClassi(List<ClasseMock> classi) {
+
+    public void populateClasses(List<VirtualClassBean> classes) {
         classiFlowPane.getChildren().clear();
-        for (ClasseMock classe : classi) {
-            VBox card = creaCardClasse(classe);
+        for (VirtualClassBean vcls : classes) {
+            VBox card = createClassCard(vcls);
             classiFlowPane.getChildren().add(card);
         }
-    }*/
+    }
 
-    private VBox creaCardClasse(VirtualClassBean cls) {
+    private VBox createClassCard(VirtualClassBean virtualClassBean) {
         VBox card = new VBox(15);
         card.setAlignment(Pos.TOP_CENTER);
         card.setPrefWidth(320);
@@ -88,30 +82,30 @@ public class VirtualClassesViewControllerGUI {
         card.setStyle("-fx-background-color: #F5FCFF; -fx-border-color: #8CB8F5; -fx-border-width: 1.5; -fx-border-radius: 12; -fx-background-radius: 12;");
         card.setPadding(new Insets(20));
 
-        ImageView imgView = new ImageView();
-        imgView.setFitWidth(280);
-        imgView.setFitHeight(150);
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(280);
+        imageView.setFitHeight(150);
 
         VBox imagePlaceholder = new VBox();
         imagePlaceholder.setPrefSize(280, 150);
         imagePlaceholder.setStyle("-fx-background-color: #E0E0E0; -fx-background-radius: 8;");
 
-        // --- COLORE NOME CLASSE ---
-        Label lblNomeClasse = new Label(cls.getClassName());
-        lblNomeClasse.setFont(new Font("Serif Bold", 24));
-        lblNomeClasse.setStyle("-fx-text-fill: #555555;");
-        lblNomeClasse.setUnderline(true);
-        lblNomeClasse.setCursor(Cursor.HAND);
+        Label classNameLabel = new Label(virtualClassBean.getClassName());
+        classNameLabel.setFont(new Font("Serif Bold", 24));
+        classNameLabel.setStyle("-fx-text-fill: #555555;");
+        classNameLabel.setUnderline(true);
+        classNameLabel.setCursor(Cursor.HAND);
 
-        lblNomeClasse.setOnMouseClicked(event -> {
+        classNameLabel.setOnMouseClicked(event -> {
+            getNavigatorGUI().getSession().setCurrentClass(virtualClassBean);
+            getNavigatorGUI().goToInsideClassView();
         });
 
-        // --- COLORE NOME PROFESSORE ---
-        Label lblProfessore = new Label(cls.getProfessor().getName());
-        lblProfessore.setFont(new Font("System Regular", 18));
-        lblProfessore.setStyle("-fx-text-fill: #777777;");
+        Label professorLabel = new Label(virtualClassBean.getProfessor().getName() + " " + virtualClassBean.getProfessor().getSurname());
+        professorLabel.setFont(new Font("System Regular", 18));
+        professorLabel.setStyle("-fx-text-fill: #777777;");
 
-        card.getChildren().addAll(imagePlaceholder, lblNomeClasse, lblProfessore);
+        card.getChildren().addAll(imagePlaceholder, classNameLabel, professorLabel);
 
         return card;
     }

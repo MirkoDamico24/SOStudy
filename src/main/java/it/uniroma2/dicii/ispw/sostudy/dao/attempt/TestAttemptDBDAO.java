@@ -104,11 +104,13 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
 
         try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery))
         {
+            int classId = factory.getVirtualClassDAO().getClassID(test.getVirtualClass().getName(), test.getVirtualClass().getProf().getEmail());
+
             Object content = null;
             ps.setInt(4, attemptID);
             for(Answer<?> answer : answers){
                 questionID = questionDAO.getQuestionId(answer.getQuestion(),
-                        testDAO.getTestId(test.getName(), test.getVirtualClass().getName()));
+                        testDAO.getTestId(test.getName(), classId));
 
                 content = answer.getContent();
 
@@ -137,15 +139,18 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
 
     @Override
     public void saveTestAttempt(TestAttempt testAttempt) {
-        String sqlQuery = "INSERT INTO Tentativo VALUES (?, ?, ?, ?, ?, ?)";
+        String sqlQuery = "INSERT INTO Tentativo (`grade`, `gradingStatus`, `handInTime`, `handInDate`, `test`, `student`) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
+        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)){
             ps.setInt(1, testAttempt.getGrade());
             ps.setString(2, testAttempt.getTestGradingStatus().toString());
             ps.setTime(3, Time.valueOf(testAttempt.getHandInTime()));
             ps.setDate(4, Date.valueOf(testAttempt.getHandInDate()));
 
-            int testId = testDAO.getTestId(testAttempt.getTest().getName(), testAttempt.getTest().getVirtualClass().getName());
+            int classId = factory.getVirtualClassDAO().getClassID(testAttempt.getTest().getVirtualClass().getName(), testAttempt.getTest().getVirtualClass().getProf().getEmail());
+
+            int testId = testDAO.getTestId(testAttempt.getTest().getName(), classId);
+            System.out.println("Test id: " + testId);
             ps.setInt(5, testId);
 
             ps.setString(6, testAttempt.getStudent().getEmail());

@@ -35,6 +35,10 @@ public class ContextContainer {
         this.questions.add(questions);
     }
 
+    public void setQuestions(List<QuestionBean> questions) {
+        this.questions = questions;
+    }
+
     public List<QuestionBean> getQuestions() {
         return questions;
     }

@@ -1,92 +1,94 @@
 package it.uniroma2.dicii.ispw.sostudy.view.gui;
 
+import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
+import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
+import it.uniroma2.dicii.ispw.sostudy.controller.KnowledgeEvaluationController;
+import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
+import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
+import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
+import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import java.util.List;
-import java.util.Arrays;
 
-public class InsideClassViewControllerGUI {
+import javax.swing.text.View;
+import java.util.List;
+import javafx.scene.control.ScrollPane;
+
+public class InsideClassViewControllerGUI extends BaseControllerGUI{
     @FXML private Button btnNotifiche;
     @FXML private Button btnHome;
     @FXML private Button btnCreaTest;
     @FXML private Button btnNomeClasseNav;
 
-    // --- Profilo ---
     @FXML private ImageView userAvatar;
     @FXML private Label userNameLabel;
 
-    // --- Contenuto Centrale ---
     @FXML private Button btnInvitaStudente;
+    @FXML private ScrollPane testListScrollPane;
     @FXML private VBox listaTestVBox;
 
     @FXML
-    public void initialize() {
-        // Esempio di utilizzo: (cambia a 'false' per vedere la versione Studente)
-        configuraVista(false, "IPSWvirtualclass", "Prof. Mario Rossi", null);
+    public void prepare() {
+        configureViewByRole(getNavigatorGUI().getContext().getSession().getCurrentRole() == UserRole.PROFESSOR);
+        setUsernameBundle();
+        configureScrollPane();
 
-        // Simulazione caricamento ultimi 3 test
-        List<String> testAssegnati = Arrays.asList(
-                "Test requisiti funzionali",
-                "Test applicazione BCE",
-                "Test activity diagram"
-        );
-        popolaTestRecenti(testAssegnati);
+        btnNomeClasseNav.setText(getNavigatorGUI().getContext().getSession().getCurrentClass().getClassName());
+
+        List<TestBean> availableTests = getNavigatorGUI().getContext().getSession().getCurrentClass().getTest();
+        populateTests(availableTests);
     }
 
-    /**
-     * Adatta la vista base, nascondendo gli elementi se l'utente è uno Studente,
-     * e imposta i testi della navbar e del profilo.
-     */
-    public void configuraVista(boolean isProfessore, String nomeClasse, String nomeUtente, Image avatar) {
-        // Imposta i nomi nella UI
-        btnNomeClasseNav.setText(nomeClasse);
-        userNameLabel.setText(nomeUtente);
-        if (avatar != null) {
-            userAvatar.setImage(avatar);
-        }
+    private void configureScrollPane() {
+        testListScrollPane.setFitToWidth(true);
+        testListScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        testListScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        testListScrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+    }
 
-        // Se l'utente NON è un professore, nasconde le funzionalità extra
+    private void configureViewByRole(boolean isProfessore) {
         if (!isProfessore) {
             btnCreaTest.setVisible(false);
-            btnCreaTest.setManaged(false); // Riautomaticamente la Navbar al centro
+            btnCreaTest.setManaged(false);
 
             btnInvitaStudente.setVisible(false);
             btnInvitaStudente.setManaged(false);
         }
     }
 
-    /**
-     * Costruisce le righe dei test dinamicamente, aggiungendo una linea di
-     * separazione (stile underline esteso) sotto ciascuna di esse.
-     */
-    public void popolaTestRecenti(List<String> nomiTest) {
+    public void setUsernameBundle() {
+        userNameLabel.setText(getFormattedUsername());
+    }
+
+    public void populateTests(List<TestBean> tests) {
         listaTestVBox.getChildren().clear();
 
-        for (String nomeTest : nomiTest) {
-            // Contenitore per il singolo test e la sua linea
+        for (TestBean test : tests) {
             VBox testItemBox = new VBox(10);
 
-            Label lblTest = new Label(nomeTest);
+            Label lblTest = new Label(test.getName());
             lblTest.setFont(new Font("Serif", 28));
-            // Stile grigio, con cursore cliccabile
             lblTest.setStyle("-fx-text-fill: #555555; -fx-cursor: hand;");
 
-            // Aggiungo evento click sul test per andare (es.) al dettaglio del test
-            lblTest.setOnMouseClicked(event ->{});
+            lblTest.setOnMouseClicked(event ->{
+                Views next = getNextView(test);
+                switch(next) {
+                    case OPENANSWERVIEW -> getNavigatorGUI().goToOpenAnswerView();
+                    case CLOSEANSWERVIEW -> getNavigatorGUI().goToCloseAnswerView();
+                }
+            });
 
-            // Linea di divisione grigio chiaro sotto il test
             Region underline = new Region();
             underline.setPrefHeight(1.5);
             underline.setMinHeight(1.5);
-            underline.setStyle("-fx-background-color: #CCCCCC;"); // Grigio tenue
+            underline.setStyle("-fx-background-color: #CCCCCC;");
 
             testItemBox.getChildren().addAll(lblTest, underline);
             testItemBox.setPadding(new Insets(10, 0, 10, 0));
@@ -95,20 +97,38 @@ public class InsideClassViewControllerGUI {
         }
     }
 
-    // --- AZIONI BOTTONI ---
+    private Views getNextView(TestBean test) {
+        KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
+        List<QuestionBean> questions = null;
+
+        try{
+            questions = ctrl.loadRequiredTest(getNavigatorGUI().getSession(), test);
+        }
+        catch(ControllerException e){
+            showAlert("Errore", e.getMessage(), "");
+        }
+
+        getNavigatorGUI().getContext().setQuestions(questions);
+        getNavigatorGUI().getContext().setTest(test);
+
+        if(getNavigatorGUI().getContext().getQuestions().getFirst().isOpenQuestion()) return Views.OPENANSWERVIEW;
+        else return Views.CLOSEANSWERVIEW;
+    }
 
     @FXML
     void handleNavHome(ActionEvent event) {
-
+        getNavigatorGUI().setPreviousView(Views.INSIDECLASSVIEW);
+        getNavigatorGUI().goToHomeView();
     }
 
     @FXML
     void handleNavCreaTest(ActionEvent event) {
-
+        getNavigatorGUI().setPreviousView(Views.INSIDECLASSVIEW);
+        getNavigatorGUI().goToCreateTestView();
     }
 
     @FXML
     void handleInvitaStudente(ActionEvent event) {
-
+            //yet to implement
     }
 }

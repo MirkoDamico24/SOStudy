@@ -131,13 +131,13 @@ public class TestDBDAO extends TestDAO {
     }
 
     @Override
-    public int getTestId(String testName, String className) throws DAOException {
+    public int getTestId(String testName, int classId) throws DAOException {
         int testId = 0;
         String sqlQuery = "SELECT code FROM Test WHERE name = ? and class = ?";
 
         try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
             ps.setString(1, testName);
-            ps.setString(2, className);
+            ps.setInt(2, classId);
             ps.executeQuery();
 
             ResultSet rs = ps.getResultSet();

@@ -31,9 +31,10 @@ public class TestAttempt{
         this.handInDate = handInDate;
     }
 
-    public TestAttempt(Test test, Student student) {
+    public TestAttempt(Test test, Student student, LocalDate handInDate) {
         this.test = test;
         this.student = student;
+        this.handInDate = handInDate;
     }
 
     public TestAttempt(Test test, List<Answer<?>> answers, Student student) {
@@ -63,8 +64,10 @@ public class TestAttempt{
     public void computeGrade(){
         int totalScore = 0;
 
-        for(Answer<?> a : this.answers){
-            totalScore += a.getScore();
+        if(this.answers != null && !this.answers.isEmpty()){
+            for(Answer<?> a : this.answers){
+                totalScore += a.getScore();
+            }
         }
 
         this.grade = totalScore;

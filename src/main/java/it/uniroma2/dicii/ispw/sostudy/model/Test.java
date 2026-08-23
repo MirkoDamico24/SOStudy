@@ -72,9 +72,14 @@ public class Test {
     }
 
     public void gradeTest(TestAttempt test) throws ModelException{
-        if(!this.tests.contains(test)) throw new ModelException("[Class: Test] Cannot evaluate an attempt that is not relative to this test");
+        if(!test.getTest().equals(this)) throw new ModelException("[Class: Test] Cannot evaluate an attempt that is not relative to this test");
 
         List<Answer<?>> testAnswers = test.getAnswers();
+        if(testAnswers == null || testAnswers.isEmpty()){
+            test.computeGrade();
+            test.setTestGradingStatus(TestGradingStatus.FULLYGRADED);
+        }
+
         for(Answer<?> a : testAnswers){
             int index = testAnswers.indexOf(a);
             Question q = this.questions.get(index);

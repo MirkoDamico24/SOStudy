@@ -35,7 +35,7 @@ public class HomeControllerCLI extends BaseControllerCLI implements MessageObser
         UserBean ub = nav.getCorrectUserBean();
 
         try {
-            notifications = nctrl.fetchUserNotifications(ub, nav.getContext().getSession());
+            notifications = nctrl.fetchUserNotifications(ub);
         }
         catch(ControllerException e){
             System.err.println("Errore durante il caricamento delle notifiche.");

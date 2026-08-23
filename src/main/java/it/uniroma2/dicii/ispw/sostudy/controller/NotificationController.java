@@ -36,7 +36,7 @@ public class NotificationController {
         messageDAO.save(newMsg);       //message saved in the persistency layer
     }
 
-    public List<MessageBean> fetchUserNotifications(UserBean ub, SessionBean session) throws ControllerException {
+    public List<MessageBean> fetchUserNotifications(UserBean ub) throws ControllerException {
         List<Message> fetched = null;
 
         try {

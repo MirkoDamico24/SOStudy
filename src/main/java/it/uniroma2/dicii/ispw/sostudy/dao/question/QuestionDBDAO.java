@@ -184,7 +184,7 @@ public class QuestionDBDAO extends QuestionDAO {
     @Override
     public Integer getQuestionId(Question question, int testID){
         Integer questionID = null;
-        String sqlQuery = "SELECET code FROM Domanda WHERE header = ? and test = ?";
+        String sqlQuery = "SELECT code FROM Domanda WHERE header = ? and test = ?";
 
         try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
             ps.setString(1, question.getHeader());

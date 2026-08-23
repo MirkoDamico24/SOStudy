@@ -11,6 +11,11 @@ public class Answer<T>{
         this.question = question;
     }
 
+    public Answer(T content, Question question) {
+        this.content = content;
+        this.question = question;
+    }
+
     public Answer<T> copy() {
         return new Answer<>(this.getScore(), this.getContent(), this.getQuestion());
     }

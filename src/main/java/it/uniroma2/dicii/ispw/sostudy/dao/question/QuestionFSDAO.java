@@ -137,10 +137,9 @@ public class QuestionFSDAO extends QuestionDAO {
             JSONArray jsonArray = JSONHelper.readJsonFile(FILE_PATH);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject testObject = jsonArray.getJSONObject(i);
-                if (!testObject.has(KEY_TEST_ID)) continue;
+                if (!testObject.has(KEY_TEST_ID) || !testIDs.contains(testObject.getInt(KEY_TEST_ID))) continue;
 
                 int testID = testObject.getInt(KEY_TEST_ID);
-                if (!testIDs.contains(testID)) continue;
 
                 questionsByTest.put(testID, extractQuestionsFromTestObject(testObject, testID));
             }

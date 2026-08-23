@@ -113,11 +113,12 @@ public class VirtualClassDBDAO extends VirtualClassDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                virtualClasses.add(this.getVirtualClassById(rs.getInt("code")));
+                virtualClasses.add(this.getVirtualClassById(rs.getInt("class")));
             }
         }
         catch (SQLException e) {
-            throw new DAOException("Database error occurred while retrieving classes by professor email.");
+            e.printStackTrace();
+            throw new DAOException("Database error occurred while retrieving classes by student email.");
         }
 
         return virtualClasses;

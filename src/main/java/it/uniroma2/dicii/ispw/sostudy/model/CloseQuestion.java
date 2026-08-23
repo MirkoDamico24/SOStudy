@@ -72,4 +72,9 @@ public class CloseQuestion extends Question {
         return new CloseQuestion(this.getHeader(), this.getMaxScore(),  this.getChoices(), this.solution);
     }
 
+    @Override
+    public Answer<Choice>  createAnswer(String textualContent, Integer integerContent) {
+        return new Answer<>(this.getChoices().get(integerContent), this);
+    }
+
 }

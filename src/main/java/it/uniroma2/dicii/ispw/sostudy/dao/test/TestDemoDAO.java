@@ -26,7 +26,7 @@ public class TestDemoDAO extends TestDAO {
     }
 
     @Override
-    public int getTestId(String testName, String className) throws DAOException{
+    public int getTestId(String testName, int classId) throws DAOException{
         //TODO: implement
         return 0;
     }
