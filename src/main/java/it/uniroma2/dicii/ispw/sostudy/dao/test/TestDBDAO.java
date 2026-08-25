@@ -150,4 +150,22 @@ public class TestDBDAO extends TestDAO {
         }
         return testId;
     }
+
+    @Override
+    public List<TestAttempt> getTestAttempt(Test test) throws DAOException{
+        int classId = 0;
+        int testId = 0;
+        List<TestAttempt> attempts = null;
+
+        try{
+            classId = DAOFactory.getInstance().getVirtualClassDAO().getClassID(test.getVirtualClass().getName(), test.getVirtualClass().getProf().getEmail());
+            testId = this.getTestId(test.getName(), classId);
+            attempts = DAOFactory.getInstance().getTestAttemptDAO().getTestAttempt(testId);
+        }
+        catch(DAOException e){
+            throw new DAOException("Error while connecting to database. " + e.getMessage());
+        }
+
+        return attempts;
+    }
 }

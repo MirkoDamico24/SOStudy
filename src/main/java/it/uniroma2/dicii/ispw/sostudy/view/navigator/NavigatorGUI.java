@@ -28,6 +28,8 @@ public class NavigatorGUI extends Navigator{
     private InsideClassViewControllerGUI insideClassView;
     private CloseQuestionViewController closeQuestionView;
     private OpenQuestionViewController openQuestionView;
+    private EvaluateOpenAnswerViewControllerGUI  evaluateOpenAnswerView;
+    private TestAttemptViewControllerGUI testAttemptView;
 
     private static final String TITLEERROR = "Errore grafico";
     private static final String MESSAGE = "Risorse non disponibili";
@@ -275,6 +277,42 @@ public class NavigatorGUI extends Navigator{
         }
         catch(IOException e) {
             showAlert(TITLEERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della test recap view");
+        }
+    }
+
+    @Override
+    public void createEvaluateOpenAnswerView(){
+        try{
+            if(this.evaluateOpenAnswerView == null) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/it/uniroma2/dicii/ispw/sostudy/OpenAnswerEvaluationView.fxml"));
+                Parent root = fxmlLoader.load();
+                this.evaluateOpenAnswerView = fxmlLoader.getController();
+                this.evaluateOpenAnswerView.setView(root);
+                this.evaluateOpenAnswerView.setNavigatorGUI(this);
+            }
+            this.evaluateOpenAnswerView.prepare();
+            buildView(this.evaluateOpenAnswerView.getView());
+        }
+        catch(IOException e) {
+            showAlert(TITLEERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della view per la valutazione del test");
+        }
+    }
+
+    @Override
+    public void createTestAttemptView(){
+        try{
+            if(this.testAttemptView == null) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/it/uniroma2/dicii/ispw/sostudy/TestAttemptView.fxml"));
+                Parent root = fxmlLoader.load();
+                this.testAttemptView = fxmlLoader.getController();
+                this.testAttemptView.setView(root);
+                this.testAttemptView.setNavigatorGUI(this);
+            }
+            this.testAttemptView.prepare();
+            buildView(this.testAttemptView.getView());
+        }
+        catch(IOException e) {
+            showAlert(TITLEERROR, MESSAGE, "Non è stato possibile trovare il file di configurazione della view per la visualizzazione dei tentativi di test");
         }
     }
 }

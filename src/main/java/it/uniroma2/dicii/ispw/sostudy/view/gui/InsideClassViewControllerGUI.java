@@ -5,29 +5,24 @@ import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.KnowledgeEvaluationController;
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
-import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
+
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-import javax.swing.text.View;
 import java.util.List;
 import javafx.scene.control.ScrollPane;
 
 public class InsideClassViewControllerGUI extends BaseControllerGUI{
-    @FXML private Button btnNotifiche;
-    @FXML private Button btnHome;
     @FXML private Button btnCreaTest;
     @FXML private Button btnNomeClasseNav;
 
-    @FXML private ImageView userAvatar;
     @FXML private Label userNameLabel;
 
     @FXML private Button btnInvitaStudente;
@@ -78,10 +73,22 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI{
             lblTest.setStyle("-fx-text-fill: #555555; -fx-cursor: hand;");
 
             lblTest.setOnMouseClicked(event ->{
-                Views next = getNextView(test);
-                switch(next) {
-                    case OPENANSWERVIEW -> getNavigatorGUI().goToOpenAnswerView();
-                    case CLOSEANSWERVIEW -> getNavigatorGUI().goToCloseAnswerView();
+                switch(getNavigatorGUI().getSession().getCurrentRole()) {
+                    case UserRole.STUDENT -> {
+                        showAlert("Test", "Il tentativo sarà avviato", "Premere 'Ok' per iniziare");
+                        Views next = getNextView(test);
+                        switch (next) {
+                            case OPENANSWERVIEW -> getNavigatorGUI().goToOpenAnswerView();
+                            case CLOSEANSWERVIEW -> getNavigatorGUI().goToCloseAnswerView();
+                            default -> showAlert("Errore", "Tipo di domanda successivo non supportato dalla UI", "");
+                        }
+                    }
+
+                    case UserRole.PROFESSOR -> {
+                        showAlert("Test", "", "Premere 'Ok' per iniziare");
+                        getNavigatorGUI().getContext().setTest(test);
+                        getNavigatorGUI().goToTestAttemptView();
+                    }
                 }
             });
 

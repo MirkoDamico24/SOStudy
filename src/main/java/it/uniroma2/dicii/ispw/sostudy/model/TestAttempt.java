@@ -73,6 +73,17 @@ public class TestAttempt{
         this.grade = totalScore;
     }
 
+    public Answer getAnswer(String textualContent){
+        List<Answer<?>> tmpAnswers = getAnswers();
+        for(Answer<?> a : tmpAnswers){
+            Object content = a.getContent();
+            if(content instanceof String stringContent &&  stringContent.equals(textualContent)){
+                return a;
+            }
+        }
+        return null;
+    }
+
     public List<Answer<?>> getAnswers() { return answers; }
     public Student getStudent() { return student; }
     public int getGrade() { return grade; }

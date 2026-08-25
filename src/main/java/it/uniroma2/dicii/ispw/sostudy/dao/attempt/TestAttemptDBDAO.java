@@ -20,6 +20,8 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
    private ChoiceDAO choiceDAO = factory.getChoiceDAO();
    private TestDAO testDAO = factory.getTestDAO();
 
+   private record ToUpdate(Answer answer, Integer questionID){}
+
     private Answer<?> buildAnswer(ResultSet rs) throws SQLException {
         int score = rs.getInt("score");
         Question question = questionDAO.getQuestionById(rs.getInt("question"));
@@ -165,5 +167,81 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
         catch(SQLException | DAOException e){
             throw new DAOException("Error occurred while saving attempt data to database. " + e.getMessage());
         }
+    }
+
+    @Override
+    public void updateTestAttempt(TestAttempt testAttempt) throws DAOException{
+        String sqlQuery = "UPDATE Tentativo SET gradingStatus = ? WHERE test = ? AND student = ? RETURNING testID";
+        int testId;
+        int classId;
+        int attemptId = 0;
+
+        try{
+            classId = factory.getVirtualClassDAO().getClassID(testAttempt.getTest().getVirtualClass().getName(),
+                    testAttempt.getTest().getVirtualClass().getProf().getEmail());
+
+            testId = testDAO.getTestId(testAttempt.getTest().getName(), classId);
+        }
+        catch(DAOException e){
+            throw new DAOException("Error occurred while updating attempt data to database. " + e.getMessage());
+        }
+
+        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
+            ps.setString(1, TestGradingStatus.FULLYGRADED.name());
+            ps.setInt(2, testId);
+            ps.setString(3, testAttempt.getStudent().getEmail());
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()){
+                attemptId = rs.getInt(1);
+            }
+        }
+        catch(SQLException e){
+            throw new DAOException("Error occurred while updating attempt data to database. " + e.getMessage());
+        }
+
+        updateAnswers(testId, attemptId, testAttempt);
+    }
+
+    private void updateAnswers(int testId, int attemptId, TestAttempt testAttempt){
+        String sqlQuery = "UPDATE Risposte SET score = ? WHERE attempt = ? AND question = ?";
+
+        List<ToUpdate> toUpdate = buildQueryElement(testId, testAttempt);
+
+        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
+            ps.setInt(2, attemptId);
+            for(ToUpdate element : toUpdate){
+                ps.setInt(1, element.answer.getScore());
+                ps.setInt(3, element.questionID);
+                ps.addBatch();
+            }
+
+            ps.executeBatch();
+        }
+        catch(SQLException e){
+            throw new DAOException("Error occurred while updating attempt data to database. " + e.getMessage());
+        }
+    }
+
+    private List<ToUpdate> buildQueryElement(int testId, TestAttempt testAttempt){
+        List<ToUpdate> toUpdateList = new ArrayList<>();
+        Integer question = null;
+
+        List<Question> questions = new ArrayList<>();
+        for(Answer a : testAttempt.getAnswers()){
+            try{
+                question = questionDAO.getQuestionId(a.getQuestion(), testId);
+            }
+            catch(DAOException e){
+                throw new DAOException("Error occurred while updating attempt data to database. " + e.getMessage());
+            }
+
+            if(question != null){
+                toUpdateList.add(new ToUpdate(a, question));
+            }
+        }
+
+        return toUpdateList;
     }
 }

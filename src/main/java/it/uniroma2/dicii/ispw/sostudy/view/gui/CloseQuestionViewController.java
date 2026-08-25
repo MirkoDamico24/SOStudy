@@ -6,11 +6,7 @@ import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.KnowledgeEvaluationController;
 import it.uniroma2.dicii.ispw.sostudy.eng.timer.TestTimerService;
 import it.uniroma2.dicii.ispw.sostudy.eng.timer.observer.TimerObserver;
-import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,7 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.Separator;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -30,7 +25,6 @@ import javafx.scene.text.Font;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Arrays;
 
 public class CloseQuestionViewController extends BaseControllerGUI implements TimerObserver {
     @FXML private Label lblNomeTest;
@@ -46,11 +40,6 @@ public class CloseQuestionViewController extends BaseControllerGUI implements Ti
     @FXML private ProgressIndicator progressTimer;
     @FXML private Label lblTimer;
     @FXML private VBox listaProgressoVBox;
-
-    // --- Variabili di stato ---
-    private Timeline timeline;
-    private int secondiRimanenti;
-    private int tempoTotaleInSecondi;
 
     // Riferimenti per gestire la logica di mutua esclusione (tipo RadioButton)
     private HBox nodoOpzioneAttiva = null;
@@ -207,6 +196,7 @@ public class CloseQuestionViewController extends BaseControllerGUI implements Ti
                 new KnowledgeEvaluationController().submitAttempt(getNavigatorGUI().getSession());
                 getNavigatorGUI().goToHomeView();
             }
+            default -> showAlert("Errore", "Tipo di domanda successivo non supportato dalla UI", "");
         }
     }
 

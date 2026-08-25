@@ -2,10 +2,6 @@ package it.uniroma2.dicii.ispw.sostudy.view.navigator;
 
 import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
 import it.uniroma2.dicii.ispw.sostudy.view.cli.*;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-
-import java.io.IOException;
 import java.util.Scanner;
 
 
@@ -98,6 +94,16 @@ public class NavigatorCLI extends Navigator{
 
     @Override
     public void createOpenAnswerView(){
+
+    }
+
+    @Override
+    public void createEvaluateOpenAnswerView(){
+
+    }
+
+    @Override
+    public void createTestAttemptView(){
 
     }
 

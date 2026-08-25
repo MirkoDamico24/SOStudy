@@ -3,6 +3,7 @@ package it.uniroma2.dicii.ispw.sostudy.dao.test;
 import it.uniroma2.dicii.ispw.sostudy.dao.CacheDAO;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.Test;
+import it.uniroma2.dicii.ispw.sostudy.model.TestAttempt;
 import it.uniroma2.dicii.ispw.sostudy.model.VirtualClass;
 
 import java.util.List;
@@ -12,4 +13,5 @@ public abstract class TestDAO extends CacheDAO<Integer, Test> {
     public abstract void saveTest(Test test) throws DAOException;
     public abstract List<Test> getTestByClassId(int classId, VirtualClass virtualClass) throws DAOException;
     public abstract int getTestId(String testName, int classId) throws DAOException;
+    public abstract List<TestAttempt> getTestAttempt(Test test) throws DAOException;
 }

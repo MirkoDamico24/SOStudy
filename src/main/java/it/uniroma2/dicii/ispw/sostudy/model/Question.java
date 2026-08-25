@@ -14,7 +14,7 @@ public abstract class Question{
 
     public abstract void evaluate(Answer<?> answer) throws ModelException;
     public abstract Question copy();
-    public abstract Answer<?> createAnswer(String textualContent, Integer integerContent);
+    public abstract Answer createAnswer(String textualContent, Integer integerContent);
 
     public int getMaxScore()                  { return this.maxScore; }
     public String getHeader()                 { return this.header; }

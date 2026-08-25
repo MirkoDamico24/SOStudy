@@ -1,5 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.view.navigator;
 
+import it.uniroma2.dicii.ispw.sostudy.bean.AttemptBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.SessionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
@@ -11,6 +12,8 @@ public class ContextContainer {
     private SessionBean session;
     private TestBean test;
     private List<QuestionBean> questions;
+    private List<AttemptBean> attempts;
+    private AttemptBean currentSelectedAttempt;
 
     public void setSession(SessionBean session) {
         this.session = session;
@@ -45,5 +48,21 @@ public class ContextContainer {
 
     public void remove(QuestionBean question) {
         questions.remove(question);
+    }
+
+    public List<AttemptBean> getAttempts() {
+        return attempts;
+    }
+
+    public void setAttempts(List<AttemptBean> attempts) {
+        this.attempts = attempts;
+    }
+
+    public AttemptBean getCurrentSelectedAttempt() {
+        return currentSelectedAttempt;
+    }
+
+    public void setCurrentSelectedAttempt(AttemptBean currentSelectedAttempt) {
+        this.currentSelectedAttempt = currentSelectedAttempt;
     }
 }

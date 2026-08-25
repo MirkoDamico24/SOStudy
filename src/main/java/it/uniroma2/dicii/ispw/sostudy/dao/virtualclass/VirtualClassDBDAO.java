@@ -117,7 +117,6 @@ public class VirtualClassDBDAO extends VirtualClassDAO {
             }
         }
         catch (SQLException e) {
-            e.printStackTrace();
             throw new DAOException("Database error occurred while retrieving classes by student email.");
         }
 

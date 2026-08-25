@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.dicii.ispw.sostudy.view.gui.EvaluateOpenAnswerViewControllerGUI">
+
+    <Label style="-fx-text-fill: #4D4CFF;" text="SoStudy" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="40.0">
+        <font>
+            <Font name="System Bold Italic" size="48.0" />
+        </font>
+    </Label>
+
+    <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
+        <children>
+            <Label fx:id="testNameLabel" style="-fx-text-fill: #000000;" text="NOME DEL TEST">
+                <font>
+                    <Font name="Serif Bold" size="48.0" />
+                </font>
+            </Label>
+        </children>
+    </HBox>
+
+    <HBox alignment="CENTER" spacing="20.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="50.0">
+        <children>
+            <ImageView fx:id="professorAvatar" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="professorNameLabel" style="-fx-border-color: #8CB8F5; -fx-border-width: 1; -fx-padding: 8 20 8 20; -fx-background-color: white; -fx-text-fill: #555555;" text="Professor Name">
+                <font>
+                    <Font name="System Regular" size="16.0" />
+                </font>
+            </Label>
+        </children>
+    </HBox>
+
+    <VBox spacing="30.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="180.0">
+        <children>
+
+            <VBox alignment="CENTER_LEFT" prefWidth="1000.0" style="-fx-background-color: #F5FCFF; -fx-border-color: #8CB8F5; -fx-border-width: 1.5; -fx-border-radius: 12; -fx-background-radius: 12;">
+                <padding>
+                    <Insets bottom="35.0" left="40.0" right="40.0" top="35.0" />
+                </padding>
+                <children>
+                    <Label fx:id="questionTextLabel" style="-fx-text-fill: #000000;" text="Per cosa è utilizzato lo use case diagram?" wrapText="true">
+                        <font>
+                            <Font name="Serif Regular" size="36.0" />
+                        </font>
+                    </Label>
+                </children>
+            </VBox>
+
+            <TextArea fx:id="answerTextArea" editable="false" prefHeight="350.0" prefWidth="1000.0" style="-fx-background-color: white; -fx-border-color: #8CB8F5; -fx-border-radius: 3; -fx-font-size: 20px;" wrapText="true" />
+
+            <HBox alignment="CENTER_LEFT" prefWidth="1000.0">
+                <children>
+                    <Button fx:id="nextQuestionButton" mnemonicParsing="false" onAction="#handleNextQuestion" style="-fx-background-color: #1C77FF; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="Prossima domanda">
+                        <font>
+                            <Font name="Serif Regular" size="24.0" />
+                        </font>
+                        <padding>
+                            <Insets bottom="10.0" left="25.0" right="25.0" top="10.0" />
+                        </padding>
+                    </Button>
+
+                    <Region HBox.hgrow="ALWAYS" />
+
+                    <HBox alignment="CENTER" style="-fx-border-color: #8CB8F5; -fx-background-color: white;">
+                        <padding>
+                            <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                        </padding>
+                        <children>
+                            <TextField fx:id="scoreInput" alignment="CENTER_RIGHT" prefWidth="50.0" promptText="___" style="-fx-background-color: transparent; -fx-border-width: 0;">
+                                <font>
+                                    <Font name="Serif Regular" size="18.0" />
+                                </font>
+                            </TextField>
+                            <Label fx:id="maxScoreLabel" style="-fx-text-fill: #555555;" text="/10">
+                                <font>
+                                    <Font name="Serif Regular" size="18.0" />
+                                </font>
+                            </Label>
+                        </children>
+                    </HBox>
+                </children>
+            </HBox>
+
+        </children>
+    </VBox>
+
+    <VBox alignment="CENTER" prefWidth="240.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #8CB8F5; -fx-border-width: 1.5; -fx-border-radius: 12; -fx-background-radius: 12;" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="480.0">
+        <padding>
+            <Insets bottom="15.0" left="20.0" right="20.0" top="15.0" />
+        </padding>
+        <children>
+            <Label fx:id="evaluatedStudentNameLabel" style="-fx-text-fill: #555555;" text="StudentName">
+                <font>
+                    <Font name="Serif Regular" size="24.0" />
+                </font>
+            </Label>
+        </children>
+    </VBox>
+
+</AnchorPane>

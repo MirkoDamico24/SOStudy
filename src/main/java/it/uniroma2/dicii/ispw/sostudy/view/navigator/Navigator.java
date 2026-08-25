@@ -1,10 +1,9 @@
 package it.uniroma2.dicii.ispw.sostudy.view.navigator;
 
-import it.uniroma2.dicii.ispw.sostudy.bean.ProfessorBean;
-import it.uniroma2.dicii.ispw.sostudy.bean.SessionBean;
-import it.uniroma2.dicii.ispw.sostudy.bean.StudentBean;
-import it.uniroma2.dicii.ispw.sostudy.bean.UserBean;
+import it.uniroma2.dicii.ispw.sostudy.bean.*;
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
+
+import java.util.List;
 
 public abstract class Navigator {
     private Views currentView;
@@ -40,6 +39,30 @@ public abstract class Navigator {
         return this.contex.getSession();
     }
 
+    public void setAttempts(List<AttemptBean> attempts) {
+        this.contex.setAttempts(attempts);
+    }
+
+    public List<AttemptBean> getAttempts() {
+        return this.contex.getAttempts();
+    }
+
+    public AttemptBean getCurrentAttempt() {
+        return this.contex.getCurrentSelectedAttempt();
+    }
+
+    public void setCurrentAttempt(AttemptBean currentAttempt) {
+        this.contex.setCurrentSelectedAttempt(currentAttempt);
+    }
+
+    public TestBean getCurrentTest() {
+        return this.contex.getTest();
+    }
+
+    public void setCurrentTest(TestBean currentTest) {
+        this.contex.setTest(currentTest);
+    }
+
     public Views getPreviousView() {
         return previousView;
     }
@@ -57,6 +80,8 @@ public abstract class Navigator {
             case INSIDECLASSVIEW -> createInsideClassView();
             case OPENANSWERVIEW ->  createOpenAnswerView();
             case CLOSEANSWERVIEW ->  createCloseAnswerView();
+            case TESTATTEMPTVIEW -> createTestAttemptView();
+            case EVALUATEOPENANSWER ->  createEvaluateOpenAnswerView();
         }
     }
 
@@ -109,6 +134,16 @@ public abstract class Navigator {
         nextView();
     }
 
+    public void goToEvaluateOpenAnswerView(){
+        setCurrentView(Views.EVALUATEOPENANSWER);
+        nextView();
+    }
+
+    public void goToTestAttemptView(){
+        setCurrentView(Views.TESTATTEMPTVIEW);
+        nextView();
+    }
+
     public UserBean getCorrectUserBean(){
         UserBean ub;
         SessionBean currentSession = this.getContext().getSession();
@@ -136,6 +171,8 @@ public abstract class Navigator {
     public abstract void createOpenQuestionView();
     public abstract void createCloseQuestionView();
     public abstract void createRecapView();
+    public abstract void createTestAttemptView();
+    public abstract void createEvaluateOpenAnswerView();
 
     //student only
     public abstract void createOpenAnswerView();

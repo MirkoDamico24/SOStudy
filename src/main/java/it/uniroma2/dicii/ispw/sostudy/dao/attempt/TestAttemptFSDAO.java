@@ -15,4 +15,8 @@ public class TestAttemptFSDAO extends TestAttemptDAO {
         //yet to implement
         return new ArrayList<>();
     }
+
+    public void updateTestAttempt(TestAttempt testAttempt) throws DAOException{
+        //yet to implement
+    }
 }

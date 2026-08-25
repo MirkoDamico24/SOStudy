@@ -17,4 +17,5 @@ public abstract class TestAttemptDAO{
 
     public abstract void saveTestAttempt(TestAttempt testAttempt) throws DAOException;
     public abstract List<TestAttempt> getTestAttempt(int testId) throws DAOException;
+    public abstract void updateTestAttempt(TestAttempt testAttempt) throws DAOException;
 }

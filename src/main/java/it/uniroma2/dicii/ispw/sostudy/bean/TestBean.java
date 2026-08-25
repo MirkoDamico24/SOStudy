@@ -3,7 +3,6 @@ package it.uniroma2.dicii.ispw.sostudy.bean;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 
 public class TestBean {

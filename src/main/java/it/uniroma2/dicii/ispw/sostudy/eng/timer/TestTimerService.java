@@ -4,6 +4,7 @@ import it.uniroma2.dicii.ispw.sostudy.eng.timer.observer.TimerSubject;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -40,7 +41,7 @@ public class TestTimerService extends TimerSubject {
     public Duration getTotalDuration() { return totalDuration; }
 
     public Duration getRemaining() {
-        Duration remaining = Duration.between(LocalDateTime.now(), deadline);
+        Duration remaining = Duration.between(LocalDateTime.now(ZoneId.systemDefault()), deadline);
         return remaining.isNegative() ? Duration.ZERO : remaining;
     }
 }

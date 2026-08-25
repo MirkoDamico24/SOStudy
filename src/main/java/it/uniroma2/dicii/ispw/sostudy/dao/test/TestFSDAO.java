@@ -189,7 +189,7 @@ public class TestFSDAO extends TestDAO {
 
                 VirtualClass virtualClass = DAOFactory.getInstance().getVirtualClassDAO().getVirtualClassById(classId);
 
-                if (virtualClass != null && virtualClass.getName().equals(classId)) {
+                if (virtualClass != null) {
                     return jsonObject.getInt(KEY_ID);
                 }
             }
@@ -198,5 +198,11 @@ public class TestFSDAO extends TestDAO {
         }
 
         return 0;
+    }
+
+    @Override
+    public List<TestAttempt> getTestAttempt(Test test) throws DAOException{
+        //TODO: implement
+        return new ArrayList<>();
     }
 }
