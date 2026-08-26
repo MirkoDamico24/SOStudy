@@ -138,6 +138,10 @@ public class OpenQuestionViewController extends BaseControllerGUI implements Tim
                 new KnowledgeEvaluationController().submitAttempt(getNavigatorGUI().getSession());
                 getNavigatorGUI().goToHomeView();
             }
+            default -> {
+                showAlert("Errore", "La schermata selezionata è inesistente", "");
+                throw new IllegalArgumentException("Errore");
+            }
         }
     }
 

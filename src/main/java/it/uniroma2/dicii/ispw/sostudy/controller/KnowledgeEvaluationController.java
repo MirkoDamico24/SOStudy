@@ -132,13 +132,17 @@ public class KnowledgeEvaluationController {
         }
 
         List<TestAttempt> availableAttempt = null;
+        if(toEvaluate.getTests() == null){
+            try{
+                availableAttempt = testDAO.getTestAttempt(toEvaluate);
+                if(availableAttempt.isEmpty()) return null;
+            }
+            catch(DAOException e){
+                throw new ControllerException("Errore durante il carciamento dei test svolti dagli studenti.");
+            }
+        }
+        else availableAttempt = toEvaluate.getTests();
 
-        try{
-            availableAttempt = testDAO.getTestAttempt(toEvaluate);
-        }
-        catch(DAOException e){
-            throw new ControllerException("Errore durante il carciamento dei test svolti dagli studenti.");
-        }
 
         List<AttemptBean> beans = new ArrayList<>();
         for(TestAttempt attempt : availableAttempt){
@@ -178,7 +182,6 @@ public class KnowledgeEvaluationController {
         TestAttempt attempt =  currentSession.getCurrentAttempt();
         attempt.setHandInTime(LocalTime.now(ZoneId.systemDefault()));
         Test test = attempt.getTest();
-        test.addTestAttempt(attempt);
 
         try{
             test.gradeTest(attempt);
@@ -187,16 +190,17 @@ public class KnowledgeEvaluationController {
             throw new ControllerException("Errore durante la valutazione del test. " + e.getMessage());
         }
 
+        test.addTestAttempt(attempt);
+
         try {
-            testAttemptDAO.saveTestAttempt(currentSession.getCurrentAttempt());
+            testAttemptDAO.saveTestAttempt(attempt);
         }
         catch(DAOException e){
             throw new ControllerException("Errore durante il salvataggio del tentativo. " + e.getMessage());
         }
     }
 
-
-    public void registerEvaluation(SessionBean session, AttemptBean attempt, TestBean test) throws ControllerException{
+    public void registerEvaluation(SessionBean session, AttemptBean attempt) throws ControllerException{
         Session currentSession = SessionManager.getInstance().getSession(session.getSessionID());
 
         Test currentTest = currentSession.getCurrentTest();
@@ -218,6 +222,7 @@ public class KnowledgeEvaluationController {
             a.setScore(answer.getAssignedScore());
         }
 
+        currentTest.gradeTest(toUpdate);
         toUpdate.setTestGradingStatus(TestGradingStatus.FULLYGRADED);
 
         try{

@@ -67,6 +67,14 @@ public abstract class Navigator {
         return previousView;
     }
 
+    public int getCurrentQuestionIndex() {
+        return this.contex.getCurrentQuestionIndex();
+    }
+
+    public void setCurrentQuestionIndex(int currentQuestionIndex) {
+        this.contex.setCurrentQuestionIndex(currentQuestionIndex);
+    }
+
     public void nextView(){
         if(currentView == null) return;
         switch(currentView){

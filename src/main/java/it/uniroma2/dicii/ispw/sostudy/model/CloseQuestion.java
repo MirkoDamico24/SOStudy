@@ -63,7 +63,7 @@ public class CloseQuestion extends Question {
         if(!(content instanceof Choice)) throw new ModelException("[Class: CloseQuestion] The provided answer is not a suitable for a CloseQuestion.");
 
         Choice answerContent = ((Choice) content);
-        int assignedScore = answerContent.equals(this.solution) ? this.getMaxScore() : 0;
+        int assignedScore = answerContent.getContent().equals(this.solution.getContent()) ? this.getMaxScore() : 0;
         answer.setScore(assignedScore);
     }
 
@@ -74,7 +74,8 @@ public class CloseQuestion extends Question {
 
     @Override
     public Answer<Choice>  createAnswer(String textualContent, Integer integerContent) {
-        return new Answer<>(this.getChoices().get(integerContent), this);
+        Choice c = new Choice(this.getChoices().get(integerContent).getContent());
+        return new Answer<>(c, this);
     }
 
 }

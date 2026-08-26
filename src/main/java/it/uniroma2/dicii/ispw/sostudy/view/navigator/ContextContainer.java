@@ -14,6 +14,7 @@ public class ContextContainer {
     private List<QuestionBean> questions;
     private List<AttemptBean> attempts;
     private AttemptBean currentSelectedAttempt;
+    private int currentQuestionIndex = -1;
 
     public void setSession(SessionBean session) {
         this.session = session;
@@ -64,5 +65,13 @@ public class ContextContainer {
 
     public void setCurrentSelectedAttempt(AttemptBean currentSelectedAttempt) {
         this.currentSelectedAttempt = currentSelectedAttempt;
+    }
+
+    public int getCurrentQuestionIndex() {
+        return currentQuestionIndex;
+    }
+
+    public void setCurrentQuestionIndex(int currentQuestionIndex) {
+        this.currentQuestionIndex = currentQuestionIndex;
     }
 }

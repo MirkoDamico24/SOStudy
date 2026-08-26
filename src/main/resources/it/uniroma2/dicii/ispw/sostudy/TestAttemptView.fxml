@@ -27,13 +27,10 @@
                     </Label>
 
                     <!-- Sezione 1: Home -->
-                    <Button fx:id="btnHome" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: transparent transparent #2D7AF1 transparent; -fx-border-width: 0 0 3 0; -fx-cursor: hand;" text="Home">
+                    <Button fx:id="btnHome" mnemonicParsing="false" onAction="#handleNavCreaTest" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Home">
                         <font>
                             <Font name="Serif Regular" size="26.0" />
                         </font>
-                        <padding>
-                            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-                        </padding>
                     </Button>
 
                     <!-- Sezione 2: Crea test (Viene nascosto da Java se Utente = Studente) -->
@@ -44,10 +41,13 @@
                     </Button>
 
                     <!-- Sezione 3: Classi Virtuali -->
-                    <Button fx:id="btnClassiVirtuali" mnemonicParsing="false" onAction="#handleNavClassiVirtuali" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Classi Virtuali">
+                    <Button fx:id="btnClassiVirtuali" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: transparent transparent #2D7AF1 transparent; -fx-border-width: 0 0 3 0; -fx-cursor: hand;" text="Classi Virtuali">
                         <font>
                             <Font name="Serif Regular" size="26.0" />
                         </font>
+                        <padding>
+                            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                        </padding>
                     </Button>
                 </children>
             </HBox>
@@ -72,7 +72,7 @@
     <!-- ==================== CONTENUTO CENTRALE (Dinamico) ==================== -->
     <VBox alignment="TOP_CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="220.0">
         <children>
-            <Label style="-fx-text-fill: #000000;" text="Comunicazioni in arrivo">
+            <Label style="-fx-text-fill: #000000;" text="Sottomissioni degli studenti">
                 <font>
                     <Font name="Serif Bold" size="48.0" />
                 </font>

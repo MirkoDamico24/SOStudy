@@ -5,7 +5,6 @@ import it.uniroma2.dicii.ispw.sostudy.bean.AttemptBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.StudentBean;
 import it.uniroma2.dicii.ispw.sostudy.model.Answer;
-import it.uniroma2.dicii.ispw.sostudy.model.Choice;
 import it.uniroma2.dicii.ispw.sostudy.model.TestAttempt;
 
 import java.util.ArrayList;

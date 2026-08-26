@@ -118,6 +118,10 @@ public class QuestionDBDAO extends QuestionDAO {
                 questionId.add(rs.getInt(1));
             }
 
+            for (int i = 0; i < questions.size() && i < questionId.size(); i++) {
+                this.addToCache(questionId.get(i), questions.get(i));
+            }
+
             finalizeQuestionSaving(completeSaving, questionId);
         }
         catch (SQLException e) {

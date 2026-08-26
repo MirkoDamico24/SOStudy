@@ -26,11 +26,6 @@ public class TestDemoDAO extends TestDAO {
         addToCache(id, test);
     }
 
-    @Override
-    public int getTestId(String testName, int classId) throws DAOException{
-        //TODO: implement
-        return 0;
-    }
 
     @Override
     public List<Test> getTestByClassId(int classId, VirtualClass virtualClass) throws DAOException{
@@ -43,4 +38,5 @@ public class TestDemoDAO extends TestDAO {
         //TODO: implement
         return new ArrayList<>();
     }
+
 }

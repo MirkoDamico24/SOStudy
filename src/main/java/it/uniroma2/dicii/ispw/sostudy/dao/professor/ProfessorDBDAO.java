@@ -19,7 +19,11 @@ public class ProfessorDBDAO extends ProfessorDAO {
         try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
-            if(rs.next()) return new Professor(rs.getString("name"), rs.getString("surname"), rs.getString("email"));
+            if(rs.next()) {
+                Professor prof = new Professor(rs.getString("name"), rs.getString("surname"), rs.getString("email"));
+                this.addToCache(rs.getString("email"), prof);
+                return prof;
+            }
         }
         catch(SQLException e){
             throw new DAOException("Error occurred while taking data from the database");

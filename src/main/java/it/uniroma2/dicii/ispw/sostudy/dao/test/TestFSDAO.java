@@ -177,30 +177,6 @@ public class TestFSDAO extends TestDAO {
     }
 
     @Override
-    public int getTestId(String testName, int classId) throws DAOException {
-        try {
-            JSONArray jsonArray = JSONHelper.readJsonFile(FILE_PATH);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                if (!jsonObject.has(KEY_ID) || !jsonObject.getString(KEY_NAME).equals(testName)) {
-                    continue;
-                }
-
-                VirtualClass virtualClass = DAOFactory.getInstance().getVirtualClassDAO().getVirtualClassById(classId);
-
-                if (virtualClass != null) {
-                    return jsonObject.getInt(KEY_ID);
-                }
-            }
-        } catch (IOException e) {
-            throw new DAOException("Error occurred while getting test id from file system. " + e.getMessage());
-        }
-
-        return 0;
-    }
-
-    @Override
     public List<TestAttempt> getTestAttempt(Test test) throws DAOException{
         //TODO: implement
         return new ArrayList<>();

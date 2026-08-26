@@ -66,51 +66,70 @@ public class TestAttemptViewControllerGUI extends BaseControllerGUI{
 
     public void setUsernameBundle() {
         userNameLabel.setText(getFormattedUsername());
+        btnClassiVirtuali.setText(getNavigatorGUI().getContext().getSession().getCurrentClass().getClassName());
     }
 
     public void populateAttemptSection(List<AttemptBean> attempt) {
         listaAttempt.getChildren().clear();
 
-        for (int i = 0; i < attempt.size(); i++) {
-            Label testLabel = new Label("Test di: " + attempt.get(i).getStudent().getName() + " " + attempt.get(i).getStudent().getSurname());
+        if(attempt == null){
+            Label testLabel = new Label("Nessuno studente ha ancora svolto il test!");
             testLabel.setFont(new Font("Serif", 26));
             testLabel.setStyle("-fx-text-fill: #555555;");
             testLabel.setMaxWidth(Double.MAX_VALUE);
             testLabel.setPadding(new Insets(15, 0, 15, 0));
-
-            AttemptBean selected =  attempt.get(i);
-
-            testLabel.setOnMouseClicked(event ->{
-                showAlert("Test", "Verrà avviata la valutazione del test", "Premere 'OK' per iniziare");
-                getNavigatorGUI().setCurrentAttempt(selected);
-                getNavigatorGUI().goToEvaluateOpenAnswerView();
-            });
-
             listaAttempt.getChildren().add(testLabel);
+        }
+        else if(attempt.isEmpty()){
+            Label testLabel = new Label("Non ci sono test da corregere!");
+            testLabel.setFont(new Font("Serif", 26));
+            testLabel.setStyle("-fx-text-fill: #555555;");
+            testLabel.setMaxWidth(Double.MAX_VALUE);
+            testLabel.setPadding(new Insets(15, 0, 15, 0));
+            listaAttempt.getChildren().add(testLabel);
+        }
+        else{
+            for (int i = 0; i < attempt.size(); i++) {
+                Label testLabel = new Label("Test di: " + attempt.get(i).getStudent().getName() + " " + attempt.get(i).getStudent().getSurname());
+                testLabel.setFont(new Font("Serif", 26));
+                testLabel.setStyle("-fx-text-fill: #555555;");
+                testLabel.setMaxWidth(Double.MAX_VALUE);
+                testLabel.setPadding(new Insets(15, 0, 15, 0));
 
-            if (i < attempt.size() - 1) {
-                Separator separator = new Separator();
-                listaAttempt.getChildren().add(separator);
+                AttemptBean selected =  attempt.get(i);
+
+                testLabel.setOnMouseClicked(event ->{
+                    showAlert("Test", "Verrà avviata la valutazione del test", "Premere 'OK' per iniziare");
+                    getNavigatorGUI().setCurrentAttempt(selected);
+                    getNavigatorGUI().goToEvaluateOpenAnswerView();
+                });
+
+                listaAttempt.getChildren().add(testLabel);
+
+                if (i < attempt.size() - 1) {
+                    Separator separator = new Separator();
+                    listaAttempt.getChildren().add(separator);
+                }
             }
         }
     }
 
     @FXML
     void handleNavCreaTest(ActionEvent event) {
-        navigatorGUI.setPreviousView(Views.HOME);
+        navigatorGUI.setPreviousView(Views.TESTATTEMPTVIEW);
         navigatorGUI.goToCreateTestView();
     }
 
     @FXML
     void handleNavClassiVirtuali(ActionEvent event) {
-        navigatorGUI.setPreviousView(Views.HOME);
+        navigatorGUI.setPreviousView(Views.TESTATTEMPTVIEW);
         navigatorGUI.goToClassesView();
     }
 
     @FXML
     void handleLogout(ActionEvent event) {
         SessionManager.getInstance().deleteSession(navigatorGUI.getContext().getSession().getSessionID());
-        navigatorGUI.setPreviousView(Views.HOME);
+        navigatorGUI.setPreviousView(Views.TESTATTEMPTVIEW);
         navigatorGUI.goToLoginView();
     }
 }

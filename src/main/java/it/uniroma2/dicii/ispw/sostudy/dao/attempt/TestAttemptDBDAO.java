@@ -106,13 +106,11 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
 
         try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery))
         {
-            int classId = factory.getVirtualClassDAO().getClassID(test.getVirtualClass().getName(), test.getVirtualClass().getProf().getEmail());
-
             Object content = null;
             ps.setInt(4, attemptID);
             for(Answer<?> answer : answers){
                 questionID = questionDAO.getQuestionId(answer.getQuestion(),
-                        testDAO.getTestId(test.getName(), classId));
+                        testDAO.getTestId(test.getName(), test.getVirtualClass().getName(), test.getVirtualClass().getProf().getEmail()));
 
                 content = answer.getContent();
 
@@ -149,9 +147,8 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
             ps.setTime(3, Time.valueOf(testAttempt.getHandInTime()));
             ps.setDate(4, Date.valueOf(testAttempt.getHandInDate()));
 
-            int classId = factory.getVirtualClassDAO().getClassID(testAttempt.getTest().getVirtualClass().getName(), testAttempt.getTest().getVirtualClass().getProf().getEmail());
-
-            int testId = testDAO.getTestId(testAttempt.getTest().getName(), classId);
+            Test associatedTest = testAttempt.getTest();
+            int testId = testDAO.getTestId(associatedTest.getName(), associatedTest.getVirtualClass().getName(), associatedTest.getVirtualClass().getProf().getEmail());
             System.out.println("Test id: " + testId);
             ps.setInt(5, testId);
 
@@ -171,28 +168,35 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
 
     @Override
     public void updateTestAttempt(TestAttempt testAttempt) throws DAOException{
-        String sqlQuery = "UPDATE Tentativo SET gradingStatus = ? WHERE test = ? AND student = ? RETURNING testID";
+        String updateQuery = "UPDATE Tentativo SET gradingStatus = ?, grade = ? WHERE test = ? AND student = ?";
+        String selectQuery = "SELECT testID FROM Tentativo WHERE test = ? AND student = ?";
         int testId;
-        int classId;
         int attemptId = 0;
 
-        try{
-            classId = factory.getVirtualClassDAO().getClassID(testAttempt.getTest().getVirtualClass().getName(),
-                    testAttempt.getTest().getVirtualClass().getProf().getEmail());
+        Test associatedTest = testAttempt.getTest();
 
-            testId = testDAO.getTestId(testAttempt.getTest().getName(), classId);
+        try{
+            testId = testDAO.getTestId(associatedTest.getName(), associatedTest.getVirtualClass().getName(), associatedTest.getVirtualClass().getProf().getEmail());
         }
         catch(DAOException e){
             throw new DAOException("Error occurred while updating attempt data to database. " + e.getMessage());
         }
 
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
+        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(updateQuery)){
             ps.setString(1, TestGradingStatus.FULLYGRADED.name());
-            ps.setInt(2, testId);
-            ps.setString(3, testAttempt.getStudent().getEmail());
+            ps.setInt(2, testAttempt.getGrade());
+            ps.setInt(3, testId);
+            ps.setString(4, testAttempt.getStudent().getEmail());
 
-            ResultSet rs = ps.executeQuery();
+            int res = ps.executeUpdate();
+            if(res == 0){
+                throw new DAOException("Attempt to update was not found in the database.");
+            }
 
+            PreparedStatement psInsert = DBConnectionFactory.getConnection().prepareStatement(selectQuery);
+            psInsert.setInt(1, testId);
+            psInsert.setString(2, testAttempt.getStudent().getEmail());
+            ResultSet rs = psInsert.executeQuery();
             if(rs.next()){
                 attemptId = rs.getInt(1);
             }
@@ -228,7 +232,6 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
         List<ToUpdate> toUpdateList = new ArrayList<>();
         Integer question = null;
 
-        List<Question> questions = new ArrayList<>();
         for(Answer a : testAttempt.getAnswers()){
             try{
                 question = questionDAO.getQuestionId(a.getQuestion(), testId);

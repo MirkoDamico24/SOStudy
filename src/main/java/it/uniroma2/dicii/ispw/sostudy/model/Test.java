@@ -53,7 +53,10 @@ public class Test {
         if(this.tests == null) {
             this.tests = new ArrayList<>();
         }
-        TestAttempt t = new TestAttempt(this, testAttempt.getAnswers(), testAttempt.getStudent());
+        TestAttempt t = new TestAttempt(this, testAttempt.getAnswers(), testAttempt.getStudent(),
+                testAttempt.getGrade(), testAttempt.getTestGradingStatus(), testAttempt.getHandInTime(),
+                testAttempt.getHandInDate()
+        );
         this.tests.add(t);
     }
 

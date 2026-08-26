@@ -20,7 +20,11 @@ public class StudentDBDAO extends StudentDAO {
         try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
-            if(rs.next()) return new Student(rs.getString("name"), rs.getString("surname"), rs.getString("email"));
+            if(rs.next()){
+                Student stud = new Student(rs.getString("name"), rs.getString("surname"), rs.getString("email"));
+                this.addToCache(rs.getString("email"), stud);
+                return stud;
+            }
         }
         catch(SQLException e){
             throw new DAOException("Error occurred while taking data from the database");
