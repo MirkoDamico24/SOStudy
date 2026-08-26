@@ -31,13 +31,13 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI{
 
     @FXML
     public void prepare() {
-        configureViewByRole(getNavigatorGUI().getContext().getSession().getCurrentRole() == UserRole.PROFESSOR);
+        configureViewByRole(getNavigatorGUI().getCurrentUserRole() == UserRole.PROFESSOR);
         setUsernameBundle();
         configureScrollPane();
 
-        btnNomeClasseNav.setText(getNavigatorGUI().getContext().getSession().getCurrentClass().getClassName());
+        btnNomeClasseNav.setText(getNavigatorGUI().getCurrentClass().getClassName());
 
-        List<TestBean> availableTests = getNavigatorGUI().getContext().getSession().getCurrentClass().getTest();
+        List<TestBean> availableTests = getNavigatorGUI().getCurrentClass().getTest();
         populateTests(availableTests);
     }
 
@@ -73,7 +73,7 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI{
             lblTest.setStyle("-fx-text-fill: #555555; -fx-cursor: hand;");
 
             lblTest.setOnMouseClicked(event ->{
-                switch(getNavigatorGUI().getSession().getCurrentRole()) {
+                switch(getNavigatorGUI().getCurrentUserRole()) {
                     case UserRole.STUDENT -> {
                         showAlert("Test", "Il tentativo sarà avviato", "Premere 'Ok' per iniziare");
                         Views next = getNextView(test);
@@ -86,7 +86,7 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI{
 
                     case UserRole.PROFESSOR -> {
                         showAlert("Test", "", "Premere 'Ok' per iniziare");
-                        getNavigatorGUI().getContext().setTest(test);
+                        getNavigatorGUI().setCurrentTest(test);
                         getNavigatorGUI().goToTestAttemptView();
                     }
                 }
@@ -115,10 +115,10 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI{
             showAlert("Errore", e.getMessage(), "");
         }
 
-        getNavigatorGUI().getContext().setQuestions(questions);
-        getNavigatorGUI().getContext().setTest(test);
+        getNavigatorGUI().setQuestions(questions);
+        getNavigatorGUI().setCurrentTest(test);
 
-        if(getNavigatorGUI().getContext().getQuestions().getFirst().isOpenQuestion()) return Views.OPENANSWERVIEW;
+        if(questions.getFirst().isOpenQuestion()) return Views.OPENANSWERVIEW;
         else return Views.CLOSEANSWERVIEW;
     }
 

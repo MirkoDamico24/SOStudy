@@ -120,15 +120,15 @@ public class CreaDomandaMultiplaControllerGUI extends BaseControllerGUI {
         int maxScore = punteggioComboBox.getValue();
 
         QuestionBean qb = new QuestionBean(header, maxScore, options, solutionIndex);
-        navigatorGUI.getContext().setQuestions(qb);
-        navigatorGUI.setPreviousView(Views.CLOSEQUESTIONVIEW);
-        navigatorGUI.goToRecapView();
+        getNavigatorGUI().setQuestions(qb);
+        getNavigatorGUI().setPreviousView(Views.CLOSEQUESTIONVIEW);
+        getNavigatorGUI().goToRecapView();
     }
 
     @FXML
     public void handleGoBack(ActionEvent event) {
-        if(navigatorGUI.getPreviousView() == Views.CREATETEST) return;
-        navigatorGUI.setPreviousView(Views.CLOSEQUESTIONVIEW);
-        navigatorGUI.goToRecapView();
+        if(getNavigatorGUI().getPreviousView() == Views.CREATETEST) return;
+        getNavigatorGUI().setPreviousView(Views.CLOSEQUESTIONVIEW);
+        getNavigatorGUI().goToRecapView();
     }
 }

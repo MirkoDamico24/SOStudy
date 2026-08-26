@@ -2,6 +2,7 @@ package it.uniroma2.dicii.ispw.sostudy.view.gui;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.*;
 import it.uniroma2.dicii.ispw.sostudy.controller.NotificationController;
+import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.eng.observer.MessageObserver;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.model.SessionManager;
@@ -13,39 +14,28 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeControllerGUI extends BaseControllerGUI implements MessageObserver {
-
-    @FXML
-    private Button btnHome;
     @FXML
     private Button btnCreaTest;
     @FXML
-    private Button btnClassiVirtuali;
-    @FXML
-    private Button btnLogout;
-
-    @FXML
     private Label userNameLabel;
-    @FXML
-    private ImageView userAvatar;
     @FXML
     private VBox listaComunicazioni;
 
     private NotificationController nctrl = new NotificationController();
 
-    public void prepare(boolean isProfessor){
-        configureViewByRole(isProfessor);
+    public void prepare(){
+        configureViewByRole(getNavigatorGUI().getCurrentUserRole() == UserRole.PROFESSOR);
         setUsernameBundle();
 
-        nctrl.registerAsNotificationObserver(this, navigatorGUI.getSession());
+        nctrl.registerAsNotificationObserver(this, getNavigatorGUI().getSession());
 
-        List<MessageBean> messages = nctrl.fetchUserNotifications(navigatorGUI.getCorrectUserBean());
+        List<MessageBean> messages = nctrl.fetchUserNotifications(getNavigatorGUI().getCorrectUserBean());
         populateNotificationSection(messages);
     }
 

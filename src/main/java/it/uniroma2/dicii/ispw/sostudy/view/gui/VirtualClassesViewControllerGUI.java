@@ -34,14 +34,14 @@ public class VirtualClassesViewControllerGUI extends BaseControllerGUI{
     @FXML private FlowPane classiFlowPane;
 
     public void prepare() {
-        configureViewByRole(navigatorGUI.getContext().getSession().getCurrentRole() == UserRole.PROFESSOR);
+        configureViewByRole(getNavigatorGUI().getCurrentUserRole() == UserRole.PROFESSOR);
         setUsernameBundle();
 
         KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
         List<VirtualClassBean> classes = null;
 
         try{
-            classes = ctrl.getUserClasses(navigatorGUI.getSession());
+            classes = ctrl.getUserClasses(getNavigatorGUI().getSession());
         }
         catch(ControllerException e){
             this.showAlert("Errore.", e.getMessage(), "Riprovare");
@@ -95,7 +95,7 @@ public class VirtualClassesViewControllerGUI extends BaseControllerGUI{
         classNameLabel.setCursor(Cursor.HAND);
 
         classNameLabel.setOnMouseClicked(event -> {
-            getNavigatorGUI().getSession().setCurrentClass(virtualClassBean);
+            getNavigatorGUI().setCurrentClass(virtualClassBean);
             getNavigatorGUI().goToInsideClassView();
         });
 

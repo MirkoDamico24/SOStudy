@@ -193,13 +193,14 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
                 throw new DAOException("Attempt to update was not found in the database.");
             }
 
-            PreparedStatement psInsert = DBConnectionFactory.getConnection().prepareStatement(selectQuery);
-            psInsert.setInt(1, testId);
-            psInsert.setString(2, testAttempt.getStudent().getEmail());
-            ResultSet rs = psInsert.executeQuery();
-            if(rs.next()){
-                attemptId = rs.getInt(1);
+            try(PreparedStatement psInsert = DBConnectionFactory.getConnection().prepareStatement(selectQuery)){
+                psInsert.setInt(1, testId);
+                psInsert.setString(2, testAttempt.getStudent().getEmail());
+                ResultSet rs = psInsert.executeQuery();
+                if(rs.next()){
+                    attemptId = rs.getInt(1);
             }
+    }
         }
         catch(SQLException e){
             throw new DAOException("Error occurred while updating attempt data to database. " + e.getMessage());

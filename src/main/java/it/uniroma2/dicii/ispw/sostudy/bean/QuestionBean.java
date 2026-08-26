@@ -10,8 +10,6 @@ public class QuestionBean {
     private QuestionType questionType;
     private List<String> options;
     private int solution;
-    private int positionInTest;
-    private boolean answerd;
 
     public QuestionBean(String header, int maxScore){
         this.header = header;
@@ -63,19 +61,4 @@ public class QuestionBean {
         this.solution = solution;
     }
 
-    public int getPositionInTest() {
-        return positionInTest;
-    }
-
-    public void setPositionInTest(int positionInTest) {
-        this.positionInTest = positionInTest;
-    }
-
-    public boolean isAnswerd() {
-        return answerd;
-    }
-
-    public void setAnswerd(boolean answerd) {
-        this.answerd = answerd;
-    }
 }

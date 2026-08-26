@@ -75,6 +75,34 @@ public abstract class Navigator {
         this.contex.setCurrentQuestionIndex(currentQuestionIndex);
     }
 
+    public void setCurrentClass (VirtualClassBean currentClass) {
+        this.contex.setCurrentClass(currentClass);
+    }
+
+    public VirtualClassBean getCurrentClass() {
+        return this.contex.getCurrentClass();
+    }
+
+    public UserRole getCurrentUserRole() {
+        return this.contex.getSession().getCurrentRole();
+    }
+
+    public void setCurrentUserRole(UserRole currentUserRole) {
+        this.contex.getSession().setCurrentRole(currentUserRole);
+    }
+
+    public void setQuestions(List<QuestionBean> questions) {
+        this.contex.setQuestions(questions);
+    }
+
+    public void setQuestions(QuestionBean question) {
+        this.contex.setQuestions(question);
+    }
+
+    public List<QuestionBean> getQuestions() {
+        return this.contex.getQuestions();
+    }
+
     public void nextView(){
         if(currentView == null) return;
         switch(currentView){

@@ -5,14 +5,12 @@ import it.uniroma2.dicii.ispw.sostudy.bean.VirtualClassBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.CreateTestController;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
-import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -20,20 +18,13 @@ import java.time.LocalTime;
 import java.util.List;
 
 public class CreaTestDetailControllerGUI extends BaseControllerGUI {
-    @FXML private Button btnHome;
-    @FXML private Button btnCreaTest;
-    @FXML private Button btnClassiVirtuali;
-    @FXML private Button btnNotifiche;
-
     @FXML private Label profNameLabel;
-    @FXML private ImageView profAvatar;
 
     @FXML private TextField nomeTestField;
     @FXML private ComboBox<String> classeComboBox;
     @FXML private DatePicker dataConsegnaPicker;
     @FXML private ComboBox<String> orarioComboBox;
     @FXML private TextField durataField;
-    @FXML private Button btnSalva;
 
     private CreateTestController createTestController = new CreateTestController();
 
@@ -78,14 +69,11 @@ public class CreaTestDetailControllerGUI extends BaseControllerGUI {
     }
 
     private String getCurrentProfEmail(){
-        if(navigatorGUI.getContext().getSession().getProfessor() == null) {
-            throw new ControllerException("L'utente corrente non è un professore. Funzionalità disattivata.");
+        if(getNavigatorGUI().getSession().getProfessor() == null) {
+            showAlert("Errore", "L'utente autenticato non ricopre il ruolo di professore", "Funzionalità non accessibile");
+            return null;
         }
-        String profEmail = navigatorGUI.getContext().getSession().getProfessor().getEmail();
-        if(profEmail == null){
-            throw new ControllerException("Email errata");
-        }
-        return profEmail;
+        return getNavigatorGUI().getSession().getProfessor().getEmail();
     }
 
     public void setUsernameBundle() {
@@ -112,18 +100,18 @@ public class CreaTestDetailControllerGUI extends BaseControllerGUI {
             return;
         }
 
-        navigatorGUI.getContext().setTest(test);
+        getNavigatorGUI().setCurrentTest(test);
 
-        if(navigatorGUI.getPreviousView() ==  Views.RECAP) {
-            navigatorGUI.setPreviousView(Views.CREATETEST);
-            navigatorGUI.goToRecapView();
+        if(getNavigatorGUI().getPreviousView() ==  Views.RECAP) {
+            getNavigatorGUI().setPreviousView(Views.CREATETEST);
+            getNavigatorGUI().goToRecapView();
         }
         else {
-            navigatorGUI.setPreviousView(Views.CREATETEST);
-            if (NavigatorGUI.showPopUp() == QuestionType.OPENQUESTION) {
-                navigatorGUI.goToOpenQuestionView();
+            getNavigatorGUI().setPreviousView(Views.CREATETEST);
+            if (getNavigatorGUI().showPopUp() == QuestionType.OPENQUESTION) {
+                getNavigatorGUI().goToOpenQuestionView();
             } else {
-                navigatorGUI.goToCloseQuestionView();
+                getNavigatorGUI().goToCloseQuestionView();
             }
         }
 

@@ -25,7 +25,7 @@ public class EvaluateOpenAnswerViewControllerGUI extends BaseControllerGUI {
     @FXML private Label evaluatedStudentNameLabel;
 
     public void prepare() {
-        setTestInfo(getNavigatorGUI().getContext().getTest());
+        setTestInfo(getNavigatorGUI().getCurrentTest());
 
         AttemptBean workingOn = getNavigatorGUI().getCurrentAttempt();
 
@@ -64,6 +64,11 @@ public class EvaluateOpenAnswerViewControllerGUI extends BaseControllerGUI {
         if(!scoreInput.getText().isEmpty()){
             int score = Integer.parseInt(scoreInput.getText());
             Navigator nav = getNavigatorGUI();
+            QuestionBean q = nav.getQuestions().get(nav.getCurrentQuestionIndex());
+            if(score > q.getMaxScore()){
+                showAlert("Punteggio elevato", "Non si può assegnare un punteggio più alto di quello previsto.", "La risposta sarà valutata con il punteggio massimo");
+                score = q.getMaxScore();
+            }
             AnswerBean answer = nav.getCurrentAttempt().getAnswers().get(nav.getCurrentQuestionIndex());
             answer.setAssignedScore(score);
         }

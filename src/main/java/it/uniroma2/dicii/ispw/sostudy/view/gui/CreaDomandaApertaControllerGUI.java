@@ -6,25 +6,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.ImageView;
 
 public class CreaDomandaApertaControllerGUI extends BaseControllerGUI {
-    @FXML private Button btnHome;
-    @FXML private Button btnCreaTest;
-    @FXML private Button btnClassiVirtuali;
-    @FXML private Button btnNotifiche;
-
     @FXML private Label profNameLabel;
-    @FXML private ImageView profAvatar;
 
     @FXML private TextArea testoDomandaArea;
     @FXML private ComboBox<Integer> punteggioComboBox;
-    @FXML private Button btnSalvaDomanda;
-    @FXML private Button btnIndietro;
 
     public void prepare() {
         testoDomandaArea.clear();
@@ -45,28 +35,28 @@ public class CreaDomandaApertaControllerGUI extends BaseControllerGUI {
         Integer maxScore = punteggioComboBox.getValue();
 
         QuestionBean qb = new QuestionBean(header, maxScore);
-        navigatorGUI.getContext().setQuestions(qb);
+        getNavigatorGUI().setQuestions(qb);
 
-        navigatorGUI.setPreviousView(Views.OPENQUESTIONVIEW);
-        navigatorGUI.goToRecapView();
+        getNavigatorGUI().setPreviousView(Views.OPENQUESTIONVIEW);
+        getNavigatorGUI().goToRecapView();
     }
 
     @FXML
     void handleIndietro(ActionEvent event) {
-        if(navigatorGUI.getPreviousView() == Views.CREATETEST) return;
-        navigatorGUI.setPreviousView(Views.OPENQUESTIONVIEW);
-        navigatorGUI.goToRecapView();
+        if(getNavigatorGUI().getPreviousView() == Views.CREATETEST) return;
+        getNavigatorGUI().setPreviousView(Views.OPENQUESTIONVIEW);
+        getNavigatorGUI().goToRecapView();
     }
 
     @FXML
     void handleNavHome(ActionEvent event) {
-        navigatorGUI.setPreviousView(Views.OPENQUESTIONVIEW);
-        navigatorGUI.goToHomeView();
+        getNavigatorGUI().setPreviousView(Views.OPENQUESTIONVIEW);
+        getNavigatorGUI().goToHomeView();
     }
 
     @FXML
     void handleNavClassiVirtuali(ActionEvent event) {
-        navigatorGUI.setPreviousView(Views.OPENQUESTIONVIEW);
-        navigatorGUI.goToClassesView();
+        getNavigatorGUI().setPreviousView(Views.OPENQUESTIONVIEW);
+        getNavigatorGUI().goToClassesView();
     }
 }

@@ -155,19 +155,17 @@ public class KnowledgeEvaluationController {
     }
 
     private List<QuestionBean> questionToBean(List<Question> questions){
-        int index = 0;
         List<QuestionBean> questionBeans = new ArrayList<>();
         for(Question question : questions){
             QuestionBean tmp = QuestionMapper.questionToBean(question);
-            tmp.setPositionInTest(++index);
             questionBeans.add(tmp);
         }
         return questionBeans;
     }
 
-    public void registerAnswer(SessionBean sessionBean, QuestionBean question, AnswerBean answer){
+    public void registerAnswer(SessionBean sessionBean, QuestionBean question, AnswerBean answer, int index){
         Session currentSession = SessionManager.getInstance().getSession(sessionBean.getSessionID());
-        Question current = currentSession.getCurrentTest().getQuestions().get(question.getPositionInTest() - 1);
+        Question current = currentSession.getCurrentTest().getQuestions().get(index);
 
         //instantiate answer and link with current
         Answer currentAnswer = current.createAnswer(answer.getTextualContent(), answer.getChosenOption());

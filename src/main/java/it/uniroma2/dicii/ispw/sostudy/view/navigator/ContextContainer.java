@@ -1,9 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.view.navigator;
 
-import it.uniroma2.dicii.ispw.sostudy.bean.AttemptBean;
-import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
-import it.uniroma2.dicii.ispw.sostudy.bean.SessionBean;
-import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
+import it.uniroma2.dicii.ispw.sostudy.bean.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +8,7 @@ import java.util.List;
 public class ContextContainer {
     private SessionBean session;
     private TestBean test;
+    private VirtualClassBean currentClass;
     private List<QuestionBean> questions;
     private List<AttemptBean> attempts;
     private AttemptBean currentSelectedAttempt;
@@ -73,5 +71,13 @@ public class ContextContainer {
 
     public void setCurrentQuestionIndex(int currentQuestionIndex) {
         this.currentQuestionIndex = currentQuestionIndex;
+    }
+
+    public void setCurrentClass (VirtualClassBean currentClass) {
+        this.currentClass = currentClass;
+    }
+
+    public VirtualClassBean getCurrentClass() {
+        return currentClass;
     }
 }

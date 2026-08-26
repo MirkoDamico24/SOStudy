@@ -5,7 +5,6 @@ import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.CreateTestController;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
-import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,7 +29,7 @@ public class RiepilogoTestControllerGUI extends BaseControllerGUI {
     public void prepare() {
         setUsernameBundle();
 
-        TestBean currentTest = navigatorGUI.getContext().getTest();
+        TestBean currentTest = getNavigatorGUI().getCurrentTest();
         if (currentTest != null) {
             setTestDetails(
                     currentTest.getName(),
@@ -41,7 +40,7 @@ public class RiepilogoTestControllerGUI extends BaseControllerGUI {
             );
         }
 
-        List<QuestionBean> questions = navigatorGUI.getContext().getQuestions();
+        List<QuestionBean> questions = getNavigatorGUI().getQuestions();
         populateQuestionList(questions);
     }
 
@@ -158,29 +157,29 @@ public class RiepilogoTestControllerGUI extends BaseControllerGUI {
 
     @FXML
     void handleModificaDettagli(ActionEvent event) {
-        navigatorGUI.setPreviousView(Views.RECAP);
-        navigatorGUI.goToCreateTestView();
+        getNavigatorGUI().setPreviousView(Views.RECAP);
+        getNavigatorGUI().goToCreateTestView();
     }
 
     @FXML
     void handleAddQuestion(ActionEvent event) {
-        navigatorGUI.setPreviousView(Views.RECAP);
-        if(NavigatorGUI.showPopUp() == QuestionType.OPENQUESTION){
-            navigatorGUI.goToOpenQuestionView();
+        getNavigatorGUI().setPreviousView(Views.RECAP);
+        if(getNavigatorGUI().showPopUp() == QuestionType.OPENQUESTION){
+            getNavigatorGUI().goToOpenQuestionView();
         }
-        else navigatorGUI.goToCloseQuestionView();
+        else getNavigatorGUI().goToCloseQuestionView();
     }
 
     @FXML
     void handleSavePublish(ActionEvent event) {
         CreateTestController createTestController = new CreateTestController();
         try {
-            createTestController.createTest(navigatorGUI.getContext().getSession().getSessionID(), navigatorGUI.getContext().getTest(), navigatorGUI.getContext().getQuestions());
+            createTestController.createTest(getNavigatorGUI().getSession().getSessionID(), getNavigatorGUI().getCurrentTest(), getNavigatorGUI().getQuestions());
         }
         catch (ControllerException e) {
             showAlert("Errore di risorsa", e.getMessage(), "Riprovare");
         }
-        navigatorGUI.setPreviousView(Views.RECAP);
-        navigatorGUI.goToHomeView();
+        getNavigatorGUI().setPreviousView(Views.RECAP);
+        getNavigatorGUI().goToHomeView();
     }
 }

@@ -8,7 +8,6 @@ public class SessionBean {
     private ProfessorBean professor;
     private final int sessionID;
     private UserRole currentRole;
-    private VirtualClassBean currentClass;
     private TestBean test;
     private TestTimerService timer;
 
@@ -42,14 +41,6 @@ public class SessionBean {
 
     public void setCurrentRole(UserRole currentRole) {
         this.currentRole = currentRole;
-    }
-
-    public VirtualClassBean getCurrentClass() {
-        return currentClass;
-    }
-
-    public void setCurrentClass(VirtualClassBean currentClass) {
-        this.currentClass = currentClass;
     }
 
     public TestBean getTest() {

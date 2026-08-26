@@ -8,6 +8,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 public class TestTimerService extends TimerSubject {
@@ -21,7 +22,14 @@ public class TestTimerService extends TimerSubject {
     }
 
     public void start() {
-        scheduler = Executors.newSingleThreadScheduledExecutor();
+        ThreadFactory daemonThreadFactory = runnable -> {
+            Thread thread = new Thread(runnable);
+            thread.setDaemon(true);
+            thread.setName("TestTimer-Background-Thread");
+            return thread;
+        };
+
+        scheduler = Executors.newSingleThreadScheduledExecutor(daemonThreadFactory);
         scheduler.scheduleAtFixedRate(this::tick, 0, 1, TimeUnit.SECONDS);
     }
 
@@ -36,7 +44,9 @@ public class TestTimerService extends TimerSubject {
     }
 
     public void stop() {
-        if (scheduler != null) scheduler.shutdown();
+        if (scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdownNow();
+        }
     }
 
     public Duration getTotalDuration() { return totalDuration; }

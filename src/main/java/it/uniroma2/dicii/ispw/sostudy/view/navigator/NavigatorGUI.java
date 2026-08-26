@@ -127,7 +127,7 @@ public class NavigatorGUI extends Navigator{
                 this.home.setView(root);
                 this.home.setNavigatorGUI(this);
             }
-            this.home.prepare(getContext().getSession().getCurrentRole() == UserRole.PROFESSOR);
+            this.home.prepare();
             buildView(this.home.getView());
         }
         catch(IOException e){

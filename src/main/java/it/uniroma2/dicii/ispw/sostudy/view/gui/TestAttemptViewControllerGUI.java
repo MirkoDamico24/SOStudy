@@ -2,7 +2,6 @@ package it.uniroma2.dicii.ispw.sostudy.view.gui;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.AttemptBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.KnowledgeEvaluationController;
-import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.model.SessionManager;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
@@ -19,13 +18,7 @@ import java.util.List;
 
 public class TestAttemptViewControllerGUI extends BaseControllerGUI{
     @FXML
-    private Button btnHome;
-    @FXML
-    private Button btnCreaTest;
-    @FXML
     private Button btnClassiVirtuali;
-    @FXML
-    private Button btnLogout;
 
     @FXML
     private Label userNameLabel;
@@ -33,9 +26,11 @@ public class TestAttemptViewControllerGUI extends BaseControllerGUI{
     @FXML
     private VBox listaAttempt;
 
+    private static final String SERIF = "Serif";
+    private static final String COLOR = "-fx-text-fill: #555555;";
+
 
     public void prepare(){
-        configureViewByRole(getNavigatorGUI().getSession().getCurrentRole() == UserRole.PROFESSOR);
         setUsernameBundle();
 
         KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
@@ -53,20 +48,9 @@ public class TestAttemptViewControllerGUI extends BaseControllerGUI{
         populateAttemptSection(attempts);
     }
 
-    public void configureViewByRole(boolean isProfessore) {
-        if (!isProfessore) {
-            btnCreaTest.setVisible(false);
-            btnCreaTest.setManaged(false);
-        }
-        else{
-            btnCreaTest.setVisible(true);
-            btnCreaTest.setManaged(true);
-        }
-    }
-
     public void setUsernameBundle() {
         userNameLabel.setText(getFormattedUsername());
-        btnClassiVirtuali.setText(getNavigatorGUI().getContext().getSession().getCurrentClass().getClassName());
+        btnClassiVirtuali.setText(getNavigatorGUI().getCurrentClass().getClassName());
     }
 
     public void populateAttemptSection(List<AttemptBean> attempt) {
@@ -74,16 +58,16 @@ public class TestAttemptViewControllerGUI extends BaseControllerGUI{
 
         if(attempt == null){
             Label testLabel = new Label("Nessuno studente ha ancora svolto il test!");
-            testLabel.setFont(new Font("Serif", 26));
-            testLabel.setStyle("-fx-text-fill: #555555;");
+            testLabel.setFont(new Font(SERIF, 26));
+            testLabel.setStyle(COLOR);
             testLabel.setMaxWidth(Double.MAX_VALUE);
             testLabel.setPadding(new Insets(15, 0, 15, 0));
             listaAttempt.getChildren().add(testLabel);
         }
         else if(attempt.isEmpty()){
             Label testLabel = new Label("Non ci sono test da corregere!");
-            testLabel.setFont(new Font("Serif", 26));
-            testLabel.setStyle("-fx-text-fill: #555555;");
+            testLabel.setFont(new Font(SERIF, 26));
+            testLabel.setStyle(COLOR);
             testLabel.setMaxWidth(Double.MAX_VALUE);
             testLabel.setPadding(new Insets(15, 0, 15, 0));
             listaAttempt.getChildren().add(testLabel);
@@ -91,8 +75,8 @@ public class TestAttemptViewControllerGUI extends BaseControllerGUI{
         else{
             for (int i = 0; i < attempt.size(); i++) {
                 Label testLabel = new Label("Test di: " + attempt.get(i).getStudent().getName() + " " + attempt.get(i).getStudent().getSurname());
-                testLabel.setFont(new Font("Serif", 26));
-                testLabel.setStyle("-fx-text-fill: #555555;");
+                testLabel.setFont(new Font(SERIF, 26));
+                testLabel.setStyle(COLOR);
                 testLabel.setMaxWidth(Double.MAX_VALUE);
                 testLabel.setPadding(new Insets(15, 0, 15, 0));
 
@@ -128,7 +112,7 @@ public class TestAttemptViewControllerGUI extends BaseControllerGUI{
 
     @FXML
     void handleLogout(ActionEvent event) {
-        SessionManager.getInstance().deleteSession(navigatorGUI.getContext().getSession().getSessionID());
+        SessionManager.getInstance().deleteSession(navigatorGUI.getSession().getSessionID());
         navigatorGUI.setPreviousView(Views.TESTATTEMPTVIEW);
         navigatorGUI.goToLoginView();
     }

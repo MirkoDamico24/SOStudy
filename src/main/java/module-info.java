@@ -22,4 +22,5 @@ module it.uniroma2.dicii.ispw.sostudy {
     opens it.uniroma2.dicii.ispw.sostudy.application to javafx.fxml;
     opens it.uniroma2.dicii.ispw.sostudy.view.cli to javafx.fxml;
     opens it.uniroma2.dicii.ispw.sostudy.view.navigator to javafx.fxml;
+    exports it.uniroma2.dicii.ispw.sostudy.eng.timer;
 }
