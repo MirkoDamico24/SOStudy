@@ -82,7 +82,7 @@
             </Label>
 
             <!-- Contenitore vuoto pronto per essere riempito da Java -->
-            <VBox fx:id="listaComunicazioni" maxWidth="1000.0" style="-fx-border-color: #555555; -fx-border-width: 2.5; -fx-border-radius: 12; -fx-background-radius: 12; -fx-background-color: #FFFFFF;">
+            <VBox fx:id="listaComunicazioni" minWidth="1000.0" maxWidth="-Infinity" style="-fx-border-color: #555555; -fx-border-width: 2.5; -fx-border-radius: 12; -fx-background-radius: 12; -fx-background-color: #FFFFFF;">
                 <padding>
                     <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
                 </padding>

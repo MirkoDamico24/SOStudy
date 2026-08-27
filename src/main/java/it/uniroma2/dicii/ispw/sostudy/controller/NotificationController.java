@@ -36,6 +36,17 @@ public class NotificationController {
         messageDAO.save(newMsg);       //message saved in the persistency layer
     }
 
+    public void sendNewEvaluationNotification(Test test, TestAttempt evaluatedTest) throws ControllerException {
+        String message = "Il test '" + test.getName() + "' svolto in data " + evaluatedTest.getHandInDate() + " ha ricevuto la valutazione: " + evaluatedTest.getGrade();
+        Student recipient = evaluatedTest.getStudent();
+        Message msg = new Message(message, recipient);
+        recipient.addMessage(msg);
+
+        List<Message> newMsg = new ArrayList<>();
+        newMsg.add(msg);
+        messageDAO.save(newMsg);
+    }
+
     public List<MessageBean> fetchUserNotifications(UserBean ub) throws ControllerException {
         List<Message> fetched = null;
 

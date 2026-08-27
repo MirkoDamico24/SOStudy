@@ -116,9 +116,15 @@ public class TestAttemptViewControllerGUI extends BaseControllerGUI{
     @FXML
     void handleLogout(ActionEvent event) {
         getNavigatorGUI().setSession(null);
-        getNavigatorGUI().setContext(null);
         SessionManager.getInstance().deleteSession(navigatorGUI.getSession().getSessionID());
         navigatorGUI.setPreviousView(Views.TESTATTEMPTVIEW);
         navigatorGUI.goToLoginView();
+    }
+
+    @FXML
+    void handleGoBack(){
+        getNavigatorGUI().setCurrentTest(null);
+        getNavigatorGUI().setPreviousView(Views.TESTATTEMPTVIEW);
+        getNavigatorGUI().goToInsideClassView();
     }
 }

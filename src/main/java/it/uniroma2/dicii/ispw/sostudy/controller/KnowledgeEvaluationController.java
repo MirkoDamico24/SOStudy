@@ -80,6 +80,7 @@ public class KnowledgeEvaluationController {
 
     public List<QuestionBean> loadRequiredTest(SessionBean session, TestBean testBean) throws ControllerException{
         Test toTake = null;
+        boolean testTaken = false;
 
         Session currentSession = SessionManager.getInstance().getSession(session.getSessionID());
 
@@ -94,6 +95,16 @@ public class KnowledgeEvaluationController {
                 break;
             }
         }
+
+        try {
+            testTaken = testAttemptDAO.checkAlreadyDone(toTake, currentSession.getCurrentStudent());
+        }
+        catch(DAOException e){
+            e.printStackTrace();
+            throw new ControllerException("Errore durante la verifica della presenza di un tentativo.");
+        }
+
+        if(testTaken) return new ArrayList<>();
 
         LocalDateTime toCheck = LocalDateTime.of(toTake.getDueDate(), toTake.getDueTime());
         LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
@@ -222,6 +233,10 @@ public class KnowledgeEvaluationController {
 
         currentTest.gradeTest(toUpdate);
         toUpdate.setTestGradingStatus(TestGradingStatus.FULLYGRADED);
+
+        //notification to student
+        NotificationController msgctrl = new NotificationController();
+        msgctrl.sendNewEvaluationNotification(currentTest, toUpdate);
 
         try{
             testAttemptDAO.updateTestAttempt(toUpdate);

@@ -26,15 +26,15 @@ public class ChoiceDemoDAO extends ChoiceDAO{
         Question question = DAOFactory.getInstance().getQuestionDAO().getQuestionById(questionID);
         QuestionDTO questionDTO = QuestionMapper.questionToDTO(question);
         if(questionDTO.type() == QuestionType.CLOSEQUESTION) {
-            ChoiceDTO dto = new ChoiceDTO(questionDTO.options(), questionDTO.solution(), questionID);
-            return dto;
+            return new ChoiceDTO(questionDTO.options(), questionDTO.solution(), questionID);
         }
         throw new DAOException("Open Answers have no choices associated.");
     }
 
     @Override
     public void saveChoices(List<ChoiceDTO> choices) throws DAOException{
-        int id = Collections.max(this.getKeys()) + 1;
+        int id = 1;
+        if(!this.getKeys().isEmpty()) id = Collections.max(this.getKeys()) + 1;
         for(ChoiceDTO choiceDTO : choices){
             for(Choice choice: choiceDTO.options()) addToCache(id, choice);
         }
@@ -42,7 +42,7 @@ public class ChoiceDemoDAO extends ChoiceDAO{
 
     @Override
     public int getChoiceId(Choice choice, int questionId) throws DAOException{
-        //use case 'evaluate knowledge' not implemented in demo version
+        //choice always accessed through Question objects
         return 0;
     }
 }

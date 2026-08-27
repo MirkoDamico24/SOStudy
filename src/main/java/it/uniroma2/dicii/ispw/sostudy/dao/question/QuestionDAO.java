@@ -1,14 +1,11 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.question;
 
 import it.uniroma2.dicii.ispw.sostudy.dao.CacheDAO;
-import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.Question;
-import it.uniroma2.dicii.ispw.sostudy.model.Test;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public abstract class QuestionDAO extends CacheDAO<Integer, Question> {
     public abstract Question getQuestionById(int questionID);

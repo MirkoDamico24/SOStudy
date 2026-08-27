@@ -16,10 +16,11 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
+import java.time.LocalDate;
 import java.util.List;
 import javafx.scene.control.ScrollPane;
 
-public class InsideClassViewControllerGUI extends BaseControllerGUI{
+public class InsideClassViewControllerGUI extends BaseControllerGUI {
     @FXML private Button btnCreaTest;
     @FXML private Button btnNomeClasseNav;
 
@@ -27,7 +28,8 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI{
 
     @FXML private Button btnInvitaStudente;
     @FXML private ScrollPane testListScrollPane;
-    @FXML private VBox listaTestVBox;
+    @FXML private VBox activeTestsVBox;
+    @FXML private VBox expiredTestsVBox;
 
     @FXML
     public void prepare() {
@@ -55,8 +57,7 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI{
 
             btnInvitaStudente.setVisible(false);
             btnInvitaStudente.setManaged(false);
-        }
-        else{
+        } else {
             btnCreaTest.setVisible(true);
             btnCreaTest.setManaged(true);
 
@@ -70,29 +71,45 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI{
     }
 
     public void populateTests(List<TestBean> tests) {
-        listaTestVBox.getChildren().clear();
+        activeTestsVBox.getChildren().clear();
+        expiredTestsVBox.getChildren().clear();
+
+        if (tests == null) {
+            return;
+        }
+
+        LocalDate today = LocalDate.now();
 
         for (TestBean test : tests) {
+            VBox targetContainer = (test.getDueDate() != null && test.getDueDate().isBefore(today))
+                    ? expiredTestsVBox
+                    : activeTestsVBox;
+
             VBox testItemBox = new VBox(10);
 
             Label lblTest = new Label(test.getName());
             lblTest.setFont(new Font("Serif", 28));
             lblTest.setStyle("-fx-text-fill: #555555; -fx-cursor: hand;");
 
-            lblTest.setOnMouseClicked(event ->{
-                switch(getNavigatorGUI().getCurrentUserRole()) {
+            lblTest.setOnMouseClicked(event -> {
+                switch (getNavigatorGUI().getCurrentUserRole()) {
                     case UserRole.STUDENT -> {
-                        showAlert("Test", "Il tentativo sarà avviato", "Premere 'Ok' per iniziare");
                         Views next = getNextView(test);
                         switch (next) {
-                            case OPENANSWERVIEW -> getNavigatorGUI().goToOpenAnswerView();
-                            case CLOSEANSWERVIEW -> getNavigatorGUI().goToCloseAnswerView();
+                            case OPENANSWERVIEW -> {
+                                showAlert("Test", "Il tentativo sarà avviato", "Premere 'Ok' per iniziare");
+                                getNavigatorGUI().goToOpenAnswerView();
+                            }
+                            case CLOSEANSWERVIEW -> {
+                                showAlert("Test", "Il tentativo sarà avviato", "Premere 'Ok' per iniziare");
+                                getNavigatorGUI().goToCloseAnswerView();
+                            }
+                            case INSIDECLASSVIEW -> getNavigatorGUI().goToInsideClassView();
                             default -> showAlert("Errore", "Tipo di domanda successivo non supportato dalla UI", "");
                         }
                     }
 
                     case UserRole.PROFESSOR -> {
-                        showAlert("Test", "", "Premere 'Ok' per iniziare");
                         getNavigatorGUI().setCurrentTest(test);
                         getNavigatorGUI().goToTestAttemptView();
                     }
@@ -107,7 +124,7 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI{
             testItemBox.getChildren().addAll(lblTest, underline);
             testItemBox.setPadding(new Insets(10, 0, 10, 0));
 
-            listaTestVBox.getChildren().add(testItemBox);
+            targetContainer.getChildren().add(testItemBox);
         }
     }
 
@@ -115,17 +132,21 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI{
         KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
         List<QuestionBean> questions = null;
 
-        try{
+        try {
             questions = ctrl.loadRequiredTest(getNavigatorGUI().getSession(), test);
-        }
-        catch(ControllerException e){
+        } catch (ControllerException e) {
             showAlert("Errore", e.getMessage(), "");
+        }
+
+        if (questions == null || questions.isEmpty()) {
+            showAlert("Errore", "Il test selezionato è già stato svolto. Non è possibile svolgere più di un tentativo.", "Selezionare un altro test");
+            return Views.INSIDECLASSVIEW;
         }
 
         getNavigatorGUI().setQuestions(questions);
         getNavigatorGUI().setCurrentTest(test);
 
-        if(questions.getFirst().isOpenQuestion()) return Views.OPENANSWERVIEW;
+        if (questions.getFirst().isOpenQuestion()) return Views.OPENANSWERVIEW;
         else return Views.CLOSEANSWERVIEW;
     }
 
@@ -143,6 +164,6 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI{
 
     @FXML
     void handleInvitaStudente(ActionEvent event) {
-            //yet to implement
+        //yet to implement
     }
 }

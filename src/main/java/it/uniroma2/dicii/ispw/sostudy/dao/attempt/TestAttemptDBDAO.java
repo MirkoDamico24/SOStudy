@@ -248,4 +248,40 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
 
         return toUpdateList;
     }
+
+    @Override
+    public boolean checkAlreadyDone(Test test, Student student) throws DAOException{
+       String sqlQuery = """
+                            SELECT EXISTS(
+                                SELECT 1
+                                FROM Tentativo
+                                WHERE test = ? AND student = ?)
+                            """;
+       int testID = 0;
+
+       try{
+           testID = testDAO.getTestId(test.getName(), test.getVirtualClass().getName(), test.getVirtualClass().getProf().getEmail());
+       }
+       catch(DAOException e){
+           throw new DAOException("Error occurred while fetching test id from database. " + e.getMessage());
+       }
+
+        try (PreparedStatement pstmt = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)) {
+            pstmt.setInt(1, testID);
+            pstmt.setString(2, student.getEmail());
+
+            ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    boolean isPresent = rs.getBoolean(1);
+
+                    if (isPresent) {
+                        return true;
+                    }
+                }
+        }
+        catch(SQLException e){
+            throw new DAOException("Error occurred while updating attempt data to database. " + e.getMessage());
+        }
+        return false;
+    }
 }

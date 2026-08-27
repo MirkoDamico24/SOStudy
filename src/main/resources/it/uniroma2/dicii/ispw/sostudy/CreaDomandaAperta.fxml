@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.dicii.ispw.sostudy.view.gui.CreaDomandaApertaControllerGUI">
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.dicii.ispw.sostudy.view.gui.CreaDomandaApertaControllerGUI">
 
     <!-- ==================== HEADER / NAV BAR ==================== -->
     <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
@@ -163,16 +154,7 @@
     </VBox>
 
     <!-- ==================== TASTO INDIETRO (Bottom-Left) ==================== -->
-    <Button fx:id="btnIndietro" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleIndietro" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #1C77FF; -fx-background-radius: 50em; -fx-border-color: #000000; -fx-border-radius: 50em; -fx-border-width: 1.5; -fx-cursor: hand;" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="80.0">
-        <graphic>
-            <!-- Freccia Indietro (Unicode) -->
-            <Label text="←" textFill="BLACK">
-                <font>
-                    <Font name="System Bold" size="64.0" />
-                </font>
-            </Label>
-        </graphic>
-    </Button>
+    <Button fx:id="btnIndietro" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleIndietro" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #1C77FF; -fx-background-radius: 50em; -fx-border-color: #000000; -fx-border-radius: 50em; -fx-border-width: 1.5; -fx-cursor: hand;" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="80.0" />
 
     <!-- ==================== CAMPANELLA NOTIFICHE (Top-Left) ==================== -->
     <Button fx:id="btnNotifiche" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="80.0" prefWidth="80.0" style="-fx-background-color: #1C77FF; -fx-background-radius: 50em; -fx-border-color: #000000; -fx-border-radius: 50em; -fx-border-width: 1.5; -fx-cursor: hand;" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="40.0">
@@ -184,5 +166,11 @@
             </Label>
         </graphic>
     </Button>
+      <!-- Freccia Indietro (Unicode) -->
+      <Label layoutX="98.0" layoutY="895.0" text="←" textFill="BLACK">
+          <font>
+              <Font name="System Bold" size="64.0" />
+          </font>
+      </Label>
 
 </AnchorPane>

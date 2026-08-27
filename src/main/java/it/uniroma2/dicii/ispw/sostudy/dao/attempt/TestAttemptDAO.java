@@ -1,6 +1,8 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.attempt;
 
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
+import it.uniroma2.dicii.ispw.sostudy.model.Student;
+import it.uniroma2.dicii.ispw.sostudy.model.Test;
 import it.uniroma2.dicii.ispw.sostudy.model.TestAttempt;
 
 import java.util.HashSet;
@@ -18,4 +20,5 @@ public abstract class TestAttemptDAO{
     public abstract void saveTestAttempt(TestAttempt testAttempt) throws DAOException;
     public abstract List<TestAttempt> getTestAttempt(int testId) throws DAOException;
     public abstract void updateTestAttempt(TestAttempt testAttempt) throws DAOException;
+    public abstract boolean checkAlreadyDone(Test test, Student student) throws DAOException;
 }
