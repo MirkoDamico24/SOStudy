@@ -108,6 +108,13 @@ public class ChoiceDBDAO extends ChoiceDAO {
     }
 
     @Override
+    /**
+     * The choice's id is not searched in cache, because the choice cannot be
+     * uniquely identified by itself. It requires also the question to which it is attached,
+     * but that would require the presence of a reference to a Question object that is not
+     * required by the domain. We chose to leave the model completly independt from
+     * persistency needs and pay a little overhead for the query.
+     */
     public int getChoiceId(Choice choice, int questionId) throws DAOException{
         int choiceId = 0;
         String sqlQuery = "SELECT code FROM OpzioniDomande WHERE content = ? AND question = ?";

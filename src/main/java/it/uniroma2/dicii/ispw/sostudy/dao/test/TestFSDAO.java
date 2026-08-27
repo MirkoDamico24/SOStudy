@@ -178,7 +178,7 @@ public class TestFSDAO extends TestDAO {
 
     @Override
     public List<TestAttempt> getTestAttempt(Test test) throws DAOException{
-        //TODO: implement
+        //use case 'evaluate knowledge' not implemented in FS version
         return new ArrayList<>();
     }
 }

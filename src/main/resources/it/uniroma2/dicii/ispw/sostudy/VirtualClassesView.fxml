@@ -27,12 +27,12 @@
                     </Label>
 
                     <!-- Home -->
-                    <Button fx:id="btnHome" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Home">
+                    <Button fx:id="btnHome" onAction="#handleHome" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Home">
                         <font><Font name="Serif Regular" size="26.0" /></font>
                     </Button>
 
                     <!-- Crea test (Verrà nascosto per gli studenti) -->
-                    <Button fx:id="btnCreaTest" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Crea test">
+                    <Button fx:id="btnCreaTest" onAction="#handleCreateTest" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Crea test">
                         <font><Font name="Serif Regular" size="26.0" /></font>
                     </Button>
 

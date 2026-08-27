@@ -1,12 +1,10 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.question;
 
 
+import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.Question;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class QuestionDemoDAO extends QuestionDAO {
     @Override
@@ -21,7 +19,11 @@ public class QuestionDemoDAO extends QuestionDAO {
 
     @Override
     public void saveTestQuestion(int testID, List<Question> question){
-        //yet to implement
+        int questionID = Collections.max(this.getKeys()) + 1;
+        for(Question q : question){
+            addToCache(questionID, q);
+            questionID++;
+        }
     }
 
     @Override
@@ -31,8 +33,8 @@ public class QuestionDemoDAO extends QuestionDAO {
     }
 
     @Override
-    public Integer getQuestionId(Question question, int testID){
-        //TODO: implement
-        return 0;
+    public Integer getQuestionId(Question question, int testID) throws DAOException{
+        //use case 'evaluate knowledge' not implemented in demo version
+        return null;
     }
 }

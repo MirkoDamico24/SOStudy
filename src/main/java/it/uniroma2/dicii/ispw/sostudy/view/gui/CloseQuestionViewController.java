@@ -69,7 +69,7 @@ public class CloseQuestionViewController extends BasicAnswerViewControllerGUI {
         QuestionBean question = getNavigatorGUI().getQuestions().get(currentIndex);
         AnswerBean answer = new AnswerBean(answerInt);
         KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
-        ctrl.registerAnswer(getNavigatorGUI().getSession(), question, answer, getNavigatorGUI().getCurrentQuestionIndex());
+        ctrl.registerAnswer(getNavigatorGUI().getSession(), answer, getNavigatorGUI().getCurrentQuestionIndex());
     }
 
 

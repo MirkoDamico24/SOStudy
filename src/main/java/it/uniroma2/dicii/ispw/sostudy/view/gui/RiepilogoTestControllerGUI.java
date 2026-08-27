@@ -5,6 +5,7 @@ import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.CreateTestController;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
+import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -112,6 +113,17 @@ public class RiepilogoTestControllerGUI extends BaseControllerGUI {
         btnEdit.setStyle("-fx-background-color: transparent; -fx-text-fill: #555555; -fx-cursor: hand; -fx-font-size: 26px; -fx-padding: 0;");
         btnEdit.setMinSize(40, 40);
 
+        btnEdit.setOnAction(e -> {
+            getNavigatorGUI().setQuestionToEdit(question);
+            getNavigatorGUI().setPreviousView(Views.RECAP);
+            if(question.isOpenQuestion()) {
+                getNavigatorGUI().goToOpenQuestionView();
+            }
+            else {
+                getNavigatorGUI().goToCloseQuestionView();
+            }
+        });
+
         Button btnDelete = new Button("🗑");
         btnDelete.setStyle("-fx-background-color: transparent; -fx-text-fill: #555555; -fx-cursor: hand; -fx-font-size: 24px; -fx-padding: 0;");
         btnDelete.setMinSize(40, 40);
@@ -120,7 +132,7 @@ public class RiepilogoTestControllerGUI extends BaseControllerGUI {
 
         btnDelete.setOnAction(e -> {
             listaDomandeVBox.getChildren().remove(rowWrapper);
-            navigatorGUI.getContext().getQuestions().remove(question);
+            getNavigatorGUI().getContext().getQuestions().remove(question);
             updateTotals();
         });
 
@@ -164,7 +176,7 @@ public class RiepilogoTestControllerGUI extends BaseControllerGUI {
     @FXML
     void handleAddQuestion(ActionEvent event) {
         getNavigatorGUI().setPreviousView(Views.RECAP);
-        if(getNavigatorGUI().showPopUp() == QuestionType.OPENQUESTION){
+        if(NavigatorGUI.showPopUp() == QuestionType.OPENQUESTION){
             getNavigatorGUI().goToOpenQuestionView();
         }
         else getNavigatorGUI().goToCloseQuestionView();

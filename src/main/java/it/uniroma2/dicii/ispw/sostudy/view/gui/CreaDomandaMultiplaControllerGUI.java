@@ -47,9 +47,22 @@ public class CreaDomandaMultiplaControllerGUI extends BaseControllerGUI {
         opzioniCount = 0;
         solutionToggleGroup = new ToggleGroup();
 
-        addOptionRow("Inserire il testo della prima opzione");
-        addOptionRow("Inserire il testo della seconda opzione");
-        addOptionRow("Inserire il testo della terza opzione");
+        QuestionBean questionToEdit = getNavigatorGUI().getQuestionToEdit();
+        if (questionToEdit != null) {
+            testoDomandaArea.setText(questionToEdit.getHeader());
+            punteggioComboBox.setValue(questionToEdit.getMaxScore());
+
+            List<String> options = questionToEdit.getOptions();
+            int solutionIndex = questionToEdit.getSolution();
+
+            for (int i = 0; i < options.size(); i++) {
+                addOptionRow(options.get(i), i == solutionIndex, false);
+            }
+        } else {
+            addOptionRow("Inserire il testo della prima opzione", true, true);
+            addOptionRow("Inserire il testo della seconda opzione", false, true);
+            addOptionRow("Inserire il testo della terza opzione", false, true);
+        }
     }
 
     public void setUsernameBundle() {
@@ -58,10 +71,10 @@ public class CreaDomandaMultiplaControllerGUI extends BaseControllerGUI {
 
     @FXML
     void handleAggiungiOpzione(ActionEvent event) {
-        addOptionRow("Inserire il testo della nuova opzione");
+        addOptionRow("Inserire il testo della nuova opzione", false, true);
     }
 
-    private void addOptionRow(String promptTesto) {
+    private void addOptionRow(String text, boolean isSelected, boolean isPrompt) {
         opzioniCount++;
 
         HBox row = new HBox(20);
@@ -69,10 +82,14 @@ public class CreaDomandaMultiplaControllerGUI extends BaseControllerGUI {
 
         RadioButton radio = new RadioButton();
         radio.setToggleGroup(solutionToggleGroup);
-        if (opzioniCount == 1) { radio.setSelected(true); }
+        if (isSelected) { radio.setSelected(true); }
 
         TextField textField = new TextField();
-        textField.setPromptText(promptTesto);
+        if (isPrompt) {
+            textField.setPromptText(text);
+        } else {
+            textField.setText(text);
+        }
         textField.setPrefHeight(45.0);
         textField.setStyle("-fx-background-color: white; -fx-border-color: #8CB8F5; -fx-border-radius: 3; -fx-font-size: 16px;");
         HBox.setHgrow(textField, Priority.ALWAYS);
@@ -120,15 +137,51 @@ public class CreaDomandaMultiplaControllerGUI extends BaseControllerGUI {
         int maxScore = punteggioComboBox.getValue();
 
         QuestionBean qb = new QuestionBean(header, maxScore, options, solutionIndex);
-        getNavigatorGUI().setQuestions(qb);
+
+        QuestionBean questionToEdit = getNavigatorGUI().getQuestionToEdit();
+        if (questionToEdit != null) {
+            List<QuestionBean> qList = getNavigatorGUI().getQuestions();
+            int index = qList.indexOf(questionToEdit);
+            if (index != -1) {
+                qList.set(index, qb);
+            }
+            getNavigatorGUI().setQuestionToEdit(null);
+        } else {
+            getNavigatorGUI().setQuestions(qb);
+        }
+
         getNavigatorGUI().setPreviousView(Views.CLOSEQUESTIONVIEW);
         getNavigatorGUI().goToRecapView();
     }
 
     @FXML
     public void handleGoBack(ActionEvent event) {
-        if(getNavigatorGUI().getPreviousView() == Views.CREATETEST) return;
+        getNavigatorGUI().getContext().setQuestionToEdit(null);
+        if(getNavigatorGUI().getPreviousView() == Views.CREATETEST){
+            getNavigatorGUI().goToCreateTestView();
+        }
+        else getNavigatorGUI().goToRecapView();
+
         getNavigatorGUI().setPreviousView(Views.CLOSEQUESTIONVIEW);
-        getNavigatorGUI().goToRecapView();
+    }
+
+    @FXML
+    void handleHome(){
+        getNavigatorGUI().setCurrentQuestionIndex(-1);
+        getNavigatorGUI().setQuestions(new ArrayList<>());
+        getNavigatorGUI().setCurrentTest(null);
+        getNavigatorGUI().getContext().setQuestionToEdit(null);
+        getNavigatorGUI().setPreviousView(Views.CLOSEQUESTIONVIEW);
+        getNavigatorGUI().goToHomeView();
+    }
+
+    @FXML
+    public void handleGoVirtualClasses(ActionEvent event) {
+        getNavigatorGUI().setCurrentQuestionIndex(-1);
+        getNavigatorGUI().setQuestions(new ArrayList<>());
+        getNavigatorGUI().setCurrentTest(null);
+        getNavigatorGUI().getContext().setQuestionToEdit(null);
+        getNavigatorGUI().setPreviousView(Views.CLOSEQUESTIONVIEW);
+        getNavigatorGUI().goToClassesView();
     }
 }

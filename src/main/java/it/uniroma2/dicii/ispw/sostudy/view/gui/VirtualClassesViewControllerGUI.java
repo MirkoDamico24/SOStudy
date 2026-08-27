@@ -4,6 +4,7 @@ import it.uniroma2.dicii.ispw.sostudy.bean.VirtualClassBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.KnowledgeEvaluationController;
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
+import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -53,9 +54,12 @@ public class VirtualClassesViewControllerGUI extends BaseControllerGUI{
 
     public void configureViewByRole(boolean isProfessore) {
         if (!isProfessore) {
-            btnCreaClasse.setVisible(false);
             btnCreaTest.setVisible(false);
             btnCreaTest.setManaged(false);
+        }
+        else{
+            btnCreaTest.setVisible(true);
+            btnCreaTest.setManaged(true);
         }
     }
 
@@ -113,5 +117,17 @@ public class VirtualClassesViewControllerGUI extends BaseControllerGUI{
     @FXML
     void handleCreaClasse(ActionEvent event) {
         //not yet implemented, different use case
+    }
+
+    @FXML
+    void handleHome(){
+        getNavigatorGUI().setPreviousView(Views.CLASSVIEW);
+        getNavigatorGUI().goToHomeView();
+    }
+
+    @FXML
+    void handleCreateTest(ActionEvent event) {
+        getNavigatorGUI().setPreviousView(Views.CLASSVIEW);
+        getNavigatorGUI().goToCreateTestView();
     }
 }

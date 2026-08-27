@@ -8,6 +8,7 @@ import it.uniroma2.dicii.ispw.sostudy.model.VirtualClass;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class TestDemoDAO extends TestDAO {
     @Override
@@ -29,13 +30,20 @@ public class TestDemoDAO extends TestDAO {
 
     @Override
     public List<Test> getTestByClassId(int classId, VirtualClass virtualClass) throws DAOException{
-        //TODO: implement
-        return new ArrayList<>();
+        Set<Integer> ids = this.getKeys();
+        List<Test> allTests = new ArrayList<>();
+        for(Integer id : ids){
+            if(getFromCache(id).getVirtualClass().equals(virtualClass)){
+                allTests.add(getFromCache(id));
+            }
+        }
+
+        return allTests;
     }
 
     @Override
     public List<TestAttempt> getTestAttempt(Test test) throws DAOException{
-        //TODO: implement
+        //use case 'evaluate knowledge' not implemented in demo version
         return new ArrayList<>();
     }
 

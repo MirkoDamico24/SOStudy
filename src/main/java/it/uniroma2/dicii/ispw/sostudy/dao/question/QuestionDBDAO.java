@@ -186,6 +186,13 @@ public class QuestionDBDAO extends QuestionDAO {
     }
 
     @Override
+    /**
+     * The question's id is not searched in cache, because the question cannot be
+     * uniquely identified by itself. It requires also the test to which it is attached,
+     * but that would require the presence of a reference to a Test object that is not
+     * required by the domain. We chose to leave the model completly independt from
+     * persistency needs and pay a little overhead for the query.
+     */
     public Integer getQuestionId(Question question, int testID){
         Integer questionID = null;
         String sqlQuery = "SELECT code FROM Domanda WHERE header = ? and test = ?";
@@ -206,5 +213,4 @@ public class QuestionDBDAO extends QuestionDAO {
 
         return questionID;
     }
-
 }

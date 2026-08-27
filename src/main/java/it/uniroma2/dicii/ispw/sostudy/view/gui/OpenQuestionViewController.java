@@ -19,6 +19,7 @@ public class OpenQuestionViewController extends BasicAnswerViewControllerGUI {
 
 
     public void prepare() {
+        txtRisposta.clear();
         this.setTestInfo(getNavigatorGUI().getCurrentTest());
 
         int currentIndex = getNavigatorGUI().getCurrentQuestionIndex();
@@ -54,7 +55,7 @@ public class OpenQuestionViewController extends BasicAnswerViewControllerGUI {
         QuestionBean question = getNavigatorGUI().getQuestions().get(currentIndex);
         AnswerBean answer = new AnswerBean(answerText);
         KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
-        ctrl.registerAnswer(getNavigatorGUI().getSession(), question, answer, getNavigatorGUI().getCurrentQuestionIndex());
+        ctrl.registerAnswer(getNavigatorGUI().getSession(), answer, getNavigatorGUI().getCurrentQuestionIndex());
     }
 
     @FXML

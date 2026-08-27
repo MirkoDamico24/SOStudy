@@ -122,16 +122,4 @@ public class VirtualClassDBDAO extends VirtualClassDAO {
 
         return virtualClasses;
     }
-
-    @Override
-    public int getClassID(String className, String profEmail) throws DAOException{
-        Set<Integer> keys = this.getKeys();
-
-        for(Integer key : keys){
-            VirtualClass tmp = this.getFromCache(key);
-            if(tmp.getName().equals(className) && tmp.getProf().getEmail().equals(profEmail)) return key;
-        }
-
-        throw new DAOException("Class not found");
-    }
 }

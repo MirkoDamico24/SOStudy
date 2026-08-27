@@ -103,6 +103,14 @@ public abstract class Navigator {
         return this.contex.getQuestions();
     }
 
+    public void setQuestionToEdit(QuestionBean questionToEdit) {
+        this.contex.setQuestionToEdit(questionToEdit);
+    }
+
+    public QuestionBean getQuestionToEdit() {
+        return this.contex.getQuestionToEdit();
+    }
+
     public void nextView(){
         if(currentView == null) return;
         switch(currentView){

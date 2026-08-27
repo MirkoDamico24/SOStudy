@@ -13,6 +13,7 @@ public class ContextContainer {
     private List<AttemptBean> attempts;
     private AttemptBean currentSelectedAttempt;
     private int currentQuestionIndex = -1;
+    private QuestionBean questionToEdit;
 
     public void setSession(SessionBean session) {
         this.session = session;
@@ -79,5 +80,13 @@ public class ContextContainer {
 
     public VirtualClassBean getCurrentClass() {
         return currentClass;
+    }
+
+    public void setQuestionToEdit(QuestionBean questionToEdit) {
+        this.questionToEdit = questionToEdit;
+    }
+
+    public QuestionBean getQuestionToEdit() {
+        return questionToEdit;
     }
 }

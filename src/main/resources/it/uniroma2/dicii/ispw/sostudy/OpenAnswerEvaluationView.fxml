@@ -95,7 +95,7 @@
         </children>
     </VBox>
 
-    <VBox alignment="CENTER" prefWidth="240.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #8CB8F5; -fx-border-width: 1.5; -fx-border-radius: 12; -fx-background-radius: 12;" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="480.0">
+    <VBox alignment="CENTER" style="-fx-background-color: #FFFFFF; -fx-border-color: #8CB8F5; -fx-border-width: 1.5; -fx-border-radius: 12; -fx-background-radius: 12;" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="480.0">
         <padding>
             <Insets bottom="15.0" left="20.0" right="20.0" top="15.0" />
         </padding>
@@ -107,5 +107,16 @@
             </Label>
         </children>
     </VBox>
+
+    <Button fx:id="btnIndietro" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleGoBack" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #1C77FF; -fx-background-radius: 50em; -fx-border-color: #000000; -fx-border-radius: 50em; -fx-border-width: 1.5; -fx-cursor: hand;" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="80.0">
+        <graphic>
+            <!-- Freccia Indietro (Unicode) -->
+            <Label text="←" textFill="BLACK">
+                <font>
+                    <Font name="System Bold" size="64.0" />
+                </font>
+            </Label>
+        </graphic>
+    </Button>
 
 </AnchorPane>

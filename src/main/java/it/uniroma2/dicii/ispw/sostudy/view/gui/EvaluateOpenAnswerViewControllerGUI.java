@@ -8,6 +8,7 @@ import it.uniroma2.dicii.ispw.sostudy.controller.KnowledgeEvaluationController;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Navigator;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -24,7 +25,10 @@ public class EvaluateOpenAnswerViewControllerGUI extends BaseControllerGUI {
     @FXML private Label maxScoreLabel;
     @FXML private Label evaluatedStudentNameLabel;
 
+    private ChangeListener<String> scoreInputListener;
+
     public void prepare() {
+        scoreInput.clear();
         setTestInfo(getNavigatorGUI().getCurrentTest());
 
         AttemptBean workingOn = getNavigatorGUI().getCurrentAttempt();
@@ -39,10 +43,31 @@ public class EvaluateOpenAnswerViewControllerGUI extends BaseControllerGUI {
         QuestionBean question = workingOn.getQuestions().get(currentIndex);
         AnswerBean answer = workingOn.getAnswers().get(currentIndex);
 
+        if (scoreInputListener != null) {
+            scoreInput.textProperty().removeListener(scoreInputListener);
+        }
+
         if (question != null) {
             questionTextLabel.setText(question.getHeader());
             answerTextArea.setText(answer.getTextualContent());
-            maxScoreLabel.setText("/" + question.getMaxScore());
+            if(answer.getAssignedScore() != -1) {
+                maxScoreLabel.setText(answer.getAssignedScore() + "/" + question.getMaxScore());
+                scoreInput.setPromptText("");
+            } else {
+                maxScoreLabel.setText("/" + question.getMaxScore());
+                scoreInput.setPromptText("___");
+            }
+
+            scoreInputListener = (observable, oldValue, newValue) -> {
+                if (newValue != null && !newValue.isEmpty()) {
+                    maxScoreLabel.setText("/" + question.getMaxScore());
+                } else if (answer.getAssignedScore() != -1) {
+                    maxScoreLabel.setText(answer.getAssignedScore() + "/" + question.getMaxScore());
+                } else {
+                    maxScoreLabel.setText("/" + question.getMaxScore());
+                }
+            };
+            scoreInput.textProperty().addListener(scoreInputListener);
         }
 
         evaluatedStudentNameLabel.setText(workingOn.getStudent().getName() + " " +  workingOn.getStudent().getSurname());
@@ -64,7 +89,7 @@ public class EvaluateOpenAnswerViewControllerGUI extends BaseControllerGUI {
         if(!scoreInput.getText().isEmpty()){
             int score = Integer.parseInt(scoreInput.getText());
             Navigator nav = getNavigatorGUI();
-            QuestionBean q = nav.getQuestions().get(nav.getCurrentQuestionIndex());
+            QuestionBean q = nav.getCurrentAttempt().getQuestions().get(nav.getCurrentQuestionIndex());
             if(score > q.getMaxScore()){
                 showAlert("Punteggio elevato", "Non si può assegnare un punteggio più alto di quello previsto.", "La risposta sarà valutata con il punteggio massimo");
                 score = q.getMaxScore();
@@ -93,6 +118,7 @@ public class EvaluateOpenAnswerViewControllerGUI extends BaseControllerGUI {
         updateCurrentAnswer();
 
         Views next = getNextView();
+        getNavigatorGUI().setPreviousView(Views.EVALUATEOPENANSWER);
         if (next == Views.TESTATTEMPTVIEW) {
             getNavigatorGUI().goToTestAttemptView();
         } else if (next == Views.EVALUATEOPENANSWER) {
@@ -108,4 +134,23 @@ public class EvaluateOpenAnswerViewControllerGUI extends BaseControllerGUI {
         }
         else return Views.EVALUATEOPENANSWER;
     }
+
+    @FXML
+    public void handleGoBack(){
+        Views previous = getNavigatorGUI().getPreviousView();
+        switch (previous) {
+            case TESTATTEMPTVIEW -> getNavigatorGUI().goToTestAttemptView();
+            case EVALUATEOPENANSWER ->{
+                getNavigatorGUI().setCurrentQuestionIndex(getNavigatorGUI().getCurrentQuestionIndex() -1);
+                if(getNavigatorGUI().getCurrentQuestionIndex() == -1) getNavigatorGUI().goToTestAttemptView();
+                else getNavigatorGUI().goToEvaluateOpenAnswerView();
+            }
+            default-> {
+                showAlert("Errore", "Schermata precedente incompatibile", "Flusso d'esecuzione compromesso");
+                System.exit(0);
+            }
+        }
+        getNavigatorGUI().setPreviousView(Views.EVALUATEOPENANSWER);
+    }
+
 }

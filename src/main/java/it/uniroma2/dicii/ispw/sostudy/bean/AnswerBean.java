@@ -3,7 +3,7 @@ package it.uniroma2.dicii.ispw.sostudy.bean;
 public class AnswerBean {
     private String textualContent;
     private Integer chosenOption = null;
-    private int assignedScore;
+    private int assignedScore = -1;
 
     public AnswerBean(String textualContent) {
         this.textualContent = textualContent;

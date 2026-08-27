@@ -56,6 +56,13 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI{
             btnInvitaStudente.setVisible(false);
             btnInvitaStudente.setManaged(false);
         }
+        else{
+            btnCreaTest.setVisible(true);
+            btnCreaTest.setManaged(true);
+
+            btnInvitaStudente.setVisible(true);
+            btnInvitaStudente.setManaged(true);
+        }
     }
 
     public void setUsernameBundle() {

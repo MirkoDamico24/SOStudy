@@ -85,6 +85,7 @@ public class TestAttemptViewControllerGUI extends BaseControllerGUI{
                 testLabel.setOnMouseClicked(event ->{
                     showAlert("Test", "Verrà avviata la valutazione del test", "Premere 'OK' per iniziare");
                     getNavigatorGUI().setCurrentAttempt(selected);
+                    getNavigatorGUI().setPreviousView(Views.TESTATTEMPTVIEW);
                     getNavigatorGUI().goToEvaluateOpenAnswerView();
                 });
 
@@ -100,18 +101,22 @@ public class TestAttemptViewControllerGUI extends BaseControllerGUI{
 
     @FXML
     void handleNavCreaTest(ActionEvent event) {
+        getNavigatorGUI().setCurrentTest(null);
         navigatorGUI.setPreviousView(Views.TESTATTEMPTVIEW);
         navigatorGUI.goToCreateTestView();
     }
 
     @FXML
     void handleNavClassiVirtuali(ActionEvent event) {
+        getNavigatorGUI().setCurrentTest(null);
         navigatorGUI.setPreviousView(Views.TESTATTEMPTVIEW);
         navigatorGUI.goToClassesView();
     }
 
     @FXML
     void handleLogout(ActionEvent event) {
+        getNavigatorGUI().setSession(null);
+        getNavigatorGUI().setContext(null);
         SessionManager.getInstance().deleteSession(navigatorGUI.getSession().getSessionID());
         navigatorGUI.setPreviousView(Views.TESTATTEMPTVIEW);
         navigatorGUI.goToLoginView();

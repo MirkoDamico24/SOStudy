@@ -102,10 +102,17 @@ public class Test {
         test.computeGrade();
     }
 
+    public List<Question> getQuestions() {
+        List<Question> copies = new ArrayList<>();
+        for(Question question : this.questions){
+            copies.add(question.copy());
+        }
+        return copies;
+    }
+
     public String getName() {return this.name;}
     public LocalDate getDueDate() {return this.dueDate;}
     public Duration getDuration() {return this.duration;}
-    public List<Question> getQuestions() {return this.questions;}
     public void setName(String name) {this.name = name;}
     public void setDueDate(LocalDate dueDate) {this.dueDate = dueDate;}
     public void setDuration(Duration duration) {this.duration = duration;}

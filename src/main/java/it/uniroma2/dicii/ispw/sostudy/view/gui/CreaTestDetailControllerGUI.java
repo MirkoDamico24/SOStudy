@@ -5,6 +5,7 @@ import it.uniroma2.dicii.ispw.sostudy.bean.VirtualClassBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.CreateTestController;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
+import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorGUI;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,30 +33,41 @@ public class CreaTestDetailControllerGUI extends BaseControllerGUI {
         clear();
         setUsernameBundle();
 
-        try {
-            String profEmail = getCurrentProfEmail();
-            List<VirtualClassBean> professorClass = createTestController.getProfessorClasses(profEmail);
-            ObservableList<String> classes = FXCollections.observableArrayList();
-            for (VirtualClassBean vClassBean : professorClass) {
-                classes.add(vClassBean.getClassName());
+        TestBean current = getNavigatorGUI().getCurrentTest();
+        if(current != null){
+            nomeTestField.setText(current.getName());
+            classeComboBox.setValue(current.getVirtualClass());
+            orarioComboBox.setValue(current.getDueTime().toString());
+            dataConsegnaPicker.setValue(current.getDueDate());
+            dataConsegnaPicker.getEditor().setText(dataConsegnaPicker.getConverter().toString(current.getDueDate()));
+            durataField.setText(String.valueOf(current.getDuration().toMinutes()));
+        }
+        else {
+            try {
+                String profEmail = getCurrentProfEmail();
+                List<VirtualClassBean> professorClass = createTestController.getProfessorClasses(profEmail);
+                ObservableList<String> classes = FXCollections.observableArrayList();
+                for (VirtualClassBean vClassBean : professorClass) {
+                    classes.add(vClassBean.getClassName());
+                }
+
+                classeComboBox.setItems(classes);
+
+            } catch (ControllerException e) {
+                showAlert("Errore di risorsa", e.getMessage(), "Riprovare");
             }
 
-            classeComboBox.setItems(classes);
-
-        } catch (ControllerException e) {
-            showAlert("Errore di risorsa", e.getMessage(), "Riprovare");
+            ObservableList<String> orari = FXCollections.observableArrayList(
+                    "00:00", "00:30", "01:00", "01:30", "02:00", "02:30", "03:00", "03:30", "04:00",
+                    "04:30", "05:00", "05:30", "06:00", "06:30", "07:00", "07:30",
+                    "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
+                    "11:00", "11:30", "12:00", "12:30", "14:00", "14:30",
+                    "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00",
+                    "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00",
+                    "22:30", "23:00", "23:30"
+            );
+            orarioComboBox.setItems(orari);
         }
-
-        ObservableList<String> orari = FXCollections.observableArrayList(
-                "00:00", "00:30", "01:00", "01:30", "02:00", "02:30", "03:00", "03:30", "04:00",
-                "04:30", "05:00", "05:30", "06:00", "06:30", "07:00", "07:30",
-                "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
-                "11:00", "11:30", "12:00", "12:30", "14:00", "14:30",
-                "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00",
-                "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00",
-                "22:30",  "23:00", "23:30"
-        );
-        orarioComboBox.setItems(orari);
     }
 
     private void clear() {
@@ -108,7 +120,7 @@ public class CreaTestDetailControllerGUI extends BaseControllerGUI {
         }
         else {
             getNavigatorGUI().setPreviousView(Views.CREATETEST);
-            if (getNavigatorGUI().showPopUp() == QuestionType.OPENQUESTION) {
+            if (NavigatorGUI.showPopUp() == QuestionType.OPENQUESTION) {
                 getNavigatorGUI().goToOpenQuestionView();
             } else {
                 getNavigatorGUI().goToCloseQuestionView();
@@ -120,12 +132,14 @@ public class CreaTestDetailControllerGUI extends BaseControllerGUI {
 
     @FXML
     void handleNavHome(ActionEvent event) {
+        getNavigatorGUI().setCurrentTest(null);
         navigatorGUI.setPreviousView(Views.CREATETEST);
         navigatorGUI.goToHomeView();
     }
 
     @FXML
     void handleNavClassiVirtuali(ActionEvent event) {
+        getNavigatorGUI().setCurrentTest(null);
         navigatorGUI.setPreviousView(Views.CREATETEST);
         navigatorGUI.goToClassesView();
     }

@@ -134,16 +134,4 @@ public class VirtualClassFSDAO extends VirtualClassDAO {
         }
         return false;
     }
-
-    @Override
-    public int getClassID(String className, String profEmail) throws DAOException {
-        for (Integer key : this.getKeys()) {
-            VirtualClass tmp = this.getFromCache(key);
-            if (tmp.getName().equals(className) && tmp.getProf().getEmail().equals(profEmail)) {
-                return key;
-            }
-        }
-
-        throw new DAOException("Class not found");
-    }
 }

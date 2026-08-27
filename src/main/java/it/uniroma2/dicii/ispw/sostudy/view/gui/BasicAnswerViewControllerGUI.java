@@ -50,6 +50,7 @@ public class BasicAnswerViewControllerGUI extends BaseControllerGUI implements T
 
     @Override
     public void conclude() {
+        //has to be implemented by the specific controllers
     }
 
     protected void renderRemaining(Duration remaining) {
@@ -78,7 +79,6 @@ public class BasicAnswerViewControllerGUI extends BaseControllerGUI implements T
         listaProgressoVBox.getChildren().clear();
 
         for (int i = 0; i < questions.size(); i++) {
-            QuestionBean q = questions.get(i);
             String tick = (i < getNavigatorGUI().getCurrentQuestionIndex()) ? "☑ " : "☐ ";
             Label lblQuestion = new Label(tick + "Question " + (i + 1));
             lblQuestion.setFont(new Font("Serif Regular", 22));

@@ -163,7 +163,7 @@ public class KnowledgeEvaluationController {
         return questionBeans;
     }
 
-    public void registerAnswer(SessionBean sessionBean, QuestionBean question, AnswerBean answer, int index){
+    public void registerAnswer(SessionBean sessionBean, AnswerBean answer, int index){
         Session currentSession = SessionManager.getInstance().getSession(sessionBean.getSessionID());
         Question current = currentSession.getCurrentTest().getQuestions().get(index);
 
