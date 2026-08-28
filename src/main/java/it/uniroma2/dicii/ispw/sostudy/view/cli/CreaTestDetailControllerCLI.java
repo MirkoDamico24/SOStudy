@@ -3,6 +3,7 @@ package it.uniroma2.dicii.ispw.sostudy.view.cli;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.VirtualClassBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.CreateTestController;
+import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorCLI;
@@ -31,8 +32,16 @@ public class CreaTestDetailControllerCLI extends BaseControllerCLI {
         System.out.println("\n------------------------------------------------------------");
         System.out.println("                     Dettagli del test                      ");
         System.out.println("------------------------------------------------------------");
-        System.out.println("Informazioni del test");
-        System.out.println("------------------------------------------------------------\n");
+        System.out.println("\n");
+    }
+
+    @Override
+    public void printNavBar(){
+        System.out.print("[NavBar]: Home | Classi Virtuali");
+        if (this.getCurrentUserRole() == UserRole.PROFESSOR) {
+            System.out.print(" | Crea test");
+        }
+        System.out.println("\n                                   ---------");
     }
 
     private List<String> loadAvailableClasses() {

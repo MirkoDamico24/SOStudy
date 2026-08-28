@@ -13,6 +13,11 @@ public class NavigatorCLI extends Navigator{
     private CreaDomandaApertaControllerCLI openQuestion;
     private CreaDomandaMultiplaControllerCLI closeQuestion;
     private RiepilogoTestControllerCLI recapView;
+    private InsideClassViewControllerCLI insideClassView;
+    private OpenAnswerViewControllerCLI openAnswerView;
+    private CloseAnswerViewControllerCLI closeAnswerView;
+    private TestAttemptViewControllerCLI testAttemptView;
+    private EvaluateOpenAnswerViewController openEvaluateView;
 
     @Override
     public void startup(){
@@ -57,7 +62,11 @@ public class NavigatorCLI extends Navigator{
 
     @Override
     public void createInsideClassView(){
-
+        if(this.insideClassView == null){
+            this.insideClassView = new InsideClassViewControllerCLI();
+            this.insideClassView.setNavigator(this);
+        }
+        this.insideClassView.start();
     }
 
     @Override
@@ -89,22 +98,38 @@ public class NavigatorCLI extends Navigator{
 
     @Override
     public void createCloseAnswerView(){
-
+        if(this.closeAnswerView == null){
+            this.closeAnswerView = new CloseAnswerViewControllerCLI();
+            this.closeAnswerView.setNavigator(this);
+        }
+        this.closeAnswerView.start();
     }
 
     @Override
     public void createOpenAnswerView(){
-
+        if(this.openAnswerView == null){
+            this.openAnswerView = new OpenAnswerViewControllerCLI();
+            this.openAnswerView.setNavigator(this);
+        }
+        this.openAnswerView.start();
     }
 
     @Override
     public void createEvaluateOpenAnswerView(){
-
+        if(this.openEvaluateView == null){
+            this.openEvaluateView = new EvaluateOpenAnswerViewController();
+            this.openEvaluateView.setNavigator(this);
+        }
+        this.openEvaluateView.start();
     }
 
     @Override
     public void createTestAttemptView(){
-
+        if(this.testAttemptView == null){
+            this.testAttemptView = new TestAttemptViewControllerCLI();
+            this.testAttemptView.setNavigator(this);
+        }
+        this.testAttemptView.start();
     }
 
     public static QuestionType selectQuestionType() {

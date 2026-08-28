@@ -166,6 +166,12 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI {
     }
 
     @FXML
+    public void handleGoBack(){
+        getNavigatorGUI().setPreviousView(Views.INSIDECLASSVIEW);
+        getNavigatorGUI().goToClassesView();
+    }
+
+    @FXML
     void handleInvitaStudente(ActionEvent event) {
         //yet to implement
     }

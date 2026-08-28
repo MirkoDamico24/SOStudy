@@ -131,5 +131,86 @@
         "id": 4,
         "dueTime": "16:00",
         "class": 1
+    },
+    {
+        "duration": "PT30M",
+        "dueDate": "2026-09-02",
+        "name": "test prova CLI",
+        "questions": [{
+            "header": "Prima ed unica domanda aperta",
+            "maxScore": 10
+        }],
+        "id": 5,
+        "dueTime": "17:00",
+        "class": 1
+    },
+    {
+        "duration": "PT30M",
+        "dueDate": "2026-09-01",
+        "name": "test prova cli",
+        "questions": [{
+            "header": "Domanda risposta aperta",
+            "maxScore": 2
+        }],
+        "id": 6,
+        "dueTime": "17:00",
+        "class": 1
+    },
+    {
+        "duration": "PT2M",
+        "dueDate": "2026-09-01",
+        "name": "test di prova sburrebole",
+        "questions": [
+            {
+                "header": "Domanda apertaaa",
+                "maxScore": 2
+            },
+            {
+                "options": [
+                    {"content": "alpha"},
+                    {
+                        "isSolution": true,
+                        "content": "beta"
+                    },
+                    {"content": "gamma"}
+                ],
+                "header": "Domanda multipla",
+                "maxScore": 5
+            }
+        ],
+        "id": 7,
+        "dueTime": "17:00",
+        "class": 1
+    },
+    {
+        "duration": "PT2M",
+        "dueDate": "2026-09-03",
+        "name": "ennesimo test di prova",
+        "questions": [
+            {
+                "header": "Test della dom",
+                "maxScore": 2
+            },
+            {
+                "options": [
+                    {"content": "Shock"},
+                    {"content": "Shock because"},
+                    {
+                        "isSolution": true,
+                        "content": "evreything in our mind"
+                    },
+                    {"content": "is totally connected with the shish"}
+                ],
+                "header": "First reaction",
+                "maxScore": 30
+            },
+            {
+                "header": "First reaction ...",
+                "maxScore": 40
+            }
+        ],
+        "id": 8,
+        "dueTime": "17:00",
+        "class": 1
     }
 ]

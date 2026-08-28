@@ -153,24 +153,15 @@
         </children>
     </VBox>
 
-    <!-- ==================== TASTO INDIETRO (Bottom-Left) ==================== -->
-    <Button fx:id="btnIndietro" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleIndietro" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #1C77FF; -fx-background-radius: 50em; -fx-border-color: #000000; -fx-border-radius: 50em; -fx-border-width: 1.5; -fx-cursor: hand;" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="80.0" />
-
-    <!-- ==================== CAMPANELLA NOTIFICHE (Top-Left) ==================== -->
-    <Button fx:id="btnNotifiche" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="80.0" prefWidth="80.0" style="-fx-background-color: #1C77FF; -fx-background-radius: 50em; -fx-border-color: #000000; -fx-border-radius: 50em; -fx-border-width: 1.5; -fx-cursor: hand;" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="40.0">
+    <!-- ==================== TASTO INDIETRO ==================== -->
+    <Button fx:id="btnIndietro" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleGoBack" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #1C77FF; -fx-background-radius: 50em; -fx-border-color: #000000; -fx-border-radius: 50em; -fx-border-width: 1.5; -fx-cursor: hand;" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="80.0">
         <graphic>
-            <Label text="🔔" textFill="BLACK">
+            <Label style="-fx-text-fill: #000000;" text="←">
                 <font>
-                    <Font size="36.0" />
+                    <Font name="System Bold" size="64.0" />
                 </font>
             </Label>
         </graphic>
     </Button>
-      <!-- Freccia Indietro (Unicode) -->
-      <Label layoutX="98.0" layoutY="895.0" text="←" textFill="BLACK">
-          <font>
-              <Font name="System Bold" size="64.0" />
-          </font>
-      </Label>
 
 </AnchorPane>

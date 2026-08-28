@@ -70,7 +70,6 @@ public class TestAttempt{
             }
         }
 
-        System.out.println("[Class: TestAttempt] Total score: " + totalScore);
         this.grade = totalScore;
     }
 

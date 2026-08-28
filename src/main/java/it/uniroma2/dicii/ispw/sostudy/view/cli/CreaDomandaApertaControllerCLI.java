@@ -13,7 +13,6 @@ public class CreaDomandaApertaControllerCLI extends BaseControllerCLI {
 
     private void showView() {
         super.printStandardHeader("CREA TEST");
-        super.printNavBar();
 
         System.out.println("\n------------------------------------------------------------");
         System.out.println("                 Domanda a risposta aperta                  ");
@@ -47,7 +46,13 @@ public class CreaDomandaApertaControllerCLI extends BaseControllerCLI {
             }
             case "0" -> {
                 System.out.println("\n--> Torno indietro...");
-                nav.goToHomeView();
+                nav.getContext().setQuestionToEdit(null);
+                if(nav.getPreviousView() == Views.CREATETEST){
+                    nav.goToCreateTestView();
+                }
+                else nav.goToRecapView();
+
+                nav.setPreviousView(Views.OPENQUESTIONVIEW);
             }
             default -> {
                 System.out.println("\n--> Operazione non consentita!");

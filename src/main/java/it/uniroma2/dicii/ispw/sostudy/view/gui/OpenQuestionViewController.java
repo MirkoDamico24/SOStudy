@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
 import java.time.Duration;
+import java.util.ArrayList;
 
 
 public class OpenQuestionViewController extends BasicAnswerViewControllerGUI {
@@ -45,6 +46,7 @@ public class OpenQuestionViewController extends BasicAnswerViewControllerGUI {
             submitAnswer();
             KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
             ctrl.submitAttempt(getNavigatorGUI().getSession());
+            getNavigatorGUI().setQuestions(new ArrayList<>());
             getNavigatorGUI().goToHomeView();
         });
     }
@@ -67,6 +69,7 @@ public class OpenQuestionViewController extends BasicAnswerViewControllerGUI {
             case CLOSEANSWERVIEW -> getNavigatorGUI().goToCloseAnswerView();
             case HOME -> {
                 new KnowledgeEvaluationController().submitAttempt(getNavigatorGUI().getSession());
+                getNavigatorGUI().setQuestions(new ArrayList<>());
                 getNavigatorGUI().goToHomeView();
             }
             default -> {

@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CloseQuestionViewController extends BasicAnswerViewControllerGUI {
@@ -59,6 +60,7 @@ public class CloseQuestionViewController extends BasicAnswerViewControllerGUI {
             submitAnswer();
             KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
             ctrl.submitAttempt(getNavigatorGUI().getSession());
+            getNavigatorGUI().setQuestions(new ArrayList<>());
             getNavigatorGUI().goToHomeView();
         });
     }
@@ -138,6 +140,7 @@ public class CloseQuestionViewController extends BasicAnswerViewControllerGUI {
             case CLOSEANSWERVIEW -> getNavigatorGUI().goToCloseAnswerView();
             case HOME -> {
                 new KnowledgeEvaluationController().submitAttempt(getNavigatorGUI().getSession());
+                getNavigatorGUI().setQuestions(new ArrayList<>());
                 getNavigatorGUI().goToHomeView();
             }
             default -> showAlert("Errore", "Tipo di domanda successivo non supportato dalla UI", "");

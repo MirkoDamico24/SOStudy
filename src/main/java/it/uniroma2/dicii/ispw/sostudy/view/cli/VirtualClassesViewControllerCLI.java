@@ -1,8 +1,11 @@
 package it.uniroma2.dicii.ispw.sostudy.view.cli;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.VirtualClassBean;
+import it.uniroma2.dicii.ispw.sostudy.controller.KnowledgeEvaluationController;
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
+import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.NavigatorCLI;
+import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 
 import java.util.List;
 import java.util.Scanner;
@@ -15,17 +18,25 @@ public class VirtualClassesViewControllerCLI {
     public void start() {
         boolean running = true;
         while (running) {
-            //loadClasses();
+            loadClasses();
             clearConsole();
             showView();
             running = manageInput();
         }
     }
 
-    /*private void loadClasses() {
-        ManageVirtualClassesController controller = new ManageVirtualClassesController();
-        userClasses = controller.getUserVirtualClasses(nav.getContext().getSession());
-    }*/
+    private void loadClasses() {
+        KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
+        List<VirtualClassBean> classes = null;
+
+        try{
+            classes = ctrl.getUserClasses(nav.getSession());
+        }
+        catch(ControllerException e){
+           System.err.println("Errore durante il caricamento delle classi disponibili");
+        }
+        userClasses = classes;
+    }
 
     private void showView() {
         String username;
@@ -44,7 +55,7 @@ public class VirtualClassesViewControllerCLI {
         printNavBar(role);
 
         System.out.println("\n------------------------------------------------------------");
-        System.out.println("                   Le tue Classi Virtuali                   ");
+        System.out.println("                       Classi Virtuali                   ");
         System.out.println("------------------------------------------------------------");
 
         printClassesList();
@@ -56,7 +67,7 @@ public class VirtualClassesViewControllerCLI {
         if (role == UserRole.PROFESSOR) {
             System.out.print(" | Crea test");
         }
-        System.out.println("\n                 ---------------");
+        System.out.println("\n                -----------------");
     }
 
     private void printClassesList() {
@@ -77,11 +88,10 @@ public class VirtualClassesViewControllerCLI {
         }
 
         if (role == UserRole.PROFESSOR) {
-            System.out.println("[C] Crea nuova classe virtuale");
+            System.out.println("[C] Crea nuova classe virtuale (non implementata)");
         }
 
-        System.out.println("[N] Vai a Notifiche");
-        System.out.println("[0] Torna alla Home");
+        System.out.println("[H] Torna alla Home");
         System.out.print("\nScegli un'opzione: ");
     }
 
@@ -97,10 +107,7 @@ public class VirtualClassesViewControllerCLI {
                 System.out.println("\n--> Operazione non consentita agli studenti!");
                 return true;
             }
-        } else if (input.equals("N")) {
-            System.out.println("\n--> Navigazione verso 'Notifiche' in corso...");
-            return false;
-        } else if (input.equals("0")) {
+        }else if (input.equals("H")) {
             System.out.println("\n--> Ritorno alla Home in corso...");
             nav.goToHomeView();
             return false;
@@ -109,7 +116,10 @@ public class VirtualClassesViewControllerCLI {
                 int choice = Integer.parseInt(input);
                 if (userClasses != null && choice > 0 && choice <= userClasses.size()) {
                     VirtualClassBean selectedClass = userClasses.get(choice - 1);
+                    nav.setCurrentClass(selectedClass);
                     System.out.println("\n--> Ingresso nella classe '" + selectedClass.getClassName() + "' in corso...");
+                    nav.setPreviousView(Views.CLASSVIEW);
+                    nav.goToInsideClassView();
                     return false;
                 } else {
                     System.out.println("\n--> Scelta non valida!");

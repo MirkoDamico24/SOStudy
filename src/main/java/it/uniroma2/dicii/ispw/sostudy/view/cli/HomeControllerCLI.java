@@ -31,6 +31,15 @@ public class HomeControllerCLI extends BaseControllerCLI implements MessageObser
         printMenu();
     }
 
+    @Override
+    public void printNavBar(){
+        System.out.print("[NavBar]: Home | Classi Virtuali");
+        if (this.getCurrentUserRole() == UserRole.PROFESSOR) {
+            System.out.print(" | Crea test");
+        }
+        System.out.println("\n     -----");
+    }
+
     private void populateNotifications(){
         UserBean ub = nav.getCorrectUserBean();
 
@@ -43,6 +52,9 @@ public class HomeControllerCLI extends BaseControllerCLI implements MessageObser
     }
 
     private void printNotifications() {
+        if(notifications.isEmpty()) {
+            System.out.println("Non ci sono nuove comunicazioni");
+        }
         for (int i = 0; i < notifications.size(); i++) {
             System.out.printf("%d. %s%n", (i + 1), this.notifications.get(i).getMessage());
         }

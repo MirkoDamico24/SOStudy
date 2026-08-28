@@ -62,7 +62,7 @@ public class CreaDomandaApertaControllerGUI extends BaseControllerGUI {
     }
 
     @FXML
-    void handleIndietro(ActionEvent event) {
+    void handleGoBack(ActionEvent event) {
         getNavigatorGUI().getContext().setQuestionToEdit(null);
         if(getNavigatorGUI().getPreviousView() == Views.CREATETEST){
             getNavigatorGUI().goToCreateTestView();

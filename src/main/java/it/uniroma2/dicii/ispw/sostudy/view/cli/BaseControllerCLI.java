@@ -37,11 +37,6 @@ public abstract class BaseControllerCLI {
         System.out.println("============================================================");
     }
 
-    protected void printNavBar() {
-        System.out.print("[NavBar]: Home | Classi Virtuali");
-        if (this.getCurrentUserRole() == UserRole.PROFESSOR) {
-            System.out.print(" | Crea test");
-        }
-        System.out.println("\n                                   ---------");
+    public void printNavBar() {
     }
 }

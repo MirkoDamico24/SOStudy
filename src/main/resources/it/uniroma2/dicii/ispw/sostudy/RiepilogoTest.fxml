@@ -168,11 +168,6 @@
         </children>
     </HBox>
 
-    <!-- ==================== HEADER (Campanella, Menu, Profilo) ==================== -->
-    <Button fx:id="btnNotifiche" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="80.0" prefWidth="80.0" style="-fx-background-color: #1C77FF; -fx-background-radius: 50em; -fx-border-color: #000000; -fx-border-radius: 50em; -fx-border-width: 1.5; -fx-cursor: hand;" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="40.0">
-        <graphic><Label style="-fx-text-fill: #000000;" text="🔔"><font><Font size="36.0" /></font></Label></graphic>
-    </Button>
-
     <!-- ==================== BOTTONE SALVA E PUBBLICA (Bottom-Center) ==================== -->
     <HBox alignment="CENTER" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <children>

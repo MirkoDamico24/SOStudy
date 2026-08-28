@@ -82,15 +82,6 @@
         </children>
     </VBox>
 
-    <!-- ==================== CAMPANELLA NOTIFICHE (Top-Left) ==================== -->
-    <Button fx:id="btnNotifiche" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="80.0" prefWidth="80.0" style="-fx-background-color: #1C77FF; -fx-background-radius: 50em; -fx-border-color: #000000; -fx-border-radius: 50em; -fx-border-width: 1.5; -fx-cursor: hand;" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="40.0">
-        <graphic>
-            <Label style="-fx-text-fill: #000000;" text="🔔">
-                <font><Font size="36.0" /></font>
-            </Label>
-        </graphic>
-    </Button>
-
     <!-- ==================== BOTTONE CREA CLASSE (Bottom-Left) ==================== -->
     <!-- Questo bottone è visibile solo ai professori e allineato con la campanella -->
     <Button fx:id="btnCreaClasse" mnemonicParsing="false" onAction="#handleCreaClasse" style="-fx-background-color: #1C77FF; -fx-text-fill: white; -fx-background-radius: 8; -fx-cursor: hand;" text="+ Crea nuova classe" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="60.0">

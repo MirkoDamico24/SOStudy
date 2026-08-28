@@ -48,6 +48,10 @@ public class RiepilogoTestControllerCLI extends BaseControllerCLI {
         int totalScore = 0;
         int totalQuestions = (questions != null) ? questions.size() : 0;
 
+        for (QuestionBean q : questions) {
+            totalScore += q.getMaxScore();
+        }
+
         System.out.println("------------------------------------------------------------");
         System.out.println("Totale domande aggiunte: " + totalQuestions + "           Punteggio totale test: " + totalScore);
         System.out.println("------------------------------------------------------------");
@@ -184,6 +188,7 @@ public class RiepilogoTestControllerCLI extends BaseControllerCLI {
             nav.setPreviousView(Views.RECAP);
             nav.goToHomeView();
         } catch (ControllerException e) {
+            e.printStackTrace();
             System.out.println("\n--> Errore durante il salvataggio: " + e.getMessage());
             promptContinue();
             start();

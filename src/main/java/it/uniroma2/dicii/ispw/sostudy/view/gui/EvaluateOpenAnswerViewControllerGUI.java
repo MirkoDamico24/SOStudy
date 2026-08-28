@@ -15,6 +15,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
+import java.util.ArrayList;
+
 public class EvaluateOpenAnswerViewControllerGUI extends BaseControllerGUI {
 
     @FXML private Label testNameLabel;
@@ -86,18 +88,19 @@ public class EvaluateOpenAnswerViewControllerGUI extends BaseControllerGUI {
     }
 
     private void registerAnswerScore(){
+        int score = 0;
+        Navigator nav = getNavigatorGUI();
         if(!scoreInput.getText().isEmpty()){
-            int score = Integer.parseInt(scoreInput.getText());
-            Navigator nav = getNavigatorGUI();
+            score = Integer.parseInt(scoreInput.getText());
             QuestionBean q = nav.getCurrentAttempt().getQuestions().get(nav.getCurrentQuestionIndex());
             if(score > q.getMaxScore()){
                 showAlert("Punteggio elevato", "Non si può assegnare un punteggio più alto di quello previsto.", "La risposta sarà valutata con il punteggio massimo");
                 score = q.getMaxScore();
             }
-            AnswerBean answer = nav.getCurrentAttempt().getAnswers().get(nav.getCurrentQuestionIndex());
-            answer.setAssignedScore(score);
-        }
 
+        }
+        AnswerBean answer = nav.getCurrentAttempt().getAnswers().get(nav.getCurrentQuestionIndex());;
+        answer.setAssignedScore(score);
     }
 
     private void submitEvaluation() {
@@ -120,6 +123,7 @@ public class EvaluateOpenAnswerViewControllerGUI extends BaseControllerGUI {
         Views next = getNextView();
         getNavigatorGUI().setPreviousView(Views.EVALUATEOPENANSWER);
         if (next == Views.TESTATTEMPTVIEW) {
+            getNavigatorGUI().setQuestions(new ArrayList<>());
             getNavigatorGUI().goToTestAttemptView();
         } else if (next == Views.EVALUATEOPENANSWER) {
             getNavigatorGUI().goToEvaluateOpenAnswerView();
@@ -142,7 +146,10 @@ public class EvaluateOpenAnswerViewControllerGUI extends BaseControllerGUI {
             case TESTATTEMPTVIEW -> getNavigatorGUI().goToTestAttemptView();
             case EVALUATEOPENANSWER ->{
                 getNavigatorGUI().setCurrentQuestionIndex(getNavigatorGUI().getCurrentQuestionIndex() -1);
-                if(getNavigatorGUI().getCurrentQuestionIndex() == -1) getNavigatorGUI().goToTestAttemptView();
+                if(getNavigatorGUI().getCurrentQuestionIndex() == -1){
+                    getNavigatorGUI().setQuestions(new ArrayList<>());
+                    getNavigatorGUI().goToTestAttemptView();
+                }
                 else getNavigatorGUI().goToEvaluateOpenAnswerView();
             }
             default-> {
