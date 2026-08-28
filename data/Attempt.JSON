@@ -1,0 +1,64 @@
+[
+    {
+        "test": 3,
+        "gradingStatus": "FULLYGRADED",
+        "student": "giuseppe.bianchi@gmail.com",
+        "handInDate": "2026-08-28",
+        "grade": 31,
+        "answers": [
+            {
+                "score": 2,
+                "textualContent": "Prima risposta a domanda aperta :(",
+                "code": 1,
+                "question": 3000
+            },
+            {
+                "score": 10,
+                "textualContent": "EiEiEiEiEiEI XD",
+                "code": 2,
+                "question": 3001
+            },
+            {
+                "score": 16,
+                "code": 3,
+                "question": 3002,
+                "integerContent": 3002001
+            },
+            {
+                "score": 3,
+                "code": 4,
+                "question": 3003,
+                "integerContent": 3003001
+            }
+        ],
+        "handInTime": "11:31:55.710308102"
+    },
+    {
+        "test": 4,
+        "gradingStatus": "FULLYGRADED",
+        "student": "giuseppe.bianchi@gmail.com",
+        "handInDate": "2026-08-28",
+        "grade": 12,
+        "answers": [
+            {
+                "score": 2,
+                "textualContent": "Eh se non lo sai tu",
+                "code": 1,
+                "question": 4000
+            },
+            {
+                "score": 0,
+                "code": 2,
+                "question": 4001,
+                "integerContent": 4001001
+            },
+            {
+                "score": 10,
+                "code": 3,
+                "question": 4002,
+                "integerContent": 4002000
+            }
+        ],
+        "handInTime": "11:39:04.136376556"
+    }
+]

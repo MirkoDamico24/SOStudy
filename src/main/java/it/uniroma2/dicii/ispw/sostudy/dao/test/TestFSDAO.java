@@ -175,10 +175,4 @@ public class TestFSDAO extends TestDAO {
             throw new DAOException("Error occurred while saving test to file system. " + e.getMessage());
         }
     }
-
-    @Override
-    public List<TestAttempt> getTestAttempt(Test test) throws DAOException{
-        //use case 'evaluate knowledge' not implemented in FS version
-        return new ArrayList<>();
-    }
 }

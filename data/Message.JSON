@@ -6,5 +6,25 @@
     {
         "recipient": "giuseppe.bianchi@gmail.com",
         "content": "Nuovo test assegnato: ISPWvirtualClass, test di prova, 2026-08-31"
+    },
+    {
+        "recipient": "giuseppe.bianchi@gmail.com",
+        "content": "Nuovo test assegnato: ISPWvirtualClass, Test fs, 2026-09-01"
+    },
+    {
+        "recipient": "giuseppe.bianchi@gmail.com",
+        "content": "Nuovo test assegnato: ISPWvirtualClass, Test prova definitiva FS, 2026-09-01"
+    },
+    {
+        "recipient": "giuseppe.bianchi@gmail.com",
+        "content": "Il test 'Test prova definitiva FS' svolto in data 2026-08-28 ha ricevuto la valutazione: 31"
+    },
+    {
+        "recipient": "giuseppe.bianchi@gmail.com",
+        "content": "Nuovo test assegnato: ISPWvirtualClass, Test di prova all in memory, 2026-09-01"
+    },
+    {
+        "recipient": "giuseppe.bianchi@gmail.com",
+        "content": "Il test 'Test di prova all in memory' svolto in data 2026-08-28 ha ricevuto la valutazione: 12"
     }
 ]

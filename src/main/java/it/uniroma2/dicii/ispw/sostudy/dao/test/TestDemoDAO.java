@@ -9,6 +9,7 @@ import it.uniroma2.dicii.ispw.sostudy.model.*;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,7 +36,7 @@ public class TestDemoDAO extends TestDAO {
 
         questions.add(new OpenQuestion("Descrivere gli interl steps di un caso d'uso di un sistema di gestione della carriera universitaria.", 10));
 
-        Test demoTest = new Test("ISPWdemoTest", LocalDate.now().plusDays(7), LocalTime.of(23, 59),
+        Test demoTest = new Test("ISPWdemoTest", LocalDate.now(ZoneId.systemDefault()).plusDays(7), LocalTime.of(23, 59),
                 Duration.ofMinutes(30), questions, virtualClass);
 
         int testId = 1;
@@ -82,12 +83,6 @@ public class TestDemoDAO extends TestDAO {
         if(allTests.isEmpty()) allTests = populateTest(virtualClass);
 
         return allTests;
-    }
-
-    @Override
-    public List<TestAttempt> getTestAttempt(Test test) throws DAOException{
-        //use case 'evaluate knowledge' not implemented in demo version
-        return new ArrayList<>();
     }
 
 }

@@ -51,7 +51,6 @@ public class OpenQuestionViewController extends BasicAnswerViewControllerGUI {
 
     private void submitAnswer(){
         String answerText = txtRisposta.getText();
-        int currentIndex = getNavigatorGUI().getCurrentQuestionIndex();
         AnswerBean answer = new AnswerBean(answerText);
         KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
         ctrl.registerAnswer(getNavigatorGUI().getSession(), answer, getNavigatorGUI().getCurrentQuestionIndex());

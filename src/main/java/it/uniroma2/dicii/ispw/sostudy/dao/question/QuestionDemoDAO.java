@@ -75,7 +75,7 @@ public class QuestionDemoDAO extends QuestionDAO {
 
         for(Integer questionId : questionsByTest.get(testID)){
             Question tmp = getQuestionById(questionId);
-            if(tmp.getHeader() == question.getHeader()) return questionId;
+            if(tmp.getHeader().equals(question.getHeader())) return questionId;
         }
 
         return null;

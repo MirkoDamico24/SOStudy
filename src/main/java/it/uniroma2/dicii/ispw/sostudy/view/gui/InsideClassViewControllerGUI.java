@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import javafx.scene.control.ScrollPane;
 
@@ -30,6 +31,8 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI {
     @FXML private ScrollPane testListScrollPane;
     @FXML private VBox activeTestsVBox;
     @FXML private VBox expiredTestsVBox;
+
+    private static final String ERROR = "Errore";
 
     @FXML
     public void prepare() {
@@ -78,7 +81,7 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI {
             return;
         }
 
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(ZoneId.systemDefault());
 
         for (TestBean test : tests) {
             VBox targetContainer = (test.getDueDate() != null && test.getDueDate().isBefore(today))
@@ -105,7 +108,7 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI {
                                 getNavigatorGUI().goToCloseAnswerView();
                             }
                             case INSIDECLASSVIEW -> getNavigatorGUI().goToInsideClassView();
-                            default -> showAlert("Errore", "Tipo di domanda successivo non supportato dalla UI", "");
+                            default -> showAlert(ERROR, "Tipo di domanda successivo non supportato dalla UI", "");
                         }
                     }
 
@@ -135,11 +138,11 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI {
         try {
             questions = ctrl.loadRequiredTest(getNavigatorGUI().getSession(), test);
         } catch (ControllerException e) {
-            showAlert("Errore", e.getMessage(), "");
+            showAlert(ERROR, e.getMessage(), "");
         }
 
         if (questions == null || questions.isEmpty()) {
-            showAlert("Errore", "Il test selezionato è già stato svolto. Non è possibile svolgere più di un tentativo.", "Selezionare un altro test");
+            showAlert(ERROR, "Il test selezionato è già stato svolto. Non è possibile svolgere più di un tentativo.", "Selezionare un altro test");
             return Views.INSIDECLASSVIEW;
         }
 

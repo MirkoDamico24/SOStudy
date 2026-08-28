@@ -214,7 +214,23 @@ public class QuestionFSDAO extends QuestionDAO {
 
     @Override
     public Integer getQuestionId(Question question, int testID) throws DAOException{
-        //use case 'evaluate knowledge' not implemented in FS version
+        try {
+            JSONArray jsonArray = JSONHelper.readJsonFile(FILE_PATH);
+            JSONObject testObject = findTestObject(jsonArray, testID);
+            if (testObject == null || !testObject.has(KEY_QUESTIONS)) {
+                return null;
+            }
+
+            JSONArray questionsArray = testObject.getJSONArray(KEY_QUESTIONS);
+            for (int index = 0; index < questionsArray.length(); index++) {
+                JSONObject questionObject = questionsArray.getJSONObject(index);
+                if (questionObject.getString(KEY_HEADER).equals(question.getHeader())) {
+                    return computeQuestionId(testID, index);
+                }
+            }
+        } catch (IOException e) {
+            throw new DAOException("Error occurred while getting question id from file system. " + e.getMessage());
+        }
         return null;
     }
 }

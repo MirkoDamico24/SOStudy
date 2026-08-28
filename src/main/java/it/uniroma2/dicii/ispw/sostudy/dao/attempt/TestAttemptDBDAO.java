@@ -160,6 +160,7 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
                 attemptId =  rs.getInt(1);
             }
             saveAnswers(attemptId, testAttempt.getAnswers(), testAttempt.getTest());
+            loadedAttempts.add(testId);
         }
         catch(SQLException | DAOException e){
             throw new DAOException("Error occurred while saving attempt data to database. " + e.getMessage());

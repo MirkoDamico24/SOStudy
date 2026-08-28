@@ -100,7 +100,6 @@ public class KnowledgeEvaluationController {
             testTaken = testAttemptDAO.checkAlreadyDone(toTake, currentSession.getCurrentStudent());
         }
         catch(DAOException e){
-            e.printStackTrace();
             throw new ControllerException("Errore durante la verifica della presenza di un tentativo.");
         }
 

@@ -107,7 +107,9 @@ public class TestDBDAO extends TestDAO {
             ps.setString(1, test.getName());
             ps.setDate(2, Date.valueOf(test.getDueDate()));
             ps.setTime(3, Time.valueOf(test.getDueTime()));
-            ps.setString(4, test.getDuration().toString());
+            if(test.getDuration() != null) ps.setString(4, test.getDuration().toString());
+            else ps.setNull(4, Types.VARCHAR);
+
             int classID = DAOFactory.getInstance().getVirtualClassDAO().getClassID(test.getVirtualClass().getName(), test.getVirtualClass().getProf().getEmail());
             ps.setInt(5, classID);
             ps.executeUpdate();
@@ -128,21 +130,5 @@ public class TestDBDAO extends TestDAO {
         catch (SQLException | DAOException e) {
             throw new DAOException("Error while connecting to database. " + e.getMessage());
         }
-    }
-
-    @Override
-    public List<TestAttempt> getTestAttempt(Test test) throws DAOException{
-        int testId = 0;
-        List<TestAttempt> attempts = null;
-
-        try{
-            testId = this.getTestId(test.getName(), test.getVirtualClass().getName(), test.getVirtualClass().getProf().getEmail());
-            attempts = DAOFactory.getInstance().getTestAttemptDAO().getTestAttempt(testId);
-        }
-        catch(DAOException e){
-            throw new DAOException("Error while fetching attempts. " + e.getMessage());
-        }
-
-        return attempts;
     }
 }
