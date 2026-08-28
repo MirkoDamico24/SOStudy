@@ -13,78 +13,106 @@ import java.util.ArrayList;
 public class EvaluateOpenAnswerViewController extends BaseControllerCLI {
 
     public void start() {
-        while (true) {
+        boolean isRunning = true;
+
+        while (isRunning) {
             clearConsole();
             TestBean test = nav.getCurrentTest();
             AttemptBean workingOn = nav.getCurrentAttempt();
 
-            int currentIndex = nav.getCurrentQuestionIndex();
-            if (currentIndex == -1) {
-                currentIndex = 0;
-                nav.setCurrentQuestionIndex(currentIndex);
-            }
-
+            int currentIndex = resolveCurrentIndex();
             QuestionBean question = workingOn.getQuestions().get(currentIndex);
             AnswerBean answer = workingOn.getAnswers().get(currentIndex);
 
-            printStandardHeader("Valutazione: " + test.getName());
-            printNavBar();
-
-            System.out.println("\nStudente in valutazione: " + workingOn.getStudent().getName() + " " + workingOn.getStudent().getSurname());
-            System.out.println("Domanda " + (currentIndex + 1) + " di " + workingOn.getQuestions().size());
-            System.out.println("------------------------------------------------------------");
-            System.out.println("DOMANDA:\n" + question.getHeader());
-            System.out.println("\nRISPOSTA STUDENTE:\n" + answer.getTextualContent());
-            System.out.println("------------------------------------------------------------");
-
-            String currentScoreStr = (answer.getAssignedScore() != -1) ? String.valueOf(answer.getAssignedScore()) : "___";
-            System.out.println("Punteggio assegnato: " + currentScoreStr + " / " + question.getMaxScore());
-
-            System.out.println("\n--- OPZIONI ---");
-            System.out.println("Inserisci un numero per assegnare o sovrascrivere il punteggio");
-            System.out.println("[A] Prossima domanda");
-            System.out.println("[I] Indietro");
+            printEvaluationScreen(test, workingOn, question, answer, currentIndex);
 
             System.out.print("\nScelta: ");
             String choice = scanner.nextLine().trim().toUpperCase();
 
-            if (choice.equals("A")) {
-                handleNextQuestion(workingOn);
-                return;
-            } else if (choice.equals("I")) {
-                handleGoBack();
-                return;
-            } else {
-                try {
-                    int score = Integer.parseInt(choice);
+            isRunning = processUserChoice(choice, workingOn, question, answer);
+        }
+    }
 
-                    if (score > question.getMaxScore()) {
-                        System.out.println("\n[!] Punteggio elevato: Non si può assegnare un punteggio più alto di quello previsto.");
-                        System.out.println("La risposta sarà valutata con il punteggio massimo (" + question.getMaxScore() + ").");
-                        score = question.getMaxScore();
-                        System.out.print("Premi Invio per continuare...");
-                        scanner.nextLine();
-                    }
+    private int resolveCurrentIndex() {
+        int currentIndex = nav.getCurrentQuestionIndex();
+        if (currentIndex == -1) {
+            currentIndex = 0;
+            nav.setCurrentQuestionIndex(currentIndex);
+        }
+        return currentIndex;
+    }
 
-                    if(score == -1) score = 0;
-                    answer.setAssignedScore(score);
-                    System.out.println("Punteggio registrato temporaneamente. Scegli [N] per salvare e proseguire.");
-                } catch (NumberFormatException e) {
-                    System.out.print("\nInput non valido. Inserisci un punteggio numerico o un comando. Premi Invio per riprovare...");
-                    scanner.nextLine();
-                }
+    private void printEvaluationScreen(TestBean test, AttemptBean workingOn, QuestionBean question, AnswerBean answer, int currentIndex) {
+        printStandardHeader("Valutazione: " + test.getName());
+        printNavBar();
+
+        System.out.println("\nStudente in valutazione: " + workingOn.getStudent().getName() + " " + workingOn.getStudent().getSurname());
+        System.out.println("Domanda " + (currentIndex + 1) + " di " + workingOn.getQuestions().size());
+        System.out.println("------------------------------------------------------------");
+        System.out.println("DOMANDA:\n" + question.getHeader());
+        System.out.println("\nRISPOSTA STUDENTE:\n" + answer.getTextualContent());
+        System.out.println("------------------------------------------------------------");
+
+        String currentScoreStr = (answer.getAssignedScore() != -1) ? String.valueOf(answer.getAssignedScore()) : "___";
+        System.out.println("Punteggio assegnato: " + currentScoreStr + " / " + question.getMaxScore());
+
+        System.out.println("\n--- OPZIONI ---");
+        System.out.println("Inserisci un numero per assegnare o sovrascrivere il punteggio");
+        System.out.println("[A] Prossima domanda");
+        System.out.println("[I] Indietro");
+    }
+
+    private boolean processUserChoice(String choice, AttemptBean workingOn, QuestionBean question, AnswerBean answer) {
+        if (choice.equals("A")) {
+            handleNextQuestion(workingOn);
+            return false;
+        }
+
+        if (choice.equals("I")) {
+            handleGoBack();
+            return false;
+        }
+
+        handleScoreAssignment(choice, question, answer);
+        return true;
+    }
+
+    private void handleScoreAssignment(String choice, QuestionBean question, AnswerBean answer) {
+        try {
+            int score = Integer.parseInt(choice);
+
+            if (score > question.getMaxScore()) {
+                System.out.println("\n[!] Punteggio elevato: Non si può assegnare un punteggio più alto di quello previsto.");
+                System.out.println("La risposta sarà valutata con il punteggio massimo (" + question.getMaxScore() + ").");
+                score = question.getMaxScore();
+                System.out.print("Premi Invio per continuare...");
+                scanner.nextLine();
             }
+
+            if (score == -1) {
+                score = 0;
+            }
+
+            answer.setAssignedScore(score);
+            System.out.println("Punteggio registrato temporaneamente. Scegli [A] per salvare e proseguire.");
+
+        } catch (NumberFormatException e) {
+            System.out.print("\nInput non valido. Inserisci un punteggio numerico o un comando. Premi Invio per riprovare...");
+            scanner.nextLine();
         }
     }
 
     private void handleNextQuestion(AttemptBean workingOn) {
-        if(workingOn.getAnswers().get(nav.getCurrentQuestionIndex()).getAssignedScore() == -1) {
+        if (workingOn.getAnswers().get(nav.getCurrentQuestionIndex()).getAssignedScore() == -1) {
             workingOn.getAnswers().get(nav.getCurrentQuestionIndex()).setAssignedScore(0);
         }
+
         int nextIndex = nav.getCurrentQuestionIndex() + 1;
+
         if (nextIndex == workingOn.getQuestions().size()) {
             nextIndex = -1;
         }
+
         nav.setCurrentQuestionIndex(nextIndex);
         nav.setPreviousView(Views.EVALUATEOPENANSWER);
 
