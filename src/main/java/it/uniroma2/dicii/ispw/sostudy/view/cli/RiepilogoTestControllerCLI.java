@@ -31,16 +31,15 @@ public class RiepilogoTestControllerCLI extends BaseControllerCLI {
     }
 
     private void printTestDetails() {
-        TestBean test = nav.getContext().getTest();
-        if (test != null) {
-            System.out.println("Dettagli test");
-            System.out.println("Nome test: " + test.getName());
-            System.out.println("Assegnato a: " + test.getVirtualClass());
-            System.out.println("Data di consegna: " + test.getDueDate());
-            System.out.println("Ora di consegna: " + test.getDueTime());
-            System.out.println("Durata test: " + test.getDuration().toMinutes() + " minutes");
-            System.out.println("------------------------------------------------------------\n");
-        }
+        TestBean test = nav.getCurrentTest();
+        System.out.println("Dettagli test");
+        System.out.println("Nome test: " + test.getName());
+        System.out.println("Assegnato a: " + test.getVirtualClass());
+        System.out.println("Data di consegna: " + test.getDueDate());
+        System.out.println("Ora di consegna: " + test.getDueTime());
+        System.out.println("Durata test: " + test.getDuration().toMinutes() + " minutes");
+        System.out.println("------------------------------------------------------------\n");
+
     }
 
     private void printQuestions() {

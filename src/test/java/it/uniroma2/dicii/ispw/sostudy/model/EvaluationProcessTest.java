@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class EvaluationProcessTest {
+class EvaluationProcessTest {
     private DAOFactory factory =  DAOFactory.getInstance();
     private it.uniroma2.dicii.ispw.sostudy.model.Test demoTest;
     private List<Question> questions;
@@ -54,7 +54,7 @@ public class EvaluationProcessTest {
     }
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         Question q1 = new OpenQuestion("Domanda 1", 10);
         Choice option1 = new Choice("Prima opzione");
         Choice option2 = new Choice("Seconda opzione");
@@ -77,7 +77,7 @@ public class EvaluationProcessTest {
     }
 
     @Test
-    public void testRequireAlreadyDoneTest(){
+    void testRequireAlreadyDoneTest(){
         createTest(LocalDate.now(ZoneId.systemDefault()).plusDays(1), LocalTime.of(15, 30), questions);
 
         TestBean requiredTest = new TestBean("Test di prova",
@@ -89,12 +89,12 @@ public class EvaluationProcessTest {
         createAttempt(demoTest, s1, LocalDate.now(ZoneId.systemDefault()), LocalTime.of(15, 30));
 
         KnowledgeEvaluationController controller = new KnowledgeEvaluationController();
-        List<QuestionBean> questions = controller.loadRequiredTest(sessionBean, requiredTest);
-        assertTrue(questions.isEmpty(), "Il metodo deve restituire una lista vuota se il test è già stato svolto.");
+        List<QuestionBean> testQuestions = controller.loadRequiredTest(sessionBean, requiredTest);
+        assertTrue(testQuestions.isEmpty(), "Il metodo deve restituire una lista vuota se il test è già stato svolto.");
     }
 
     @Test
-    public void testRequireExpiredTest(){
+    void testRequireExpiredTest(){
         createTest(LocalDate.now(ZoneId.systemDefault()).minusDays(1), LocalTime.of(15, 30), questions);
 
         TestBean requiredTest = new TestBean("Test di prova",
@@ -109,7 +109,7 @@ public class EvaluationProcessTest {
     }
 
     @Test
-    public void testAutomaticEvaluation(){
+    void testAutomaticEvaluation(){
         createTest(LocalDate.now(ZoneId.systemDefault()).plusDays(1), LocalTime.of(15, 30), questions);
         TestAttempt attempt = createAttempt(demoTest, s1, LocalDate.now(ZoneId.systemDefault()), LocalTime.of(15, 30));
         session.setCurrentAttempt(attempt);

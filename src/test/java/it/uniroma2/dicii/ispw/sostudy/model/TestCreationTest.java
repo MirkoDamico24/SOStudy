@@ -17,7 +17,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestCreationTest {
+class TestCreationTest {
     private DAOFactory factory = DAOFactory.getInstance();
     private VirtualClass vcls;
     private int sessionId;
@@ -41,7 +41,7 @@ public class TestCreationTest {
     }
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         Professor prof = new Professor("Mario", "Rossi", "mario.rossi@gmail.com");
         factory.getProfessorDAO().addToCache("mario.rossi@gmail.com", prof);
         sessionId = SessionManager.getInstance().createSession(prof).getSessionID();
@@ -59,7 +59,7 @@ public class TestCreationTest {
     }
 
     @Test
-    public void testCreation() {
+    void testCreation() {
         TestBean toCreate = createTest(LocalDate.now(ZoneId.systemDefault()).plusDays(1),
                 LocalTime.of(17, 00),
                 Duration.ofMinutes(30),
@@ -87,7 +87,7 @@ public class TestCreationTest {
     }
 
     @Test
-    public void testStudentNotification(){
+    void testStudentNotification(){
         //creating test questions
         TestBean toCreate = createTest(LocalDate.now(ZoneId.systemDefault()).plusDays(1),
                 LocalTime.of(17, 00),
@@ -106,7 +106,7 @@ public class TestCreationTest {
     }
 
     @Test
-    public void testAssignTestNonExistingClass(){
+    void testAssignTestNonExistingClass(){
         TestBean toCreate = createTest(LocalDate.now(ZoneId.systemDefault()).plusDays(1),
                 LocalTime.of(17, 00),
                 Duration.ofMinutes(30),
@@ -117,7 +117,7 @@ public class TestCreationTest {
     }
 
     @Test
-    public void testDateTimeValidation(){
+    void testDateTimeValidation(){
         TestBean toTest = createTest(LocalDate.now(ZoneId.systemDefault()).minusDays(1),
                 LocalTime.of(17, 00),
                 Duration.ofMinutes(30),

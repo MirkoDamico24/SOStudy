@@ -1,7 +1,5 @@
 package it.uniroma2.dicii.ispw.sostudy.bean;
 
-import it.uniroma2.dicii.ispw.sostudy.model.Question;
-
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;

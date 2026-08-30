@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AuthenticationTest {
+class AuthenticationTest {
     @Test
-    public void testStudentAuthentication() {
+   void testStudentAuthentication() {
         UserBean user = new UserBean("giuseppe.bianchi@gmail.com", "giuseppe.bianchi");
 
         LoginController loginController = new LoginController();
@@ -22,7 +22,7 @@ public class AuthenticationTest {
     }
 
     @Test
-    public void testProfessorAuthentication(){
+    void testProfessorAuthentication(){
         UserBean user = new UserBean("mario.rossi@gmail.com", "mario.rossi");
 
         LoginController loginController = new LoginController();

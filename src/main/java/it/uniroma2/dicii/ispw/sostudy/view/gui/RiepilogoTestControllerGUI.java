@@ -31,16 +31,14 @@ public class RiepilogoTestControllerGUI extends BaseControllerGUI {
         setUsernameBundle();
 
         TestBean currentTest = getNavigatorGUI().getCurrentTest();
-        if (currentTest != null) {
-            setTestDetails(
-                    currentTest.getName(),
-                    currentTest.getVirtualClass(),
-                    currentTest.getDueDate().toString(),
-                    currentTest.getDueTime().toString(),
-                    String.valueOf(currentTest.getDuration().toMinutes())
-            );
-        }
-
+        setTestDetails(
+                currentTest.getName(),
+                currentTest.getVirtualClass(),
+                currentTest.getDueDate().toString(),
+                currentTest.getDueTime().toString(),
+                String.valueOf(currentTest.getDuration().toMinutes())
+        );
+        
         List<QuestionBean> questions = getNavigatorGUI().getCurrentTest().getQuestions();
         populateQuestionList(questions);
     }
