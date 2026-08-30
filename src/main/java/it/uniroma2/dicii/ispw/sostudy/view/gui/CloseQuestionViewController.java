@@ -3,7 +3,6 @@ package it.uniroma2.dicii.ispw.sostudy.view.gui;
 import it.uniroma2.dicii.ispw.sostudy.bean.AnswerBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.KnowledgeEvaluationController;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -15,8 +14,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CloseQuestionViewController extends BasicAnswerViewControllerGUI {
@@ -26,52 +23,23 @@ public class CloseQuestionViewController extends BasicAnswerViewControllerGUI {
     @FXML
     private VBox optionsVBox;
 
-
     private HBox nodoOpzioneAttiva = null;
     private Integer rispostaSelezionata = null;
     private String fillColor = "-fx-text-fill: #555555;";
 
-
-    public void prepare() {
-        setTestInfo(getNavigatorGUI().getCurrentTest());
-
-        int currentIndex = getNavigatorGUI().getCurrentQuestionIndex();
-        if(currentIndex == -1){
-            currentIndex++;
-            getNavigatorGUI().setCurrentQuestionIndex(currentIndex);
-        }
-
-        QuestionBean question = getNavigatorGUI().getQuestions().get(currentIndex);
-
+    @Override
+    protected void setupQuestionUI(QuestionBean question) {
         lblTestoDomanda.setText(question.getHeader());
         popolaOpzioni(question.getOptions());
-
-        populateProgressBox(getNavigatorGUI().getQuestions());
-
-        attachToTimer();
     }
-
 
     @Override
-    public void conclude() {
-        Platform.runLater(() -> {
-            renderRemaining(Duration.ZERO);
-            showAlert("Tempo scaduto.", "Il tempo a disposizione per lo svolgimento del test è saduto.", "Si verrà reindirizzati alla home");
-            submitAnswer();
-            KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
-            ctrl.submitAttempt(getNavigatorGUI().getSession());
-            getNavigatorGUI().setQuestions(new ArrayList<>());
-            getNavigatorGUI().goToHomeView();
-        });
-    }
-
-    private void submitAnswer(){
+    protected void submitAnswer() {
         int answerInt = rispostaSelezionata;
         AnswerBean answer = new AnswerBean(answerInt);
         KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
         ctrl.registerAnswer(getNavigatorGUI().getSession(), answer, getNavigatorGUI().getCurrentQuestionIndex());
     }
-
 
     public void popolaOpzioni(List<String> options) {
         optionsVBox.getChildren().clear();
@@ -104,7 +72,6 @@ public class CloseQuestionViewController extends BasicAnswerViewControllerGUI {
 
             optionBox.getChildren().addAll(lblNum, spacer1, lblTesto, spacer2, lblCheck);
 
-
             final String optionValue = text;
             optionBox.setOnMouseClicked(e -> {
                 if (nodoOpzioneAttiva != null) {
@@ -130,21 +97,6 @@ public class CloseQuestionViewController extends BasicAnswerViewControllerGUI {
             showAlert("SoStudy", "Nessuna risposta selezionata.", "Per proseguire selezionare un'opzione");
             getNavigatorGUI().goToCloseAnswerView();
         }
-
-        dispose();
-        submitAnswer();
-        updateQuestion();
-
-        switch(getNextView()){
-            case OPENANSWERVIEW -> getNavigatorGUI().goToOpenAnswerView();
-            case CLOSEANSWERVIEW -> getNavigatorGUI().goToCloseAnswerView();
-            case HOME -> {
-                new KnowledgeEvaluationController().submitAttempt(getNavigatorGUI().getSession());
-                getNavigatorGUI().setQuestions(new ArrayList<>());
-                getNavigatorGUI().goToHomeView();
-            }
-            default -> showAlert("Errore", "Tipo di domanda successivo non supportato dalla UI", "");
-        }
+        proceedToNextQuestion();
     }
-
 }

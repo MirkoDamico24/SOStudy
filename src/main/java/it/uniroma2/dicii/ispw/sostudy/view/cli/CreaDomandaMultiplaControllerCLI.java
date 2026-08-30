@@ -6,71 +6,47 @@ import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreaDomandaMultiplaControllerCLI extends BaseControllerCLI {
+public class CreaDomandaMultiplaControllerCLI extends CreaDomandaControllerCLI {
 
-    public void start() {
-        super.clearConsole();
-        showView();
-        manageInput();
+    private List<String> options;
+    private int solutionIndex;
+
+    @Override
+    protected String getSubtitle() {
+        return "                Domanda a risposta multipla                 ";
     }
 
-    private void showView() {
-        super.printStandardHeader("CREA TEST");
-
-        System.out.println("\n------------------------------------------------------------");
-        System.out.println("                Domanda a risposta multipla                 ");
-        System.out.println("------------------------------------------------------------\n");
+    @Override
+    protected void gatherSpecificData() {
+        this.options = getOptions();
+        this.solutionIndex = getSolutionIndex(options);
+        this.score = InputReaderCLI.readInteger(
+                "\nPunteggio (Inserire un numero intero per il punteggio massimo): ",
+                "\n--> Errore: Il punteggio deve essere un numero intero valido!\n",
+                scanner
+        );
     }
 
-    private void manageInput() {
-        System.out.print("Testo della domanda (Inserire il testo della domanda): ");
-        String questionText = scanner.nextLine().trim();
+    @Override
+    protected void createAndSaveQuestionBean(String questionText) {
+        QuestionBean qb = new QuestionBean(questionText, score, options, solutionIndex);
+        nav.getCurrentTest().addQuestion(qb);
+    }
 
-        List<String> options = getOptions();
-        int solutionIndex = getSolutionIndex(options);
-        int score = getScore();
-
-        System.out.println("\nAzioni disponibili:");
-        System.out.println("[1] Salva domanda");
-        System.out.println("[0] Indietro");
-        System.out.print("\nScegli un'opzione: ");
-
-        String choice = scanner.nextLine().trim();
-
-        switch (choice) {
-            case "1" -> {
-                System.out.println("\n--> Salvataggio in corso...");
-                System.out.println("--> Domanda salvata con successo!");
-                saveQuestion(questionText, score, options, solutionIndex);
-                nav.setPreviousView(Views.CLOSEQUESTIONVIEW);
-                nav.goToRecapView();
-            }
-            case "0" -> {
-                System.out.println("\n--> Torno indietro...");
-                nav.getContext().setQuestionToEdit(null);
-                if(nav.getPreviousView() == Views.CREATETEST){
-                    nav.goToCreateTestView();
-                }
-                else nav.goToRecapView();
-
-                nav.setPreviousView(Views.OPENQUESTIONVIEW);
-            }
-            default -> {
-                System.out.println("\n--> Operazione non consentita!");
-                start();
-            }
-        }
+    @Override
+    protected Views getSuccessView() {
+        return Views.CLOSEQUESTIONVIEW;
     }
 
     private List<String> getOptions() {
-        List<String> options = new ArrayList<>();
+        List<String> optionsList = new ArrayList<>();
         System.out.println("\n--- Inserimento Opzioni ---");
 
         System.out.print("Opzione 1 (Inserire il testo della prima opzione): ");
-        options.add(scanner.nextLine().trim());
+        optionsList.add(scanner.nextLine().trim());
 
         System.out.print("Opzione 2 (Inserire il testo della seconda opzione): ");
-        options.add(scanner.nextLine().trim());
+        optionsList.add(scanner.nextLine().trim());
 
         boolean addingOptions = true;
         while (addingOptions) {
@@ -81,53 +57,39 @@ public class CreaDomandaMultiplaControllerCLI extends BaseControllerCLI {
             String addChoice = scanner.nextLine().trim();
 
             if ("1".equals(addChoice)) {
-                System.out.printf("Opzione %d (Inserire il testo dell'opzione): ", options.size() + 1);
-                options.add(scanner.nextLine().trim());
+                System.out.printf("Opzione %d (Inserire il testo dell'opzione): ", optionsList.size() + 1);
+                optionsList.add(scanner.nextLine().trim());
             } else if ("2".equals(addChoice)) {
                 addingOptions = false;
             } else {
                 System.out.println("--> Scelta non valida, riprova.");
             }
         }
-        return options;
+        return optionsList;
     }
 
-    private int getSolutionIndex(List<String> options) {
+    private int getSolutionIndex(List<String> optionsList) {
         System.out.println("\n--- Selezione Soluzione ---");
-        for (int i = 0; i < options.size(); i++) {
-            System.out.printf("[%d] %s%n", i + 1, options.get(i));
+        for (int i = 0; i < optionsList.size(); i++) {
+            System.out.printf("[%d] %s%n", i + 1, optionsList.get(i));
         }
 
-        int solutionIndex = -1;
+        int solIndex = -1;
         boolean validSolution = false;
         while (!validSolution) {
-
             int num = InputReaderCLI.readInteger(
                     "Quale opzione è la soluzione corretta? (Inserire il numero corrispondente): ",
                     "--> Errore: Inserire un numero intero valido!",
                     scanner
             );
 
-            if (num >= 1 && num <= options.size()) {
-                solutionIndex = num - 1;
+            if (num >= 1 && num <= optionsList.size()) {
+                solIndex = num - 1;
                 validSolution = true;
             } else {
-                System.out.println("--> Numero non valido, deve essere compreso tra 1 e " + options.size());
+                System.out.println("--> Numero non valido, deve essere compreso tra 1 e " + optionsList.size());
             }
         }
-        return solutionIndex;
-    }
-
-    private int getScore() {
-        return InputReaderCLI.readInteger(
-                "\nPunteggio (Inserire un numero intero per il punteggio massimo): ",
-                "\n--> Errore: Il punteggio deve essere un numero intero valido!\n",
-                scanner
-        );
-    }
-
-    private void saveQuestion(String questionText, int score, List<String> options, int solutionIndex) {
-        QuestionBean qb = new QuestionBean(questionText, score, options, solutionIndex);
-        nav.getCurrentTest().addQuestion(qb);
+        return solIndex;
     }
 }
