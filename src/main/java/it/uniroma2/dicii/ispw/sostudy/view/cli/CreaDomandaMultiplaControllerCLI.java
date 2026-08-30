@@ -128,6 +128,6 @@ public class CreaDomandaMultiplaControllerCLI extends BaseControllerCLI {
 
     private void saveQuestion(String questionText, int score, List<String> options, int solutionIndex) {
         QuestionBean qb = new QuestionBean(questionText, score, options, solutionIndex);
-        nav.getContext().setQuestions(qb);
+        nav.getCurrentTest().addQuestion(qb);
     }
 }

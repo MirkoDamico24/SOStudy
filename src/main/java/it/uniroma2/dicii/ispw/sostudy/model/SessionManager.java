@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class SessionManager {
     private final HashMap<Integer, Session> sessions;
 
-    private int ids;
+    private int ids = 0;
 
     public SessionManager() {
         sessions = new HashMap<>();

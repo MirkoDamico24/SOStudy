@@ -44,7 +44,7 @@ public class RiepilogoTestControllerCLI extends BaseControllerCLI {
     }
 
     private void printQuestions() {
-        List<QuestionBean> questions = nav.getQuestions();
+        List<QuestionBean> questions = nav.getCurrentTest().getQuestions();
         int totalScore = 0;
         int totalQuestions = (questions.isEmpty()) ? questions.size() : 0;
 
@@ -109,7 +109,7 @@ public class RiepilogoTestControllerCLI extends BaseControllerCLI {
     }
 
     private int getQuestionIndex(String actionMsg) {
-        List<QuestionBean> questions = nav.getContext().getQuestions();
+        List<QuestionBean> questions = nav.getCurrentTest().getQuestions();
         if (questions == null || questions.isEmpty()) {
             System.out.println("\n--> Nessuna domanda disponibile per la " + actionMsg + ".");
             return -1;
@@ -132,7 +132,7 @@ public class RiepilogoTestControllerCLI extends BaseControllerCLI {
     }
 
     private void removeQuestionByIndex(int index) {
-        List<QuestionBean> questions = nav.getContext().getQuestions();
+        List<QuestionBean> questions = nav.getCurrentTest().getQuestions();
         if (questions != null && index >= 0 && index < questions.size()) {
             questions.remove(index);
         }
@@ -175,12 +175,11 @@ public class RiepilogoTestControllerCLI extends BaseControllerCLI {
     private void handleSavePublish() {
         CreateTestController createTestController = new CreateTestController();
         try {
-            int sessionId = nav.getContext().getSession().getSessionID();
-            TestBean test = nav.getContext().getTest();
-            List<QuestionBean> questions = nav.getContext().getQuestions();
+            int sessionId = nav.getSession().getSessionID();
+            TestBean test = nav.getCurrentTest();
 
             System.out.println("\n--> Salvataggio e pubblicazione in corso...");
-            createTestController.createTest(sessionId, test, questions);
+            createTestController.createTest(sessionId, test);
 
             System.out.println("--> Test salvato e pubblicato con successo!");
             promptContinue();

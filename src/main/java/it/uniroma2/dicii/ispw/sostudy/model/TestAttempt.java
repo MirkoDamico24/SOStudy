@@ -9,7 +9,7 @@ import java.util.List;
 
 public class TestAttempt{
     private int grade;
-    private TestGradingStatus testGradingStatus;
+    private TestGradingStatus testGradingStatus = TestGradingStatus.NOTSTARTED;
     private LocalTime handInTime;
     private LocalDate handInDate;
 

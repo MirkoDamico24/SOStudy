@@ -63,6 +63,6 @@ public class CreaDomandaApertaControllerCLI extends BaseControllerCLI {
 
     private void saveQuestion(String questionText, int score) {
         QuestionBean qb = new QuestionBean(questionText, score);
-        nav.getContext().setQuestions(qb);
+        nav.getCurrentTest().addQuestion(qb);
     }
 }

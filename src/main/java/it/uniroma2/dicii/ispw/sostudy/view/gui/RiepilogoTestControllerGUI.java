@@ -41,7 +41,7 @@ public class RiepilogoTestControllerGUI extends BaseControllerGUI {
             );
         }
 
-        List<QuestionBean> questions = getNavigatorGUI().getQuestions();
+        List<QuestionBean> questions = getNavigatorGUI().getCurrentTest().getQuestions();
         populateQuestionList(questions);
     }
 
@@ -132,7 +132,7 @@ public class RiepilogoTestControllerGUI extends BaseControllerGUI {
 
         btnDelete.setOnAction(e -> {
             listaDomandeVBox.getChildren().remove(rowWrapper);
-            getNavigatorGUI().getContext().getQuestions().remove(question);
+            getNavigatorGUI().getCurrentTest().getQuestions().remove(question);
             updateTotals();
         });
 
@@ -186,7 +186,7 @@ public class RiepilogoTestControllerGUI extends BaseControllerGUI {
     void handleSavePublish(ActionEvent event) {
         CreateTestController createTestController = new CreateTestController();
         try {
-            createTestController.createTest(getNavigatorGUI().getSession().getSessionID(), getNavigatorGUI().getCurrentTest(), getNavigatorGUI().getQuestions());
+            createTestController.createTest(getNavigatorGUI().getSession().getSessionID(), getNavigatorGUI().getCurrentTest());
         }
         catch (ControllerException e) {
             showAlert("Errore di risorsa", e.getMessage(), "Riprovare");

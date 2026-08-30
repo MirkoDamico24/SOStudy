@@ -39,7 +39,7 @@ public class CreateTestController {
         return null;
     }
 
-    public void createTest(int sessionID, TestBean test, List<QuestionBean> questions) throws ControllerException{
+    public void createTest(int sessionID, TestBean test) throws ControllerException{
         TestDAO td = DAOFactory.getInstance().getTestDAO();
 
         VirtualClass cls = getClass(sessionID, test.getVirtualClass());
@@ -47,7 +47,7 @@ public class CreateTestController {
             throw new ControllerException("Class not found");
         }
 
-        List<Question> questionList = getQuestions(questions);
+        List<Question> questionList = getQuestions(test.getQuestions());
 
         Test newTest = new Test(test.getName(), test.getDueDate(), test.getDueTime(), test.getDuration(), questionList, cls);
         try {

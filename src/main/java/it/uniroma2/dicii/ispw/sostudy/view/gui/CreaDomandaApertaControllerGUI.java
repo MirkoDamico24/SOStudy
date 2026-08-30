@@ -47,14 +47,14 @@ public class CreaDomandaApertaControllerGUI extends BaseControllerGUI {
 
         QuestionBean questionToEdit = getNavigatorGUI().getQuestionToEdit();
         if (questionToEdit != null) {
-            List<QuestionBean> qList = getNavigatorGUI().getQuestions();
+            List<QuestionBean> qList = getNavigatorGUI().getCurrentTest().getQuestions();
             int index = qList.indexOf(questionToEdit);
             if (index != -1) {
                 qList.set(index, qb);
             }
             getNavigatorGUI().setQuestionToEdit(null);
         } else {
-            getNavigatorGUI().setQuestions(qb);
+            getNavigatorGUI().getCurrentTest().addQuestion(qb);
         }
 
         getNavigatorGUI().setPreviousView(Views.OPENQUESTIONVIEW);

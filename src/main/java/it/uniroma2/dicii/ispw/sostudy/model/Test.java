@@ -99,6 +99,10 @@ public class Test {
             }
         }
 
+        if(test.getTestGradingStatus() == TestGradingStatus.NOTSTARTED){
+            test.setTestGradingStatus(TestGradingStatus.FULLYGRADED);
+        }
+
         test.computeGrade();
     }
 

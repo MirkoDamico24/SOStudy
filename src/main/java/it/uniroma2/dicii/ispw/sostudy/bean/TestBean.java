@@ -1,8 +1,12 @@
 package it.uniroma2.dicii.ispw.sostudy.bean;
 
+import it.uniroma2.dicii.ispw.sostudy.model.Question;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class TestBean {
@@ -10,6 +14,7 @@ public class TestBean {
     private LocalDate dueDate;
     private LocalTime dueTime;
     private Duration duration;
+    private List<QuestionBean> questions;
     private int maxScore;
     private String virtualClass;
 
@@ -66,6 +71,22 @@ public class TestBean {
 
     public LocalTime getDueTime() {
         return dueTime;
+    }
+
+    public void setQuestions(List<QuestionBean> questions) {
+        this.questions = questions;
+    }
+
+    public void addQuestion(QuestionBean question) {
+        if(this.questions == null) {
+            this.questions = new ArrayList<>();
+        }
+
+        this.questions.add(question);
+    }
+
+    public List<QuestionBean> getQuestions() {
+        return questions;
     }
 
 }

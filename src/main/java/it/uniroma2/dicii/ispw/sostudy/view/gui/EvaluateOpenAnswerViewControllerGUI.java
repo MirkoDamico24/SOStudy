@@ -99,7 +99,7 @@ public class EvaluateOpenAnswerViewControllerGUI extends BaseControllerGUI {
             }
 
         }
-        AnswerBean answer = nav.getCurrentAttempt().getAnswers().get(nav.getCurrentQuestionIndex());;
+        AnswerBean answer = nav.getCurrentAttempt().getAnswers().get(nav.getCurrentQuestionIndex());
         answer.setAssignedScore(score);
     }
 

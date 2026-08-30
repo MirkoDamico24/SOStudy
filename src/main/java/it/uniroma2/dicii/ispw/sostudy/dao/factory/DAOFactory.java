@@ -25,6 +25,11 @@ public abstract class DAOFactory {
                 Properties prop = new Properties();
                 prop.load(input);
 
+                String activity = prop.getProperty("activity");
+                if(activity.equals("test")) {
+                   instance = new DemoDAOFactory();
+                   return instance;
+                }
                 String persistency =  prop.getProperty("PERSISTENCY");
                 instance = switch (persistency){
                     case "FS" -> new FSDAOFactory();

@@ -206,6 +206,11 @@ public class KnowledgeEvaluationController {
         catch(DAOException e){
             throw new ControllerException("Errore durante il salvataggio del tentativo. " + e.getMessage());
         }
+
+        if(attempt.getTestGradingStatus() == TestGradingStatus.FULLYGRADED) {
+            NotificationController msgctrl = new NotificationController();
+            msgctrl.sendNewEvaluationNotification(test, attempt);
+        }
     }
 
     public void registerEvaluation(SessionBean session, AttemptBean attempt) throws ControllerException{
