@@ -96,7 +96,7 @@ public class TestCreationTest {
 
         //test creation request to controller
         CreateTestController  controller = new CreateTestController();
-        controller.createTest(0, toCreate);
+        controller.createTest(sessionId, toCreate);
 
         String message = "Nuovo test assegnato: " + toCreate.getVirtualClass() + ", " + toCreate.getName() + ", " + toCreate.getDueDate();
         List<Student> classStudents = vcls.getStudents();
