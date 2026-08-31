@@ -56,10 +56,14 @@ public class VirtualClassesViewControllerGUI extends BaseControllerGUI{
         if (!isProfessore) {
             btnCreaTest.setVisible(false);
             btnCreaTest.setManaged(false);
+            btnCreaClasse.setVisible(false);
+            btnCreaClasse.setManaged(false);
         }
         else{
             btnCreaTest.setVisible(true);
             btnCreaTest.setManaged(true);
+            btnCreaClasse.setVisible(true);
+            btnCreaClasse.setManaged(true);
         }
     }
 
