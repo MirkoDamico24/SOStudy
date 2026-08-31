@@ -28,7 +28,7 @@ public class NotificationController {
         */
         List<Message> newMsg = new ArrayList<>();
         for (Student student : cls.getStudents()) {
-            Message msg = new Message(message, student);
+            Message msg = new Message(message, student, MessageType.NEWTEST);
             newMsg.add(msg);
             student.addMessage(msg);
         }
@@ -39,7 +39,7 @@ public class NotificationController {
     public void sendNewEvaluationNotification(Test test, TestAttempt evaluatedTest) throws ControllerException {
         String message = "Il test '" + test.getName() + "' svolto in data " + evaluatedTest.getHandInDate() + " ha ricevuto la valutazione: " + evaluatedTest.getGrade();
         Student recipient = evaluatedTest.getStudent();
-        Message msg = new Message(message, recipient);
+        Message msg = new Message(message, recipient, MessageType.GRADENOTIFICATION);
         recipient.addMessage(msg);
 
         List<Message> newMsg = new ArrayList<>();
@@ -47,15 +47,42 @@ public class NotificationController {
         messageDAO.save(newMsg);
     }
 
-    public List<MessageBean> fetchUserNotifications(UserBean ub) throws ControllerException {
+    public void sendRevisionNotification(Professor recipient, TestAttempt attempt) throws ControllerException {
+        String message = "Lo studente: " + attempt.getStudent().getEmail() + " ha fatto richiesta di revisione per il test '"
+                + attempt.getTest().getName() + "' nella classe: " + attempt.getTest().getVirtualClass().getName();
+
+        Message msg = new Message(message, recipient, MessageType.REVIEWNOTIFICATION);
+        recipient.addMessage(msg);
+
+        List<Message> newMsg = new ArrayList<>();
+        newMsg.add(msg);
+        messageDAO.save(newMsg);
+    }
+
+    public List<MessageBean> fetchUserNotifications(UserBean ub, SessionBean currentSession) throws ControllerException {
         List<Message> fetched = null;
 
-        try {
-            fetched = messageDAO.getUserMessages(ub.getEmail());
-        } catch (DAOException e) {
-            throw new ControllerException("Errore durante il caricamento dei messaggi.");
+        Session session = SessionManager.getInstance().getSession(currentSession.getSessionID());
+
+        switch(currentSession.getCurrentRole()){
+            case STUDENT ->{
+                Student student = session.getCurrentStudent();
+                fetched = student.getMessages();
+            }
+
+            case PROFESSOR ->{
+                Professor prof = session.getCurrentProfessor();
+                fetched = prof.getMessages();
+            }
         }
 
+        if(fetched == null || fetched.isEmpty()){
+            try {
+                fetched = messageDAO.getUserMessages(ub.getEmail());
+            } catch (DAOException e) {
+                throw new ControllerException("Errore durante il caricamento dei messaggi.");
+            }
+        }
         return toMessageBean(fetched);
     }
 
@@ -65,8 +92,9 @@ public class NotificationController {
 
         for (Message msg : fetched) {
             if (msg.getSender() != null)
-                bean = new MessageBean(msg.getMessage(), msg.getRecipient().getEmail(), msg.getSender().getEmail());
-            else bean = new MessageBean(msg.getMessage(), msg.getRecipient().getEmail());
+                bean = new MessageBean(msg.getMessage(), msg.getRecipient().getEmail(), msg.getSender().getEmail(), msg.getType(), msg.isRead());
+            else bean = new MessageBean(msg.getMessage(), msg.getRecipient().getEmail(), msg.getType(), msg.isRead());
+            msg.setRead(true);
             messageBeans.add(bean);
         }
         return messageBeans;
@@ -91,4 +119,5 @@ public class NotificationController {
 
         return subject;
     }
+
 }

@@ -10,5 +10,17 @@
     {
         "recipient": "giuseppe.bianchi@gmail.com",
         "content": "Il test 'ISPW demo test' svolto in data 2026-08-31 ha ricevuto la valutazione: 13"
+    },
+    {
+        "read": false,
+        "recipient": "giuseppe.bianchi@gmail.com",
+        "type": "NEWTEST",
+        "content": "Nuovo test assegnato: ISPWvirtualClass, Test di prova FS, 2026-09-03"
+    },
+    {
+        "read": false,
+        "recipient": "giuseppe.bianchi@gmail.com",
+        "type": "GRADENOTIFICATION",
+        "content": "Il test 'Test di prova FS' svolto in data 2026-08-31 ha ricevuto la valutazione: 20"
     }
 ]

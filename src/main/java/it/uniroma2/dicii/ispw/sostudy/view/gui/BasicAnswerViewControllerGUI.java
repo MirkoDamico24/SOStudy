@@ -2,7 +2,7 @@ package it.uniroma2.dicii.ispw.sostudy.view.gui;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
-import it.uniroma2.dicii.ispw.sostudy.controller.KnowledgeEvaluationController;
+import it.uniroma2.dicii.ispw.sostudy.controller.TakeTestController;
 import it.uniroma2.dicii.ispw.sostudy.eng.timer.TestTimerService;
 import it.uniroma2.dicii.ispw.sostudy.eng.timer.observer.TimerObserver;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
@@ -64,7 +64,7 @@ public abstract class BasicAnswerViewControllerGUI extends BaseControllerGUI imp
             case OPENANSWERVIEW -> getNavigatorGUI().goToOpenAnswerView();
             case CLOSEANSWERVIEW -> getNavigatorGUI().goToCloseAnswerView();
             case HOME -> {
-                new KnowledgeEvaluationController().submitAttempt(getNavigatorGUI().getSession());
+                new TakeTestController().submitAttempt(getNavigatorGUI().getSession());
                 getNavigatorGUI().setQuestions(new ArrayList<>());
                 getNavigatorGUI().goToHomeView();
             }
@@ -95,7 +95,7 @@ public abstract class BasicAnswerViewControllerGUI extends BaseControllerGUI imp
             renderRemaining(Duration.ZERO);
             showAlert("Tempo scaduto.", "Il tempo a disposizione per lo svolgimento del test è saduto.", "Si verrà reindirizzati alla home");
             submitAnswer();
-            KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
+            TakeTestController ctrl = new TakeTestController();
             ctrl.submitAttempt(getNavigatorGUI().getSession());
             getNavigatorGUI().setQuestions(new ArrayList<>());
             getNavigatorGUI().goToHomeView();

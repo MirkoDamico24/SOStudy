@@ -3,14 +3,17 @@ package it.uniroma2.dicii.ispw.sostudy.view.cli;
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.KnowledgeEvaluationController;
+import it.uniroma2.dicii.ispw.sostudy.controller.TakeTestController;
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
+import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class InsideClassViewControllerCLI extends BaseControllerCLI {
 
@@ -155,8 +158,51 @@ public class InsideClassViewControllerCLI extends BaseControllerCLI {
         }
     }
 
+    private void checkSelectedTest(TestBean test) {
+        KnowledgeEvaluationController kctrl = new KnowledgeEvaluationController();
+        Integer toAccept = kctrl.checkGradeToAccept(nav.getSession(), test);
+        if(toAccept != null){
+            boolean accepted = acceptGrade(toAccept);
+            try {
+                kctrl.acceptGrade(nav.getSession(), accepted);
+            }
+            catch (ControllerException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+        else {
+            System.out.println("\nErrore: Il test selezionato è già stato svolto. Non è possibile svolgere più di un tentativo.");
+            System.out.print("Premi Invio per selezionare un altro test...");
+            scanner.nextLine();
+        }
+    }
+
+    private boolean acceptGrade(Integer toAccept) {
+        System.out.println("\nIl voto proposto è: " + toAccept);
+        System.out.println("Selezionare accetta per confermare e registrare il voto, rifiuta per richiedere una revisione della valutazione");
+        System.out.println("[1] Acceta voto");
+        System.out.println("[2] Rifiuta voto");
+        System.out.print("\nScegli un'opzione: ");
+
+        Scanner scanner = new Scanner(System.in);
+        String choice = scanner.nextLine().trim();
+
+        switch (choice) {
+            case "1" -> {
+                return true;
+            }
+            case "2" -> {
+                return false;
+            }
+            default -> {
+                System.out.println("\n--> Operazione non consentita!");
+                return acceptGrade(toAccept);
+            }
+        }
+    }
+
     private void processStudentTestSelection(TestBean test) {
-        KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
+        TakeTestController ctrl = new TakeTestController();
         List<QuestionBean> questions;
 
         try {
@@ -170,9 +216,7 @@ public class InsideClassViewControllerCLI extends BaseControllerCLI {
         }
 
         if (questions == null || questions.isEmpty()) {
-            System.out.println("\nErrore: Il test selezionato è già stato svolto. Non è possibile svolgere più di un tentativo.");
-            System.out.print("Premi Invio per selezionare un altro test...");
-            scanner.nextLine();
+            checkSelectedTest(test);
             nav.goToInsideClassView();
             return;
         }

@@ -1,7 +1,7 @@
 package it.uniroma2.dicii.ispw.sostudy.model;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.*;
-import it.uniroma2.dicii.ispw.sostudy.controller.KnowledgeEvaluationController;
+import it.uniroma2.dicii.ispw.sostudy.controller.TakeTestController;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import org.junit.jupiter.api.BeforeEach;
@@ -88,7 +88,7 @@ class EvaluationProcessTest {
 
         createAttempt(demoTest, s1, LocalDate.now(ZoneId.systemDefault()), LocalTime.of(15, 30));
 
-        KnowledgeEvaluationController controller = new KnowledgeEvaluationController();
+        TakeTestController controller = new TakeTestController();
         List<QuestionBean> testQuestions = controller.loadRequiredTest(sessionBean, requiredTest);
         assertTrue(testQuestions.isEmpty(), "Il metodo deve restituire una lista vuota se il test è già stato svolto.");
     }
@@ -103,7 +103,7 @@ class EvaluationProcessTest {
                 Duration.ofMinutes(30),
                 vcls.getName());
 
-        KnowledgeEvaluationController controller = new KnowledgeEvaluationController();
+        TakeTestController controller = new TakeTestController();
         ControllerException e = assertThrows(ControllerException.class, () -> controller.loadRequiredTest(sessionBean, requiredTest));
         assertEquals("Termini di consegna del test scaduti.", e.getMessage());
     }
@@ -114,7 +114,7 @@ class EvaluationProcessTest {
         TestAttempt attempt = createAttempt(demoTest, s1, LocalDate.now(ZoneId.systemDefault()), LocalTime.of(15, 30));
         session.setCurrentAttempt(attempt);
 
-        KnowledgeEvaluationController controller = new KnowledgeEvaluationController();
+        TakeTestController controller = new TakeTestController();
         controller.submitAttempt(sessionBean);
 
         assertEquals(demoTest.getQuestions().getLast().getMaxScore(), attempt.getAnswers().getLast().getScore(),

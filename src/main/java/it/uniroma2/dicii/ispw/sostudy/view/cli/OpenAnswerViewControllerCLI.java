@@ -2,7 +2,7 @@ package it.uniroma2.dicii.ispw.sostudy.view.cli;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.AnswerBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
-import it.uniroma2.dicii.ispw.sostudy.controller.KnowledgeEvaluationController;
+import it.uniroma2.dicii.ispw.sostudy.controller.TakeTestController;
 
 public class OpenAnswerViewControllerCLI extends AnswerViewControllerCLI {
 
@@ -30,7 +30,7 @@ public class OpenAnswerViewControllerCLI extends AnswerViewControllerCLI {
 
     private void submitAnswer(String answerText, int currentIndex) {
         AnswerBean answer = new AnswerBean(answerText);
-        KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
+        TakeTestController ctrl = new TakeTestController();
         ctrl.registerAnswer(nav.getSession(), answer, currentIndex);
     }
 

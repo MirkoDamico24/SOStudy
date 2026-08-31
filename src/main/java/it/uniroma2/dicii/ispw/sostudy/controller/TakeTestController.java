@@ -1,0 +1,152 @@
+package it.uniroma2.dicii.ispw.sostudy.controller;
+
+import it.uniroma2.dicii.ispw.sostudy.bean.AnswerBean;
+import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
+import it.uniroma2.dicii.ispw.sostudy.bean.SessionBean;
+import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
+import it.uniroma2.dicii.ispw.sostudy.dao.attempt.TestAttemptDAO;
+import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
+import it.uniroma2.dicii.ispw.sostudy.dao.virtualclass.VirtualClassDAO;
+import it.uniroma2.dicii.ispw.sostudy.eng.functional.QuestionMapper;
+import it.uniroma2.dicii.ispw.sostudy.eng.timer.TestTimerService;
+import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
+import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
+import it.uniroma2.dicii.ispw.sostudy.exception.ModelException;
+import it.uniroma2.dicii.ispw.sostudy.model.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
+
+public class TakeTestController {
+    private DAOFactory factory = DAOFactory.getInstance();
+    private TestAttemptDAO testAttemptDAO = factory.getTestAttemptDAO();
+    private VirtualClassDAO classDAO = factory.getVirtualClassDAO();
+
+    private List<VirtualClass> obtainClasses(SessionBean sessionBean) throws ControllerException {
+        List<VirtualClass> vcls = null;
+        try {
+            switch(sessionBean.getCurrentRole()){
+                case PROFESSOR -> vcls = classDAO.getClassesByProfessor(sessionBean.getProfessor().getEmail());
+                case STUDENT -> vcls = classDAO.getClassesByStudent(sessionBean.getStudent().getEmail());
+                default -> throw new ControllerException("Invalid session role");
+            }
+        }
+        catch(DAOException e){
+            throw new ControllerException("Errore durante la ricerca della classe");
+        }
+
+        return vcls;
+    }
+
+    private VirtualClass getSelectedClass(List<VirtualClass> classes, TestBean testBean, Session session){
+        VirtualClass selectedClass = null;
+        for(VirtualClass virtualClass : classes){
+            if(virtualClass.getName().equals(testBean.getVirtualClass())){
+                selectedClass = virtualClass;
+                session.setCurrentClass(selectedClass);
+                break;
+            }
+        }
+        return selectedClass;
+    }
+
+    public List<QuestionBean> loadRequiredTest(SessionBean session, TestBean testBean) throws ControllerException {
+        Test toTake = null;
+        boolean testTaken = false;
+
+        Session currentSession = SessionManager.getInstance().getSession(session.getSessionID());
+
+        List<VirtualClass> vcls = obtainClasses(session);
+
+        VirtualClass selectedClass = getSelectedClass(vcls, testBean, currentSession);
+
+        //extract test from class' test list
+        for(Test test : selectedClass.getAvailableTests()){
+            if(test.getName().equals(testBean.getName())){
+                toTake = test;
+                break;
+            }
+        }
+
+        try {
+            testTaken = testAttemptDAO.checkAlreadyDone(toTake, currentSession.getCurrentStudent());
+        }
+        catch(DAOException e){
+            throw new ControllerException("Errore durante la verifica della presenza di un tentativo.");
+        }
+
+        if(testTaken) return new ArrayList<>();
+
+        LocalDateTime toCheck = LocalDateTime.of(toTake.getDueDate(), toTake.getDueTime());
+        LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
+        if(!toCheck.isAfter(now)){
+            throw new  ControllerException("Termini di consegna del test scaduti.");
+        }
+
+        //add test to session
+        currentSession.setCurrentTest(toTake);
+
+        if(currentSession.getRole() == UserRole.STUDENT){
+            TestAttempt attempt = new TestAttempt(toTake, currentSession.getCurrentStudent(), LocalDate.now(ZoneId.systemDefault()));
+            currentSession.setCurrentAttempt(attempt);
+            TestTimerService timer = new TestTimerService(LocalDateTime.now(ZoneId.systemDefault()), toTake.getDuration());
+            session.setTimer(timer);
+            timer.start();
+        }
+
+        return questionToBean(toTake.getQuestions());
+    }
+
+    private List<QuestionBean> questionToBean(List<Question> questions){
+        List<QuestionBean> questionBeans = new ArrayList<>();
+        for(Question question : questions){
+            QuestionBean tmp = QuestionMapper.questionToBean(question);
+            questionBeans.add(tmp);
+        }
+        return questionBeans;
+    }
+
+    public void registerAnswer(SessionBean sessionBean, AnswerBean answer, int index){
+        Session currentSession = SessionManager.getInstance().getSession(sessionBean.getSessionID());
+        Question current = currentSession.getCurrentTest().getQuestions().get(index);
+
+        //instantiate answer and link with current
+        Answer currentAnswer = current.createAnswer(answer.getTextualContent(), answer.getChosenOption());
+
+        currentSession.getCurrentAttempt().addAnswer(currentAnswer);
+    }
+
+    public void submitAttempt(SessionBean sessionBean) throws ControllerException{
+        Session currentSession = SessionManager.getInstance().getSession(sessionBean.getSessionID());
+
+        //grading auto-valuable questions
+        TestAttempt attempt =  currentSession.getCurrentAttempt();
+        attempt.setHandInTime(LocalTime.now(ZoneId.systemDefault()));
+        Test test = attempt.getTest();
+
+        try{
+            test.gradeTest(attempt);
+        }
+        catch(ModelException e){
+            throw new ControllerException("Errore durante la valutazione del test. " + e.getMessage());
+        }
+
+        test.addTestAttempt(attempt);
+
+        try {
+            testAttemptDAO.saveTestAttempt(attempt);
+        }
+        catch(DAOException e){
+            throw new ControllerException("Errore durante il salvataggio del tentativo. " + e.getMessage());
+        }
+
+        if(attempt.getTestGradingStatus() == TestGradingStatus.PENDING) {
+            NotificationController msgctrl = new NotificationController();
+            msgctrl.sendNewEvaluationNotification(test, attempt);
+        }
+    }
+}

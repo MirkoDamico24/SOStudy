@@ -87,20 +87,21 @@ public class EvaluateOpenAnswerViewControllerGUI extends BaseControllerGUI {
         getNavigatorGUI().setCurrentQuestionIndex(nextIndex);
     }
 
-    private void registerAnswerScore(){
+    private boolean registerAnswerScore() {
         int score = 0;
         Navigator nav = getNavigatorGUI();
         if(!scoreInput.getText().isEmpty()){
             score = Integer.parseInt(scoreInput.getText());
             QuestionBean q = nav.getCurrentAttempt().getQuestions().get(nav.getCurrentQuestionIndex());
             if(score > q.getMaxScore()){
-                showAlert("Punteggio elevato", "Non si può assegnare un punteggio più alto di quello previsto.", "La risposta sarà valutata con il punteggio massimo");
-                score = q.getMaxScore();
+                showAlert("Punteggio non valido", "Non si può assegnare un punteggio più alto di quello previsto.", "La casella è stata svuotata per permettere un nuovo inserimento.");
+                scoreInput.clear();
+                return false;
             }
-
         }
         AnswerBean answer = nav.getCurrentAttempt().getAnswers().get(nav.getCurrentQuestionIndex());
         answer.setAssignedScore(score);
+        return true;
     }
 
     private void submitEvaluation() {
@@ -117,7 +118,10 @@ public class EvaluateOpenAnswerViewControllerGUI extends BaseControllerGUI {
 
     @FXML
     void handleNextQuestion(ActionEvent event) {
-        registerAnswerScore();
+        if (!registerAnswerScore()) {
+            return;
+        }
+
         updateCurrentAnswer();
 
         Views next = getNextView();
@@ -159,5 +163,4 @@ public class EvaluateOpenAnswerViewControllerGUI extends BaseControllerGUI {
         }
         getNavigatorGUI().setPreviousView(Views.EVALUATEOPENANSWER);
     }
-
 }

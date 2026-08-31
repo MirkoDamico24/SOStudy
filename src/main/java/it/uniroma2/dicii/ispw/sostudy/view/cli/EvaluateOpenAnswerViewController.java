@@ -82,11 +82,10 @@ public class EvaluateOpenAnswerViewController extends BaseControllerCLI {
             int score = Integer.parseInt(choice);
 
             if (score > question.getMaxScore()) {
-                System.out.println("\n[!] Punteggio elevato: Non si può assegnare un punteggio più alto di quello previsto.");
-                System.out.println("La risposta sarà valutata con il punteggio massimo (" + question.getMaxScore() + ").");
-                score = question.getMaxScore();
-                System.out.print("Premi Invio per continuare...");
+                System.out.println("\n[!] Punteggio non consentito: Hai inserito " + score + ", ma il massimo è " + question.getMaxScore() + ".");
+                System.out.print("Premi Invio per reinserire un punteggio corretto...");
                 scanner.nextLine();
+                return;
             }
 
             if (score == -1) {

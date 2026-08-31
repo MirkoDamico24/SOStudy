@@ -5,6 +5,7 @@ import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.Message;
+import it.uniroma2.dicii.ispw.sostudy.model.MessageType;
 import it.uniroma2.dicii.ispw.sostudy.model.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,6 +32,8 @@ public class MessageFSDAO extends MessageDAO {
                     jsonObject.put(SENDER, m.getSender().getEmail());
                 }
                 jsonObject.put(RECEIVER, m.getRecipient().getEmail());
+                jsonObject.put("type", m.getType().toString());
+                jsonObject.put("read", m.isRead());
                 jsonArray.put(jsonObject);
             }
 
@@ -53,14 +56,17 @@ public class MessageFSDAO extends MessageDAO {
 
                 if (jsonObject.has(RECEIVER) && jsonObject.getString(RECEIVER).equals(userEmail)) {
                     String content = jsonObject.getString("content");
+                    MessageType type = MessageType.valueOf(jsonObject.getString("type"));
+                    boolean read = jsonObject.getBoolean("read");
+                    if(read) continue;
                     Message msg;
 
                     if (jsonObject.has(SENDER) && !jsonObject.isNull(SENDER)) {
                         String senderEmail = jsonObject.getString(SENDER);
                         User sender = getUser(senderEmail);
-                        msg = new Message(content, sender, recipient);
+                        msg = new Message(content, sender, recipient, type);
                     } else {
-                        msg = new Message(content, recipient);
+                        msg = new Message(content, recipient, type);
                     }
                     messages.add(msg);
                 }

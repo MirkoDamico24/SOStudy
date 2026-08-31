@@ -161,6 +161,8 @@ CREATE TABLE `SoStudyDB`.`Messaggi` (
 `message` VARCHAR(1024) NOT NULL,
 `sender` VARCHAR(45),
 `recipient` VARCHAR(45) NOT NULL,
+`type` ENUM('NEWTEST', 'GRADENOTIFICATION', 'REVIEWNOTIFICATION') NOT NULL,
+`viewd` BOOLEAN NOT NULL,
 PRIMARY KEY (`messageid`),
 FOREIGN KEY (`sender`) REFERENCES `SoStudyDB`.`Utenti` (`email`)
 ON DELETE CASCADE
@@ -263,11 +265,11 @@ INSERT INTO `Risposte` (`textualContent`, `integerContent`, `score`, `attempt`, 
 (NULL, 4, NULL, 3, 3);
 
 -- -----------------------------------------------------
--- 11. Inserimento Messaggi (Nuovo)
+-- 11. Inserimento Messaggi (Adattato con viewd)
 -- -----------------------------------------------------
-INSERT INTO `Messaggi` (`message`, `sender`, `recipient`) VALUES
-('Nuovo test pubblicato: Parziale SQL', 'mario.rossi@gmail.com', 'a.neri@studenti.it'),
-('Nuovo test pubblicato: Parziale SQL', 'mario.rossi@gmail.com', 'm.verdi@studenti.it'),
-('Ricordate l''appello di domani', 'mario.rossi@gmail.com', 'g.gialli@studenti.it'),
-('Richiesta chiarimento su Parziale SQL', 'a.neri@studenti.it', 'mario.rossi@gmail.com'),
-('Il suo test è stato corretto', 'mario.rossi@gmail.com', 'a.neri@studenti.it');
+INSERT INTO `Messaggi` (`message`, `sender`, `recipient`, `type`, `viewd`) VALUES
+('Nuovo test pubblicato: Parziale SQL', 'mario.rossi@gmail.com', 'a.neri@studenti.it', 'NEWTEST', FALSE),
+('Nuovo test pubblicato: Parziale SQL', 'mario.rossi@gmail.com', 'm.verdi@studenti.it', 'NEWTEST', FALSE),
+('Ricordate l''appello di domani', 'mario.rossi@gmail.com', 'g.gialli@studenti.it', 'NEWTEST', FALSE),
+('Richiesta chiarimento su Parziale SQL', 'a.neri@studenti.it', 'mario.rossi@gmail.com', 'REVIEWNOTIFICATION', FALSE),
+('Il suo test è stato corretto', 'mario.rossi@gmail.com', 'a.neri@studenti.it', 'GRADENOTIFICATION', FALSE);

@@ -6,17 +6,10 @@ import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.dao.test.TestDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.virtualclass.VirtualClassDAO;
 import it.uniroma2.dicii.ispw.sostudy.eng.functional.AttemptMapper;
-import it.uniroma2.dicii.ispw.sostudy.eng.functional.QuestionMapper;
-import it.uniroma2.dicii.ispw.sostudy.eng.timer.TestTimerService;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
-import it.uniroma2.dicii.ispw.sostudy.exception.ModelException;
 import it.uniroma2.dicii.ispw.sostudy.model.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,81 +71,46 @@ public class KnowledgeEvaluationController {
         return selectedClass;
     }
 
-    public List<QuestionBean> loadRequiredTest(SessionBean session, TestBean testBean) throws ControllerException{
-        Test toTake = null;
-        boolean testTaken = false;
-
-        Session currentSession = SessionManager.getInstance().getSession(session.getSessionID());
-
-        List<VirtualClass> vcls = obtainClasses(session);
-
-        VirtualClass selectedClass = getSelectedClass(vcls, testBean, currentSession);
-
-        //extract test from class' test list
-        for(Test test : selectedClass.getAvailableTests()){
-            if(test.getName().equals(testBean.getName())){
-                toTake = test;
-                break;
-            }
-        }
-
-        try {
-            testTaken = testAttemptDAO.checkAlreadyDone(toTake, currentSession.getCurrentStudent());
-        }
-        catch(DAOException e){
-            throw new ControllerException("Errore durante la verifica della presenza di un tentativo.");
-        }
-
-        if(testTaken) return new ArrayList<>();
-
-        LocalDateTime toCheck = LocalDateTime.of(toTake.getDueDate(), toTake.getDueTime());
-        LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
-        if(!toCheck.isAfter(now)){
-            throw new  ControllerException("Termini di consegna del test scaduti.");
-        }
-
-        //add test to session
-        currentSession.setCurrentTest(toTake);
-
-        if(currentSession.getRole() == UserRole.STUDENT){
-            TestAttempt attempt = new TestAttempt(toTake, currentSession.getCurrentStudent(), LocalDate.now(ZoneId.systemDefault()));
-            currentSession.setCurrentAttempt(attempt);
-            TestTimerService timer = new TestTimerService(LocalDateTime.now(ZoneId.systemDefault()), toTake.getDuration());
-            session.setTimer(timer);
-            timer.start();
-        }
-
-        return questionToBean(toTake.getQuestions());
-    }
-
-    public List<AttemptBean> loadTestAttempts(SessionBean session, TestBean testBean) throws ControllerException{
+    private Test getSelectedTest(TestBean testBean, SessionBean session){
         List<VirtualClass> vcls = obtainClasses(session);
 
         Session currentSession = SessionManager.getInstance().getSession(session.getSessionID());
 
         VirtualClass selectedClass = getSelectedClass(vcls, testBean, currentSession);
 
-        Test toEvaluate = null;
+        Test selected = null;
         for(Test test : selectedClass.getAvailableTests()){
             if(test.getName().equals(testBean.getName())){
-                toEvaluate = test;
+                selected = test;
                 currentSession.setCurrentTest(test);
                 break;
             }
         }
 
+        return selected;
+    }
+
+    private List<TestAttempt> retireTestAttempts(Test test){
         List<TestAttempt> availableAttempt = null;
-        if(toEvaluate.getTests() == null){
+        if(test.getTests() == null){
             try{
-                availableAttempt = testDAO.getTestAttempt(toEvaluate);
+                availableAttempt = testDAO.getTestAttempt(test);
                 if(availableAttempt.isEmpty()) return null;
             }
             catch(DAOException e){
                 throw new ControllerException("Errore durante il carciamento dei test svolti dagli studenti.");
             }
         }
-        else availableAttempt = toEvaluate.getTests();
+        else availableAttempt = test.getTests();
 
+        return availableAttempt;
+    }
+
+    public List<AttemptBean> loadTestAttempts(SessionBean session, TestBean testBean) throws ControllerException{
+        Test toEvaluate = getSelectedTest(testBean, session);
+
+        List<TestAttempt> availableAttempt = retireTestAttempts(toEvaluate);
+        if(availableAttempt == null) return new ArrayList<>();
 
         List<AttemptBean> beans = new ArrayList<>();
         for(TestAttempt attempt : availableAttempt){
@@ -164,52 +122,12 @@ public class KnowledgeEvaluationController {
         return beans;
     }
 
-    private List<QuestionBean> questionToBean(List<Question> questions){
-        List<QuestionBean> questionBeans = new ArrayList<>();
-        for(Question question : questions){
-            QuestionBean tmp = QuestionMapper.questionToBean(question);
-            questionBeans.add(tmp);
-        }
-        return questionBeans;
-    }
-
-    public void registerAnswer(SessionBean sessionBean, AnswerBean answer, int index){
-        Session currentSession = SessionManager.getInstance().getSession(sessionBean.getSessionID());
-        Question current = currentSession.getCurrentTest().getQuestions().get(index);
-
-        //instantiate answer and link with current
-        Answer currentAnswer = current.createAnswer(answer.getTextualContent(), answer.getChosenOption());
-
-        currentSession.getCurrentAttempt().addAnswer(currentAnswer);
-    }
-
-    public void submitAttempt(SessionBean sessionBean) throws ControllerException{
-        Session currentSession = SessionManager.getInstance().getSession(sessionBean.getSessionID());
-
-        //grading auto-valuable questions
-        TestAttempt attempt =  currentSession.getCurrentAttempt();
-        attempt.setHandInTime(LocalTime.now(ZoneId.systemDefault()));
-        Test test = attempt.getTest();
-
+    private void requestAttemptUpdate(TestAttempt attempt){
         try{
-            test.gradeTest(attempt);
-        }
-        catch(ModelException e){
-            throw new ControllerException("Errore durante la valutazione del test. " + e.getMessage());
-        }
-
-        test.addTestAttempt(attempt);
-
-        try {
-            testAttemptDAO.saveTestAttempt(attempt);
+            testAttemptDAO.updateTestAttempt(attempt);
         }
         catch(DAOException e){
-            throw new ControllerException("Errore durante il salvataggio del tentativo. " + e.getMessage());
-        }
-
-        if(attempt.getTestGradingStatus() == TestGradingStatus.FULLYGRADED) {
-            NotificationController msgctrl = new NotificationController();
-            msgctrl.sendNewEvaluationNotification(test, attempt);
+            throw new ControllerException("Errore durante l'aggiornamento della valutazione.");
         }
     }
 
@@ -236,18 +154,43 @@ public class KnowledgeEvaluationController {
         }
 
         currentTest.gradeTest(toUpdate);
-        toUpdate.setTestGradingStatus(TestGradingStatus.FULLYGRADED);
+        toUpdate.setTestGradingStatus(TestGradingStatus.PENDING);
 
         //notification to student
         NotificationController msgctrl = new NotificationController();
         msgctrl.sendNewEvaluationNotification(currentTest, toUpdate);
 
-        try{
-            testAttemptDAO.updateTestAttempt(toUpdate);
-        }
-        catch(DAOException e){
-            throw new ControllerException("Errore durante l'aggiornamento della valutazione.");
-        }
+        requestAttemptUpdate(toUpdate);
     }
 
+    public Integer checkGradeToAccept(SessionBean session, TestBean testBean) throws ControllerException{
+        Test toEvaluate = getSelectedTest(testBean, session);
+        List<TestAttempt> availableAttempt = retireTestAttempts(toEvaluate);
+
+        Session currentSession = SessionManager.getInstance().getSession(session.getSessionID());
+
+        for(TestAttempt attempt : availableAttempt){
+            if(attempt.getStudent().getEmail().equals(session.getStudent().getEmail()) && attempt.getTestGradingStatus() == TestGradingStatus.PENDING){
+                currentSession.setCurrentAttempt(attempt);
+                return attempt.getGrade();
+            }
+        }
+        return null;
+    }
+
+    public void acceptGrade(SessionBean session, boolean accepted) throws ControllerException{
+        Session  currentSession = SessionManager.getInstance().getSession(session.getSessionID());
+        TestAttempt attempt = currentSession.getCurrentAttempt();
+        if(accepted) attempt.setTestGradingStatus(TestGradingStatus.FULLYGRADED);
+        else {
+            attempt.setTestGradingStatus(TestGradingStatus.REVISIONING);
+            Test test = attempt.getTest();
+            VirtualClass vcls = test.getVirtualClass();
+            Professor prof = vcls.getProf();
+            NotificationController msgctrl = new NotificationController();
+            msgctrl.sendRevisionNotification(prof, attempt);
+        }
+
+        requestAttemptUpdate(attempt);
+    }
 }

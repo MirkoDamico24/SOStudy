@@ -5,6 +5,7 @@ import it.uniroma2.dicii.ispw.sostudy.controller.NotificationController;
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.eng.observer.MessageObserver;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
+import it.uniroma2.dicii.ispw.sostudy.model.MessageType;
 import it.uniroma2.dicii.ispw.sostudy.model.SessionManager;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 import javafx.application.Platform;
@@ -35,16 +36,15 @@ public class HomeControllerGUI extends BaseControllerGUI implements MessageObser
 
         nctrl.registerAsNotificationObserver(this, getNavigatorGUI().getSession());
 
-        List<MessageBean> messages = nctrl.fetchUserNotifications(getNavigatorGUI().getCorrectUserBean());
+        List<MessageBean> messages = nctrl.fetchUserNotifications(getNavigatorGUI().getCorrectUserBean(), getNavigatorGUI().getSession());
         populateNotificationSection(messages);
     }
 
-    public void configureViewByRole(boolean isProfessore) {
-        if (!isProfessore) {
+    public void configureViewByRole(boolean isProfessor) {
+        if (!isProfessor) {
             btnCreaTest.setVisible(false);
             btnCreaTest.setManaged(false);
-        }
-        else{
+        } else {
             btnCreaTest.setVisible(true);
             btnCreaTest.setManaged(true);
         }
@@ -58,7 +58,8 @@ public class HomeControllerGUI extends BaseControllerGUI implements MessageObser
         listaComunicazioni.getChildren().clear();
 
         for (int i = 0; i < msg.size(); i++) {
-            Label msgLabel = new Label(msg.get(i).getMessage());
+            MessageBean currentMessage = msg.get(i);
+            Label msgLabel = new Label(currentMessage.getMessage());
             msgLabel.setFont(new Font("Serif", 26));
             msgLabel.setStyle("-fx-text-fill: #555555;");
             msgLabel.setMaxWidth(Double.MAX_VALUE);
@@ -69,6 +70,13 @@ public class HomeControllerGUI extends BaseControllerGUI implements MessageObser
             if (i < msg.size() - 1) {
                 Separator separator = new Separator();
                 listaComunicazioni.getChildren().add(separator);
+            }
+
+            if (getNavigatorGUI().getCurrentUserRole() == UserRole.STUDENT && currentMessage.getType() == MessageType.GRADENOTIFICATION && !currentMessage.isRead()) {
+                Platform.runLater(() ->
+                        showAlert("Proposta di voto disponibile", "Recarsi nella classe interessata e cliccare sul test indicato per accettare o rifiutare la proposta di voto",
+                                currentMessage.getMessage())
+                );
             }
         }
     }
@@ -101,11 +109,10 @@ public class HomeControllerGUI extends BaseControllerGUI implements MessageObser
 
         List<MessageBean> messages = null;
         try {
-            messages = nctrl.fetchUserNotifications(ub);
-        }
-        catch(ControllerException e) {
+            messages = nctrl.fetchUserNotifications(ub, getNavigatorGUI().getSession());
+        } catch(ControllerException e) {
             Platform.runLater(() ->
-                    showAlert("Errore", "Errore nel caricamento delle nuove notifiche", "Riavviare l'applicazione")
+                    showAlert("Errore", "Errore durante il caricamento delle notifiche", "Riavviare l'applicazione.")
             );
             return;
         }

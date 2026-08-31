@@ -4,6 +4,7 @@ import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.Message;
+import it.uniroma2.dicii.ispw.sostudy.model.MessageType;
 import it.uniroma2.dicii.ispw.sostudy.model.User;
 
 import java.util.ArrayList;
@@ -21,8 +22,8 @@ public class MessageDemoDAO extends MessageDAO {
         User student = DAOFactory.getInstance().getStudentDAO().getStudentByEmail("giuseppe.bianchi@gmail.com");
         User professor = DAOFactory.getInstance().getProfessorDAO().getProfessorByEmail("mario.rossi@gmail.com");
 
-        Message first = new Message("Nuovo test pubblicato: Parziale SQL", professor, student);
-        Message second = new Message("Richiesta chiarimento su Parziale SQL", student, professor);
+        Message first = new Message("Nuovo test pubblicato: Parziale SQL", professor, student, MessageType.NEWTEST);
+        Message second = new Message("Richiesta chiarimento su Parziale SQL", student, professor, MessageType.REVIEWNOTIFICATION);
 
         messages.add(first);
         messages.add(second);

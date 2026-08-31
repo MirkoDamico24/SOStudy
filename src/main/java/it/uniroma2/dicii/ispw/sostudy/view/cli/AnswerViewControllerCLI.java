@@ -2,7 +2,7 @@ package it.uniroma2.dicii.ispw.sostudy.view.cli;
 
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
-import it.uniroma2.dicii.ispw.sostudy.controller.KnowledgeEvaluationController;
+import it.uniroma2.dicii.ispw.sostudy.controller.TakeTestController;
 import it.uniroma2.dicii.ispw.sostudy.eng.timer.TestTimerService;
 import it.uniroma2.dicii.ispw.sostudy.eng.timer.observer.TimerObserver;
 
@@ -65,7 +65,7 @@ public abstract class AnswerViewControllerCLI extends BaseControllerCLI implemen
 
         if (nextIndex >= totalQuestions) {
             System.out.println("\nTest completato! Salvataggio e consegna in corso...");
-            KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
+            TakeTestController ctrl = new TakeTestController();
             ctrl.submitAttempt(nav.getSession());
             nav.setQuestions(new ArrayList<>());
             nav.setCurrentQuestionIndex(-1);
@@ -114,7 +114,7 @@ public abstract class AnswerViewControllerCLI extends BaseControllerCLI implemen
 
         submitAnswerOnTimeout(nav.getCurrentQuestionIndex());
 
-        KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
+        TakeTestController ctrl = new TakeTestController();
         ctrl.submitAttempt(nav.getSession());
         nav.setQuestions(new ArrayList<>());
         nav.setCurrentQuestionIndex(-1);

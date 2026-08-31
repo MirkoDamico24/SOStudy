@@ -3,15 +3,16 @@ package it.uniroma2.dicii.ispw.sostudy.view.gui;
 import it.uniroma2.dicii.ispw.sostudy.bean.QuestionBean;
 import it.uniroma2.dicii.ispw.sostudy.bean.TestBean;
 import it.uniroma2.dicii.ispw.sostudy.controller.KnowledgeEvaluationController;
+import it.uniroma2.dicii.ispw.sostudy.controller.TakeTestController;
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 
+import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -19,7 +20,7 @@ import javafx.scene.text.Font;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
-import javafx.scene.control.ScrollPane;
+import java.util.Optional;
 
 public class InsideClassViewControllerGUI extends BaseControllerGUI {
     @FXML private Button btnCreaTest;
@@ -132,7 +133,7 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI {
     }
 
     private Views getNextView(TestBean test) {
-        KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
+        TakeTestController ctrl = new TakeTestController();
         List<QuestionBean> questions = null;
 
         try {
@@ -142,7 +143,7 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI {
         }
 
         if (questions == null || questions.isEmpty()) {
-            showAlert(ERROR, "Il test selezionato è già stato svolto. Non è possibile svolgere più di un tentativo.", "Selezionare un altro test");
+            checkSelectedTest(test);
             return Views.INSIDECLASSVIEW;
         }
 
@@ -151,6 +152,47 @@ public class InsideClassViewControllerGUI extends BaseControllerGUI {
 
         if (questions.getFirst().isOpenQuestion()) return Views.OPENANSWERVIEW;
         else return Views.CLOSEANSWERVIEW;
+    }
+
+    private void checkSelectedTest(TestBean test) {
+        KnowledgeEvaluationController kctrl = new KnowledgeEvaluationController();
+        Integer toAccept = kctrl.checkGradeToAccept(getNavigatorGUI().getSession(), test);
+        if(toAccept != null){
+            boolean accepted = showPopUp(toAccept);
+            try {
+                kctrl.acceptGrade(getNavigatorGUI().getSession(), accepted);
+            }
+            catch (ControllerException e) {
+                showAlert(ERROR, e.getMessage(), "");
+            }
+        }
+        else {
+            showAlert(ERROR, "Il test selezionato è già stato svolto. Non è possibile svolgere più di un tentativo.", "Selezionare un altro test");
+        }
+    }
+
+    private boolean showPopUp(Integer grade){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Conferma proposta di voto");
+        alert.setHeaderText("Il voto proposto è: " + grade);
+        alert.setContentText("Selezionare accetta per confermare e registrare il voto, rifiuta per richiedere una revisione della valutazione");
+
+        ButtonType btnAccept = new ButtonType("Accetta voto");
+        ButtonType btnReject = new ButtonType("Rifiuta voto");
+
+        alert.getButtonTypes().setAll(btnAccept, btnReject);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent()) {
+            if (result.get() == btnAccept) {
+                return true;
+
+            } else if (result.get() == btnReject) {
+                return false;
+            }
+        }
+        return false;
     }
 
     @FXML

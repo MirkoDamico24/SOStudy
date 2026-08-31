@@ -80,7 +80,7 @@ public class Test {
         List<Answer<?>> testAnswers = test.getAnswers();
         if(testAnswers == null || testAnswers.isEmpty()){
             test.computeGrade();
-            test.setTestGradingStatus(TestGradingStatus.FULLYGRADED);
+            test.setTestGradingStatus(TestGradingStatus.PENDING);
         }
 
         for(Answer<?> a : testAnswers){
@@ -100,7 +100,7 @@ public class Test {
         }
 
         if(test.getTestGradingStatus() == TestGradingStatus.NOTSTARTED){
-            test.setTestGradingStatus(TestGradingStatus.FULLYGRADED);
+            test.setTestGradingStatus(TestGradingStatus.PENDING);
         }
 
         test.computeGrade();
