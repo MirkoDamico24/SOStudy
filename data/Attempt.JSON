@@ -1,144 +1,22 @@
-[
-    {
-        "test": 6,
-        "gradingStatus": "INCOMPLETE",
-        "student": "giuseppe.bianchi@gmail.com",
-        "handInDate": "2026-08-28",
-        "grade": 0,
-        "answers": [{
-            "score": 0,
-            "textualContent": "Risposta a domanda aperta",
+[{
+    "test": 1,
+    "gradingStatus": "FULLYGRADED",
+    "student": "giuseppe.bianchi@gmail.com",
+    "handInDate": "2026-08-31",
+    "grade": 13,
+    "answers": [
+        {
+            "score": 3,
+            "textualContent": "Step1\nStep 2",
             "code": 1,
-            "question": 6000
-        }],
-        "handInTime": "16:21:16.524587907"
-    },
-    {
-        "test": 7,
-        "gradingStatus": "FULLYGRADED",
-        "student": "giuseppe.bianchi@gmail.com",
-        "handInDate": "2026-08-28",
-        "grade": 2,
-        "answers": [
-            {
-                "score": 2,
-                "textualContent": "Why is the question open?",
-                "code": 1,
-                "question": 7000
-            },
-            {
-                "score": 0,
-                "code": 2,
-                "question": 7001,
-                "integerContent": 7001000
-            }
-        ],
-        "handInTime": "16:32:49.767348600"
-    },
-    {
-        "test": 8,
-        "gradingStatus": "FULLYGRADED",
-        "student": "giuseppe.bianchi@gmail.com",
-        "handInDate": "2026-08-28",
-        "grade": 72,
-        "answers": [
-            {
-                "score": 2,
-                "textualContent": "risposta alla dom",
-                "code": 1,
-                "question": 8000
-            },
-            {
-                "score": 30,
-                "code": 2,
-                "question": 8001,
-                "integerContent": 8001002
-            },
-            {
-                "score": 40,
-                "textualContent": "shock. Shock because evrything in our mind is totally connected with the shish.",
-                "code": 3,
-                "question": 8002
-            }
-        ],
-        "handInTime": "17:22:17.892038806"
-    },
-    {
-        "test": 1,
-        "gradingStatus": "FULLYGRADED",
-        "student": "giuseppe.bianchi@gmail.com",
-        "handInDate": "2026-08-28",
-        "grade": 9,
-        "answers": [
-            {
-                "score": -1,
-                "textualContent": "First Come First Served",
-                "code": 1,
-                "question": 1000
-            },
-            {
-                "score": 10,
-                "code": 2,
-                "question": 1001,
-                "integerContent": 1001002
-            }
-        ],
-        "handInTime": "17:34:44.359648953"
-    },
-    {
-        "test": 2,
-        "gradingStatus": "FULLYGRADED",
-        "student": "giuseppe.bianchi@gmail.com",
-        "handInDate": "2026-08-28",
-        "grade": 9,
-        "answers": [
-            {
-                "score": -1,
-                "textualContent": "Risposta apertissima",
-                "code": 1,
-                "question": 2000
-            },
-            {
-                "score": 10,
-                "code": 2,
-                "question": 2001,
-                "integerContent": 2001000
-            }
-        ],
-        "handInTime": "17:39:34.799520324"
-    },
-    {
-        "test": 3,
-        "gradingStatus": "FULLYGRADED",
-        "student": "giuseppe.bianchi@gmail.com",
-        "handInDate": "2026-08-28",
-        "grade": 13,
-        "answers": [
-            {
-                "score": 0,
-                "textualContent": "Prima risposta aperta",
-                "code": 1,
-                "question": 3000
-            },
-            {
-                "score": 10,
-                "textualContent": "Seconda risposta aperta",
-                "code": 2,
-                "question": 3001
-            },
-            {
-                "score": 0,
-                "code": 3,
-                "question": 3002,
-                "integerContent": 3002000
-            },
-            {
-                "score": 3,
-                "code": 4,
-                "question": 3003,
-                "integerContent": 3003001
-            }
-        ],
-        "handInTime": "17:51:08.691512904"
-    }
-]
+            "question": 1000
+        },
+        {
+            "score": 10,
+            "code": 2,
+            "question": 1001,
+            "integerContent": 1001002
+        }
+    ],
+    "handInTime": "10:43:17.362858620"
+}]

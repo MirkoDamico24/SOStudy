@@ -1,26 +1,14 @@
 [
     {
         "recipient": "giuseppe.bianchi@gmail.com",
-        "content": "Il test 'test di prova sburrebole' svolto in data 2026-08-28 ha ricevuto la valutazione: 2"
+        "content": "Nuovo test assegnato: ISPWvirtualClass, ISPW demo test, 2026-09-02"
     },
     {
         "recipient": "giuseppe.bianchi@gmail.com",
-        "content": "Nuovo test assegnato: ISPWvirtualClass, ennesimo test di prova, 2026-09-03"
+        "content": "Nuovo test assegnato: ISPWvirtualClass, Test sui principi GRASP, 2026-09-02"
     },
     {
         "recipient": "giuseppe.bianchi@gmail.com",
-        "content": "Il test 'ennesimo test di prova' svolto in data 2026-08-28 ha ricevuto la valutazione: 72"
-    },
-    {
-        "recipient": "giuseppe.bianchi@gmail.com",
-        "content": "Il test 'test di prova' svolto in data 2026-08-28 ha ricevuto la valutazione: 9"
-    },
-    {
-        "recipient": "giuseppe.bianchi@gmail.com",
-        "content": "Il test 'Test fs' svolto in data 2026-08-28 ha ricevuto la valutazione: 9"
-    },
-    {
-        "recipient": "giuseppe.bianchi@gmail.com",
-        "content": "Il test 'Test prova definitiva FS' svolto in data 2026-08-28 ha ricevuto la valutazione: 13"
+        "content": "Il test 'ISPW demo test' svolto in data 2026-08-31 ha ricevuto la valutazione: 13"
     }
 ]

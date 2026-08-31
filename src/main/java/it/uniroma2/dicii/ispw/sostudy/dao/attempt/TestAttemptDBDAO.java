@@ -149,7 +149,6 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
 
             Test associatedTest = testAttempt.getTest();
             int testId = testDAO.getTestId(associatedTest.getName(), associatedTest.getVirtualClass().getName(), associatedTest.getVirtualClass().getProf().getEmail());
-            System.out.println("Test id: " + testId);
             ps.setInt(5, testId);
 
             ps.setString(6, testAttempt.getStudent().getEmail());
