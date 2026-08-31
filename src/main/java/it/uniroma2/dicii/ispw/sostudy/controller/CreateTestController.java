@@ -54,7 +54,6 @@ public class CreateTestController {
             td.saveTest(newTest);
         }
         catch (DAOException e) {
-            e.printStackTrace();
             throw new ControllerException("Errore durante il salvataggio del test", e);
         }
         cls.addTest(newTest);
