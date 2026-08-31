@@ -6,7 +6,6 @@ import it.uniroma2.dicii.ispw.sostudy.controller.KnowledgeEvaluationController;
 import it.uniroma2.dicii.ispw.sostudy.controller.TakeTestController;
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
-import it.uniroma2.dicii.ispw.sostudy.model.QuestionType;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 
 import java.time.LocalDate;
