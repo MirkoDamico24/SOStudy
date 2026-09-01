@@ -55,7 +55,7 @@ public class TestTimerService extends TimerSubject {
     public Duration getRemaining() {
         ZonedDateTime now = ZonedDateTime.now(ZoneId.systemDefault());
         ZonedDateTime zonedDeadline = deadline.atZone(ZoneId.systemDefault());
-        Duration remaining = Duration.between(now, zonedDeadline);
-        return remaining.isNegative() ? Duration.ZERO : remaining;
+        Duration timeLeft = Duration.between(now, zonedDeadline);
+        return timeLeft.isNegative() ? Duration.ZERO : timeLeft;
     }
 }

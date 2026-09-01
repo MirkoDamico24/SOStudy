@@ -7,7 +7,6 @@ import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.eng.observer.MessageObserver;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.model.SessionManager;
-import it.uniroma2.dicii.ispw.sostudy.model.User;
 
 import java.util.ArrayList;
 import java.util.List;

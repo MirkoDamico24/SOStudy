@@ -7,7 +7,6 @@ import it.uniroma2.dicii.ispw.sostudy.eng.observer.MessageObserver;
 import it.uniroma2.dicii.ispw.sostudy.exception.ControllerException;
 import it.uniroma2.dicii.ispw.sostudy.model.MessageType;
 import it.uniroma2.dicii.ispw.sostudy.model.SessionManager;
-import it.uniroma2.dicii.ispw.sostudy.model.User;
 import it.uniroma2.dicii.ispw.sostudy.view.navigator.Views;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
