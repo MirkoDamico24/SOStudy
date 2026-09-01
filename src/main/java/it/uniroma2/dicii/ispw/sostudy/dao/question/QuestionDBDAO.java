@@ -1,7 +1,7 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.question;
 
 
-import it.uniroma2.dicii.ispw.sostudy.application.DBConnectionFactory;
+import it.uniroma2.dicii.ispw.sostudy.application.DBConnection;
 import it.uniroma2.dicii.ispw.sostudy.dao.choice.ChoiceDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.eng.functional.ChoiceDTO;
@@ -48,7 +48,7 @@ public class QuestionDBDAO extends QuestionDAO {
 
         Question toRet = null;
         String sqlQuery = "SELECT header, maxScore, type FROM Domanda WHERE code ? ";
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery))
+        try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery))
         {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -70,7 +70,7 @@ public class QuestionDBDAO extends QuestionDAO {
         List<Question> questions = new ArrayList<>();
 
         String sqlQuery = "SELECT code, header, maxScore, type FROM Domanda WHERE test = ? ";
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
+        try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery)){
             ps.setInt(1, testID);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
@@ -96,7 +96,7 @@ public class QuestionDBDAO extends QuestionDAO {
         List<CloseIndexes> completeSaving = new ArrayList<>();
 
         String sqlQuery = "INSERT INTO Domanda (header, maxScore, type, test) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(4, testID);
             for(Question q : questions){
                 QuestionDTO dto = QuestionMapper.questionToDTO(q);
@@ -157,7 +157,7 @@ public class QuestionDBDAO extends QuestionDAO {
 
         String sqlQuery = "SELECT code, header, maxScore, type, test FROM Domanda WHERE test IN (" + placeholders + ")";
 
-        try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)) {
+        try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery)) {
             for (int i = 0; i < testIDs.size(); i++) {
                 ps.setInt(i + 1, testIDs.get(i));
             }
@@ -197,7 +197,7 @@ public class QuestionDBDAO extends QuestionDAO {
         Integer questionID = null;
         String sqlQuery = "SELECT code FROM Domanda WHERE header = ? and test = ?";
 
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
+        try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery)){
             ps.setString(1, question.getHeader());
             ps.setInt(2, testID);
             ps.executeQuery();

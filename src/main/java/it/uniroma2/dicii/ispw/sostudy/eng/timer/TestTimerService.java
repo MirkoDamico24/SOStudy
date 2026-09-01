@@ -15,6 +15,7 @@ public class TestTimerService extends TimerSubject {
     private final LocalDateTime deadline;
     private ScheduledExecutorService scheduler;
     private final Duration totalDuration;
+    private volatile Duration remaining;
 
     public TestTimerService(LocalDateTime startInstant, Duration duration) {
         this.totalDuration = duration;
@@ -34,7 +35,7 @@ public class TestTimerService extends TimerSubject {
     }
 
     private void tick() {
-        Duration remaining = getRemaining();
+        remaining = getRemaining();
         if (remaining.isNegative() || remaining.isZero()) {
             notifyTimeExpired();
             stop();

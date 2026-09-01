@@ -1,6 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.attempt;
 
-import it.uniroma2.dicii.ispw.sostudy.application.DBConnectionFactory;
+import it.uniroma2.dicii.ispw.sostudy.application.DBConnection;
 import it.uniroma2.dicii.ispw.sostudy.dao.choice.ChoiceDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.dao.question.QuestionDAO;
@@ -56,7 +56,7 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
 
         Test test = testDAO.getTestById(testId);
 
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
+        try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery)){
             ps.setInt(1, testId);
 
             ResultSet rs = ps.executeQuery();
@@ -104,7 +104,7 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
         int questionID = 0;
         String sqlQuery = "INSERT INTO Risposte (`textualContent`, `integerContent`, `score`, `attempt`, `question`) VALUES (?, ?, ?, ?, ?)";
 
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery))
+        try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery))
         {
             Object content = null;
             ps.setInt(4, attemptID);
@@ -141,7 +141,7 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
     public void saveTestAttempt(TestAttempt testAttempt) {
         String sqlQuery = "INSERT INTO Tentativo (`grade`, `gradingStatus`, `handInTime`, `handInDate`, `test`, `student`) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)){
+        try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)){
             ps.setInt(1, testAttempt.getGrade());
             ps.setString(2, testAttempt.getTestGradingStatus().toString());
             ps.setTime(3, Time.valueOf(testAttempt.getHandInTime()));
@@ -182,7 +182,7 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
             throw new DAOException("Error occurred while updating attempt data to database. " + e.getMessage());
         }
 
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(updateQuery)){
+        try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(updateQuery)){
             ps.setString(1, TestGradingStatus.FULLYGRADED.name());
             ps.setInt(2, testAttempt.getGrade());
             ps.setInt(3, testId);
@@ -193,7 +193,7 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
                 throw new DAOException("Attempt to update was not found in the database.");
             }
 
-            try(PreparedStatement psInsert = DBConnectionFactory.getConnection().prepareStatement(selectQuery)){
+            try(PreparedStatement psInsert = DBConnection.getConnection().prepareStatement(selectQuery)){
                 psInsert.setInt(1, testId);
                 psInsert.setString(2, testAttempt.getStudent().getEmail());
                 ResultSet rs = psInsert.executeQuery();
@@ -214,7 +214,7 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
 
         List<ToUpdate> toUpdate = buildQueryElement(testId, testAttempt);
 
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
+        try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery)){
             ps.setInt(2, attemptId);
             for(ToUpdate element : toUpdate){
                 ps.setInt(1, element.answer.getScore());
@@ -266,7 +266,7 @@ public class TestAttemptDBDAO extends TestAttemptDAO{
            throw new DAOException("Error occurred while fetching test id from database. " + e.getMessage());
        }
 
-        try (PreparedStatement pstmt = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)) {
+        try (PreparedStatement pstmt = DBConnection.getConnection().prepareStatement(sqlQuery)) {
             pstmt.setInt(1, testID);
             pstmt.setString(2, student.getEmail());
 

@@ -1,6 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.choice;
 
-import it.uniroma2.dicii.ispw.sostudy.application.DBConnectionFactory;
+import it.uniroma2.dicii.ispw.sostudy.application.DBConnection;
 import it.uniroma2.dicii.ispw.sostudy.eng.functional.ChoiceDTO;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.Choice;
@@ -21,7 +21,7 @@ public class ChoiceDBDAO extends ChoiceDAO {
 
         Choice choice = null;
         String sqlQuery = "SELECT content FROM OpzioniDomande WHERE code = ?";
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery))
+        try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery))
         {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -43,7 +43,7 @@ public class ChoiceDBDAO extends ChoiceDAO {
         Choice solution = null;
         String sqlQuery = "SELECT code, content, isSolution FROM OpzioniDomande WHERE question = ?";
 
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery))
+        try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery))
         {
             ps.setInt(1, questionID);
             ResultSet rs = ps.executeQuery();
@@ -73,7 +73,7 @@ public class ChoiceDBDAO extends ChoiceDAO {
     @Override
     public void saveChoices(List<ChoiceDTO> choices) {
         String sqlQuery = "INSERT INTO OpzioniDomande(content, isSolution, question) VALUES (?, ?, ?)";
-        try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
 
             for (ChoiceDTO dto : choices) {
                 ps.setInt(3, dto.questionID());
@@ -119,7 +119,7 @@ public class ChoiceDBDAO extends ChoiceDAO {
         int choiceId = 0;
         String sqlQuery = "SELECT code FROM OpzioniDomande WHERE content = ? AND question = ?";
 
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
+        try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery)){
             ps.setString(1, choice.getContent());
             ps.setInt(2, questionId);
             ps.executeQuery();

@@ -1,6 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.professor;
 
-import it.uniroma2.dicii.ispw.sostudy.application.DBConnectionFactory;
+import it.uniroma2.dicii.ispw.sostudy.application.DBConnection;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.Professor;
 
@@ -16,7 +16,7 @@ public class ProfessorDBDAO extends ProfessorDAO {
         }
 
         String sqlQuery = "SELECT name, surname, email FROM Professor WHERE email = ?";
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
+        try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery)){
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             if(rs.next()) {

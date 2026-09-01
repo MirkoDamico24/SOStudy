@@ -1,6 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.virtualclass;
 
-import it.uniroma2.dicii.ispw.sostudy.application.DBConnectionFactory;
+import it.uniroma2.dicii.ispw.sostudy.application.DBConnection;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.dao.professor.ProfessorDAO;
 import it.uniroma2.dicii.ispw.sostudy.dao.student.StudentDAO;
@@ -31,7 +31,7 @@ public class VirtualClassDBDAO extends VirtualClassDAO {
 
         String sqlQuery = "SELECT name, professor FROM Class WHERE code = ?";
 
-        try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)) {
+        try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery)) {
             ps.setInt(1, id);
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -63,7 +63,7 @@ public class VirtualClassDBDAO extends VirtualClassDAO {
         List<Student> students = new ArrayList<>();
         String sqlQuery = "SELECT email FROM ClassStudents join Student on student = email WHERE class = ?";
 
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
+        try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery)){
             ps.setInt(1, classID);
 
             ResultSet rs = ps.executeQuery();
@@ -87,7 +87,7 @@ public class VirtualClassDBDAO extends VirtualClassDAO {
         List<VirtualClass> virtualClasses = new ArrayList<>();
         String sqlQuery = "SELECT code FROM Class WHERE professor = ?";
 
-        try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)) {
+        try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery)) {
             ps.setString(1, profEmail);
 
             ResultSet rs = ps.executeQuery();
@@ -107,7 +107,7 @@ public class VirtualClassDBDAO extends VirtualClassDAO {
         List<VirtualClass> virtualClasses = new ArrayList<>();
         String sqlQuery = "SELECT class FROM ClassStudents WHERE student = ?";
 
-        try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)) {
+        try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery)) {
             ps.setString(1, studentEmail);
             ResultSet rs = ps.executeQuery();
 

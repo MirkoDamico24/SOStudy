@@ -10,10 +10,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class DBConnectionFactory {
+public class DBConnection {
     private static Connection connection = null;
 
-    private DBConnectionFactory() {}
+    private DBConnection() {}
 
     public static Connection getConnection() throws DAOException {
         if(connection == null){

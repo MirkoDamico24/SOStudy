@@ -1,6 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.test;
 
-import it.uniroma2.dicii.ispw.sostudy.application.DBConnectionFactory;
+import it.uniroma2.dicii.ispw.sostudy.application.DBConnection;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.*;
@@ -24,7 +24,7 @@ public class TestDBDAO extends TestDAO {
                             FROM Test join Domanda on `Domanda`.`test` = `Test`.`code` 
                                 join Class on Test.class = Class.code 
                             WHERE `Test`.`code` = ?""";
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
+        try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery)){
             ps.setInt(1, testId);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
@@ -54,7 +54,7 @@ public class TestDBDAO extends TestDAO {
 
         String sqlQuery = "SELECT code, name, dueDate, dueTime, duration FROM Test WHERE class = ?";
 
-        try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)) {
+        try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery)) {
             ps.setInt(1, classId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -103,7 +103,7 @@ public class TestDBDAO extends TestDAO {
     @Override
     public void saveTest(Test test) throws DAOException {
         String sqlQuery = "INSERT INTO Test (name, dueDate, dueTime, duration, class) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, test.getName());
             ps.setDate(2, Date.valueOf(test.getDueDate()));
             ps.setTime(3, Time.valueOf(test.getDueTime()));

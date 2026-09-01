@@ -32,11 +32,10 @@ public abstract class BasicAnswerViewControllerGUI extends BaseControllerGUI imp
 
     private TestTimerService testTimer;
 
-    // Metodi astratti delegati alle sottoclassi
+
     protected abstract void setupQuestionUI(QuestionBean question);
     protected abstract void submitAnswer();
 
-    // Template method per il setup della vista
     public void prepare() {
         setTestInfo(getNavigatorGUI().getCurrentTest());
 
@@ -48,7 +47,6 @@ public abstract class BasicAnswerViewControllerGUI extends BaseControllerGUI imp
 
         QuestionBean question = getNavigatorGUI().getQuestions().get(currentIndex);
 
-        // Deleghiamo l'impostazione grafica specifica (testo, textarea o opzioni) ai figli
         setupQuestionUI(question);
 
         populateProgressBox(getNavigatorGUI().getQuestions());

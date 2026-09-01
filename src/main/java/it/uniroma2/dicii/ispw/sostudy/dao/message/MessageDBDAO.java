@@ -1,6 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.message;
 
-import it.uniroma2.dicii.ispw.sostudy.application.DBConnectionFactory;
+import it.uniroma2.dicii.ispw.sostudy.application.DBConnection;
 import it.uniroma2.dicii.ispw.sostudy.dao.factory.DAOFactory;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 import it.uniroma2.dicii.ispw.sostudy.model.Message;
@@ -19,7 +19,7 @@ public class MessageDBDAO extends MessageDAO {
     public void save(List<Message> message) throws DAOException {
         String sqlQuery = "INSERT INTO Messaggi (message, sender, recipient, type, viewd) VALUES (?, ?, ?, ?, ?)";
 
-        try (PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
             for (Message m : message) {
                 ps.setString(1, m.getMessage());
                 if(m.getSender() != null) ps.setString(2, m.getSender().getEmail());
@@ -45,7 +45,7 @@ public class MessageDBDAO extends MessageDAO {
                         WHERE recipient = ? AND viewd = false
                         ORDER BY messageid desc""";
 
-        try(PreparedStatement ps = DBConnectionFactory.getConnection().prepareStatement(sqlQuery)){
+        try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(sqlQuery)){
             ps.setString(1, userEmail);
             ResultSet rs = ps.executeQuery();
             messages = buildMessages(rs, userEmail);

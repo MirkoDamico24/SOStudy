@@ -38,6 +38,10 @@ public class VirtualClassesViewControllerGUI extends BaseControllerGUI{
         configureViewByRole(getNavigatorGUI().getCurrentUserRole() == UserRole.PROFESSOR);
         setUsernameBundle();
 
+        retriveUserClasses();
+    }
+
+    public void retriveUserClasses(){
         KnowledgeEvaluationController ctrl = new KnowledgeEvaluationController();
         List<VirtualClassBean> classes = null;
 

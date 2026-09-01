@@ -1,6 +1,6 @@
 package it.uniroma2.dicii.ispw.sostudy.dao.authentication;
 
-import it.uniroma2.dicii.ispw.sostudy.application.DBConnectionFactory;
+import it.uniroma2.dicii.ispw.sostudy.application.DBConnection;
 import it.uniroma2.dicii.ispw.sostudy.controller.UserRole;
 import it.uniroma2.dicii.ispw.sostudy.exception.DAOException;
 
@@ -9,7 +9,7 @@ import java.sql.*;
 public class AuthenticationDBDAO extends AuthenticationDAO {
 
     private Connection getDBConnection(){
-        return DBConnectionFactory.getConnection();
+        return DBConnection.getConnection();
     }
 
     @Override
